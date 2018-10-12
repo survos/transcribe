@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Command;
+
+use App\Entity\Media;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Repository\MediaRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
+# use Google\Cloud\Speech\Result;
+
+# [START speech_transcribe_auto_punctuation]
+use Google\Cloud\Speech\V1\SpeechRecognitionResult;
+use Google\Cloud\Speech\V1\SpeechClient;
+use Google\Cloud\Speech\V1\WordInfo;
+
+use Google\Cloud\Speech\V1\RecognitionAudio;
+use Google\Cloud\Speech\V1\RecognitionConfig;
+use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
+
+class TranscribeCommand extends Command
+{
+    protected static $defaultName = 'app:transcribe';
+
+    private $mediaRepository;
+    private $em;
+
+    public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository)
+    {
+        parent::__construct($name);
+        $this->mediaRepository = $mediaRepository;
+        $this->em = $em;
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setDescription('Transcribe videos using Google Speech API')
+            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
+            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+        ;
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $qb = $this->mediaRepository->createQueryBuilder('m')
+            ->where('m.transcriptRequested = true')
+            // ->andWhere('m.transcriptJson IS NULL')
+            ;
+        /** @var Media $media */
+
+        // @todo Note: Speech-to-Text supports WAV files with LINEAR16 or MULAW encoded audio.  So we could store wav data in db and stream it.
+        foreach ($qb->getQuery()->getResult() as $media) {
+            $filename = $media->getPath();
+            $flacFilename = $media->getPath() . '.flac';
+            if ( !file_exists($flacFilename)) {
+                $command = "ffmpeg -i $filename -c:a flac  -ac 1 $flacFilename";
+                exec($command);
+            }
+            // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
+
+            $jsonResult = $this->transcribe_auto_punctuation($flacFilename);
+
+            /*
+            $data = file_get_contents($flacFilename);
+
+            // get contents of a file into a string
+            $handle = fopen($flacFilename, 'r');
+            $content = fread($handle, filesize($flacFilename));
+            fclose($handle);
+
+            // Create the speech client
+            $languageCode = 'en-US';
+            $speech = new SpeechClient([
+                'languageCode' => $languageCode,
+            ]);
+
+            // When true, time offsets for every word will be included in the response.
+            $options['enableWordTimeOffsets'] = true;
+            $options['enableWordTimeOffsets'] = true;
+
+            // Make the API call
+            $results = $speech->recognize(
+                fopen($flacFilename, 'r'),
+                $options
+            );
+            */
+
+
+
+            $media
+                ->setTranscriptJson($jsonResult);
+            $this->em->flush();
+            print $media->getTranscriptJson();
+
+        }
+
+
+        $arg1 = $input->getArgument('arg1');
+
+        if ($arg1) {
+            $io->note(sprintf('You passed an argument: %s', $arg1));
+        }
+
+        if ($input->getOption('option1')) {
+            // ...
+        }
+
+        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+    }
+
+    /**
+     * Transcribe the given audio file with auto punctuation enabled
+     */
+    function transcribe_auto_punctuation($path)
+    {
+        // get contents of a file into a string
+        $handle = fopen($path, 'r');
+        $content = fread($handle, filesize($path));
+        fclose($handle);
+
+        // set string as audio content
+        $audio = (new RecognitionAudio())
+            ->setContent($content);
+
+        // set config
+        $config = (new RecognitionConfig())
+            // ->setEncoding(AudioEncoding::LINEAR16)
+            // ->setSampleRateHertz(32000)
+            ->setLanguageCode('en-US')
+            ->setEnableAutomaticPunctuation(true)
+            ->setEnableWordTimeOffsets(true)
+        ;
+
+        // create the speech client
+        $client = new SpeechClient();
+
+        // make the API call
+        $response = $client->recognize($config, $audio);
+        $results = $response->getResults();
+
+        // print results
+        $x = [];
+        /** @var SpeechRecognitionResult $result */
+
+        foreach ($results as $result) {
+            $x[] = json_decode($result->serializeToJsonString());
+            $alternatives = $result->getAlternatives();
+            $mostLikely = $alternatives[0];
+
+            $transcript = $mostLikely->getTranscript();
+            $confidence = $mostLikely->getConfidence();
+            /** @var WordInfo $wordInfo */
+            foreach ($mostLikely->getWords() as $wordInfo) {
+                $words[] = [
+                    // $wordInfo->serializeToJsonString()
+                ];
+            }
+            printf('Transcript: %s' . PHP_EOL, $transcript);
+            printf('Confidence: %s' . PHP_EOL, $confidence);
+        }
+
+        return  json_encode($x, JSON_PRETTY_PRINT);
+    }
+
+}

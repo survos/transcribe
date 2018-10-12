@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Media {{ media.filename }}!{% endblock %}
+
+{% block body %}
+
+    {{ dump(media) }}
+
+    {{ dump(media.transcript) }}
+
+{% endblock %}
