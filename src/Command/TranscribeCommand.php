@@ -3,6 +3,9 @@
 namespace App\Command;
 
 use App\Entity\Media;
+use Google\ApiCore\OperationResponse;
+use Google\Cloud\Storage\StorageClient;
+use Google\Cloud\Storage\StorageObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +25,7 @@ use Google\Cloud\Speech\V1\WordInfo;
 use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
+use Google\Cloud\Speech\V1\LongRunningRecognizeResponse;
 
 class TranscribeCommand extends Command
 {
@@ -29,6 +33,8 @@ class TranscribeCommand extends Command
 
     private $mediaRepository;
     private $em;
+    /** @var SymfonyStyle */
+    private $io;
 
     public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository)
     {
@@ -42,31 +48,63 @@ class TranscribeCommand extends Command
         $this
             ->setDescription('Transcribe videos using Google Speech API')
             ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        $this->io = $io;
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
-            ->where('m.transcriptRequested = true')
-            // ->andWhere('m.transcriptJson IS NULL')
+            ->where('m.transcriptRequested = true');
+
+        if (!$input->getOption('force')) {
+            $qb
+                ->andWhere('m.transcriptJson IS NULL');
+        }
             ;
         /** @var Media $media */
 
         // @todo Note: Speech-to-Text supports WAV files with LINEAR16 or MULAW encoded audio.  So we could store wav data in db and stream it.
         foreach ($qb->getQuery()->getResult() as $media) {
+
             $filename = $media->getPath();
             $flacFilename = $media->getPath() . '.flac';
-            if ( !file_exists($flacFilename)) {
-                $command = "ffmpeg -i $filename -c:a flac  -ac 1 $flacFilename";
-                exec($command);
+
+            // see if we already have it on gs
+            // Fetch the storage object
+            $storage = new StorageClient();
+            $bucketName = 'jufj';
+            $objectName = basename($flacFilename);
+            $object = $storage->bucket($bucketName)->object($objectName);
+
+            if (!$object->exists()) {
+                $this->io->error($objectName . ' does not exist');
+                if ( !file_exists($flacFilename)) {
+                    $io->note("Creating flac for $filename");
+                    $command = "ffmpeg -i $filename -c:a flac  -ac 1 $flacFilename";
+                    exec($command);
+                }
+
+                $file = fopen($flacFilename, 'r');
+                $bucket = $storage->bucket($bucketName);
+                $object = $bucket->upload($file, [
+                    'name' => $objectName
+                ]);
             }
+
+
+
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
 
-            $jsonResult = $this->transcribe_auto_punctuation($flacFilename);
+            $io->note("Transcribing $flacFilename");
+            if ($jsonResult = $this->transcribe_auto_punctuation($object))
+            {
+                $cacheFile = $filename . 'json';
+                file_put_contents($cacheFile, $jsonResult);
+            }
 
             /*
             $data = file_get_contents($flacFilename);
@@ -109,26 +147,30 @@ class TranscribeCommand extends Command
             $io->note(sprintf('You passed an argument: %s', $arg1));
         }
 
-        if ($input->getOption('option1')) {
-            // ...
-        }
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Finished transcribing');
     }
 
     /**
      * Transcribe the given audio file with auto punctuation enabled
      */
-    function transcribe_auto_punctuation($path)
+    function transcribe_auto_punctuation(StorageObject $object)
     {
+
+
         // get contents of a file into a string
+        /* moved to Google Storage
         $handle = fopen($path, 'r');
         $content = fread($handle, filesize($path));
         fclose($handle);
+        */
 
+
+        $uri = $object->gcsUri();
+
+        $this->io->note($uri);
         // set string as audio content
         $audio = (new RecognitionAudio())
-            ->setContent($content);
+            ->setUri($uri);
 
         // set config
         $config = (new RecognitionConfig())
@@ -142,29 +184,53 @@ class TranscribeCommand extends Command
         // create the speech client
         $client = new SpeechClient();
 
+
+        /** @var OperationResponse $operationResponse */
+        $operationResponse = $client->longRunningRecognize($config, $audio);
+
+        $operationResponse->pollUntilComplete();
+
+             if ($operationResponse->operationSucceeded()) {
+
+                 /** @var LongRunningRecognizeResponse $results */
+                 $results = $operationResponse->getResult();
+                 printf("Class: %s\n", get_class($results));
+                 // dump($results);
+                 // doSomethingWith($result)
+             } else {
+                 $error = $operationResponse->getError();
+                 // handleError($error)
+             }
         // make the API call
-        $response = $client->recognize($config, $audio);
-        $results = $response->getResults();
+        // $response = $client->recognize($config, $audio);
+        //$results = $response->getResults();
 
         // print results
         $x = [];
+
+
         /** @var SpeechRecognitionResult $result */
-
-        foreach ($results as $result) {
-            $x[] = json_decode($result->serializeToJsonString());
+        foreach ($results->getResults() as $result) {
+            printf("Class: %s\n", get_class($result));
+            dump($result);
             $alternatives = $result->getAlternatives();
-            $mostLikely = $alternatives[0];
+            if (!empty($alternatives[0]))
+            {
+                $x[] = json_decode($result->serializeToJsonString());
+                $mostLikely = $alternatives[0];
 
-            $transcript = $mostLikely->getTranscript();
-            $confidence = $mostLikely->getConfidence();
-            /** @var WordInfo $wordInfo */
-            foreach ($mostLikely->getWords() as $wordInfo) {
-                $words[] = [
-                    // $wordInfo->serializeToJsonString()
-                ];
+                $transcript = $mostLikely->getTranscript();
+                $confidence = $mostLikely->getConfidence();
+                /** @var WordInfo $wordInfo */
+                foreach ($mostLikely->getWords() as $wordInfo) {
+                    $words[] = [
+                        // $wordInfo->serializeToJsonString()
+                    ];
+                }
+                printf('Transcript: %s' . PHP_EOL, $transcript);
+                printf('Confidence: %s' . PHP_EOL, $confidence);
+
             }
-            printf('Transcript: %s' . PHP_EOL, $transcript);
-            printf('Confidence: %s' . PHP_EOL, $confidence);
         }
 
         return  json_encode($x, JSON_PRETTY_PRINT);

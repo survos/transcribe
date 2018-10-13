@@ -20,7 +20,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/media", name="media")
+     * @Route("/", name="media")
      */
     public function index()
     {

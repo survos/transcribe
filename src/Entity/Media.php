@@ -44,6 +44,11 @@ class Media
      */
     private $transcriptRequested;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $word_count;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -119,4 +124,28 @@ class Media
     {
         return $this->getTranscriptJson() ? json_decode($this->getTranscriptJson()) : null;
     }
+
+    public function getWordCount(): ?int
+    {
+        return $this->word_count;
+    }
+
+    public function setWordCount(?int $word_count): self
+    {
+        $this->word_count = $word_count;
+
+        return $this;
+    }
+
+    public function getSentenceCount()
+    {
+        $transcript = $this->getTranscript();
+        return $transcript ? count($transcript): null;
+    }
+
+    public function getFileSize()
+    {
+        return filesize($this->getPath()) / (1024 * 1024) ;
+    }
+
 }

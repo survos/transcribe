@@ -10,7 +10,7 @@
 
 <div class="example-wrapper">
 =
-    <table>
+    <table class="table table-striped">
         <thead>
 
         </thead>
@@ -19,7 +19,9 @@
             <tr>
                 <td><a href="{{ path('media_show', {id: m.id}) }}">{{ m.id }}</a></td>
                 <td>{{ m.filename }}</td>
-                <td>{{ m.transcriptRequested }}</td>
+                <td>{{ m.transcriptRequested ? 'T'}}</td>
+                <td>{{ m.sentenceCount }}</td>
+                <td>{{ (m.fileSize / (1024 * 1024))|number_format(2) }}M</td>
             </tr>
 
         {% endfor %}
@@ -29,8 +31,7 @@
 
     This friendly message is coming from:
     <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/MediaController.php'|file_link(0) }}">src/Controller/MediaController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/media/index.html.twig'|file_link(0) }}">templates/media/index.html.twig</a></code></li>
+        <li><a href="{{ path('easyadmin') }}">EZ Admin</a></li>
     </ul>
 </div>
 {% endblock %}

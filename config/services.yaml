@@ -27,5 +27,12 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    survos.landing_menu_builder:
+        class: Survos\LandingBundle\Menu\LandingMenuBuilder
+        arguments: ["@knp_menu.factory"]
+        tags:
+        - { name: knp_menu.menu_builder, method: createMainMenu, alias: landing_menu } # The alias is what is used to retrieve the menu
+        - { name: knp_menu.menu_builder, method: createTestMenu, alias: test_menu }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -1,0 +1,4 @@
+survos_landing:
+  entities:
+    - App\Entity\Message: ~
+    - App\Entity\Archive: ~

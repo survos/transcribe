@@ -4,8 +4,32 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e55a0cff06b6006bf86e9b613d04359",
+    "content-hash": "59a96d514b9eadfb4325cff7fe89c906",
     "packages": [
+        {
+            "name": "bluemoehre/flac-php",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bluemoehre/flac-php.git",
+                "reference": "0194a5090124983d5dd8e72440d04955da0abc42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bluemoehre/flac-php/zipball/0194a5090124983d5dd8e72440d04955da0abc42",
+                "reference": "0194a5090124983d5dd8e72440d04955da0abc42",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "flac.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "PHP class for native reading FLAC's metadata",
+            "time": "2017-02-12T23:16:24+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.6.0",
@@ -1507,6 +1531,56 @@
             "time": "2018-09-27T19:41:35+00:00"
         },
         {
+            "name": "google/cloud-storage",
+            "version": "v1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-cloud-php-storage.git",
+                "reference": "3db9ba4fa8ac8749781c4ace05142375588ea75a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/3db9ba4fa8ac8749781c4ace05142375588ea75a",
+                "reference": "3db9ba4fa8ac8749781c4ace05142375588ea75a",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-core": "^1.23"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "google/cloud-pubsub": "^1.0",
+                "phpdocumentor/reflection": "^3.0",
+                "phpseclib/phpseclib": "^2",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "suggest": {
+                "google/cloud-pubsub": "May be used to register a topic to receive bucket notifications.",
+                "phpseclib/phpseclib": "May be used in place of OpenSSL for creating signed Cloud Storage URLs. Please require version ^2."
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-storage",
+                    "target": "googleapis/google-cloud-php-storage.git",
+                    "path": "Storage",
+                    "entry": "src/StorageClient.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\Storage\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Cloud Storage Client for PHP",
+            "time": "2018-10-08T13:57:02+00:00"
+        },
+        {
             "name": "google/gax",
             "version": "0.37.0",
             "source": {
@@ -1910,6 +1984,129 @@
                 "sql"
             ],
             "time": "2014-01-12T16:20:24+00:00"
+        },
+        {
+            "name": "knplabs/knp-menu",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/KnpMenu.git",
+                "reference": "655630a1db0b72108262d1a844de3b1ba0885be5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/655630a1db0b72108262d1a844de3b1ba0885be5",
+                "reference": "655630a1db0b72108262d1a844de3b1ba0885be5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "psr/container": "^1.0",
+                "symfony/http-foundation": "~2.4|~3.0|^4.0",
+                "symfony/phpunit-bridge": "~3.3|^4.0",
+                "symfony/routing": "~2.3|~3.0|^4.0",
+                "twig/twig": "~1.16|~2.0"
+            },
+            "suggest": {
+                "twig/twig": "for the TwigRenderer and the integration with your templates"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Menu\\": "src/Knp/Menu"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+                },
+                {
+                    "name": "KnpLabs",
+                    "homepage": "https://knplabs.com"
+                }
+            ],
+            "description": "An object oriented menu library",
+            "homepage": "https://knplabs.com",
+            "keywords": [
+                "menu",
+                "tree"
+            ],
+            "time": "2017-11-18T20:49:26+00:00"
+        },
+        {
+            "name": "knplabs/knp-menu-bundle",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
+                "reference": "6bea43eb84fc67c43ab2b43709194efffa8a8ac0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/6bea43eb84fc67c43ab2b43709194efffa8a8ac0",
+                "reference": "6bea43eb84fc67c43ab2b43709194efffa8a8ac0",
+                "shasum": ""
+            },
+            "require": {
+                "knplabs/knp-menu": "~2.3",
+                "php": "^5.6 || ^7",
+                "symfony/framework-bundle": "~2.7|~3.0 | ^4.0"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.7|~3.0 | ^4.0",
+                "symfony/phpunit-bridge": "^3.3 | ^4.0",
+                "symfony/templating": "~2.7|~3.0 | ^4.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Bundle\\MenuBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                },
+                {
+                    "name": "Knplabs",
+                    "homepage": "http://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/KnpLabs/KnpMenuBundle/contributors"
+                }
+            ],
+            "description": "This bundle provides an integration of the KnpMenu library",
+            "keywords": [
+                "menu"
+            ],
+            "time": "2017-12-24T16:32:39+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2531,6 +2728,49 @@
                 "controllers"
             ],
             "time": "2018-09-30T05:16:57+00:00"
+        },
+        {
+            "name": "survos/landing-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/LandingBundle.git",
+                "reference": "d1daf661003fc9eb04bd47a222eeec89272117da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/LandingBundle/zipball/d1daf661003fc9eb04bd47a222eeec89272117da",
+                "reference": "d1daf661003fc9eb04bd47a222eeec89272117da",
+                "shasum": ""
+            },
+            "require": {
+                "knplabs/knp-menu-bundle": "^2.0",
+                "symfony/workflow": "^4.1",
+                "twig/twig": "^2.5"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": "true"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\LandingBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Add a landing and login page to a Symfony4 application",
+            "time": "2018-09-25T13:38:06+00:00"
         },
         {
             "name": "symfony/asset",
@@ -4994,6 +5234,73 @@
             "time": "2018-09-30T03:38:13+00:00"
         },
         {
+            "name": "symfony/workflow",
+            "version": "v4.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/workflow.git",
+                "reference": "c22c5def84dda887414ac80f93930245faa394b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/workflow/zipball/c22c5def84dda887414ac80f93930245faa394b2",
+                "reference": "c22c5def84dda887414ac80f93930245faa394b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/property-access": "~3.4|~4.0"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/event-dispatcher": "~3.4|~4.0",
+                "symfony/expression-language": "~3.4|~4.0",
+                "symfony/security-core": "~3.4|~4.0",
+                "symfony/validator": "~3.4|~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Workflow\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                }
+            ],
+            "description": "Symfony Workflow Component",
+            "homepage": "http://symfony.com",
+            "keywords": [
+                "petrinet",
+                "place",
+                "state",
+                "statemachine",
+                "transition",
+                "workflow"
+            ],
+            "time": "2018-10-02T12:40:59+00:00"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v4.1.6",
             "source": {
@@ -5173,6 +5480,170 @@
                 "templating"
             ],
             "time": "2018-07-13T07:18:09+00:00"
+        },
+        {
+            "name": "wapmorgan/binary-stream",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wapmorgan/BinaryStream.git",
+                "reference": "ca4989c15801635d79f65426b1b0fc6fe803b620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wapmorgan/BinaryStream/zipball/ca4989c15801635d79f65426b1b0fc6fe803b620",
+                "reference": "ca4989c15801635d79f65426b1b0fc6fe803b620",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wapmorgan\\BinaryStream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A handy tool for working with binary data",
+            "keywords": [
+                "binary",
+                "binary-data",
+                "reader",
+                "writer"
+            ],
+            "time": "2017-06-18T01:02:52+00:00"
+        },
+        {
+            "name": "wapmorgan/file-type-detector",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wapmorgan/FileTypeDetector.git",
+                "reference": "1db30747b674fe9444294c5393794d18f712f114"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wapmorgan/FileTypeDetector/zipball/1db30747b674fe9444294c5393794d18f712f114",
+                "reference": "1db30747b674fe9444294c5393794d18f712f114",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wapmorgan\\FileTypeDetector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Detects file type by filename or content and generates correct mimetype.",
+            "keywords": [
+                "files",
+                "filetype",
+                "formats",
+                "mimetype"
+            ],
+            "time": "2017-05-13T11:45:42+00:00"
+        },
+        {
+            "name": "wapmorgan/media-file",
+            "version": "0.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wapmorgan/MediaFile.git",
+                "reference": "263f773696e02d173fb9636c9a8111ac84032292"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wapmorgan/MediaFile/zipball/263f773696e02d173fb9636c9a8111ac84032292",
+                "reference": "263f773696e02d173fb9636c9a8111ac84032292",
+                "shasum": ""
+            },
+            "require": {
+                "bluemoehre/flac-php": "1.0.2",
+                "wapmorgan/binary-stream": "~0.4.0",
+                "wapmorgan/file-type-detector": "^1.0.2",
+                "wapmorgan/mp3info": "~0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "boyhagemann/wave": "Wav support"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wapmorgan\\MediaFile\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A unified reader of metadata from audio & video files",
+            "keywords": [
+                "aac",
+                "amr",
+                "avi",
+                "flac",
+                "mp3",
+                "mp4",
+                "ogg",
+                "wav",
+                "wma",
+                "wmv"
+            ],
+            "time": "2018-03-10T00:56:03+00:00"
+        },
+        {
+            "name": "wapmorgan/mp3info",
+            "version": "0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wapmorgan/Mp3Info.git",
+                "reference": "1f98fd2316c81e1b67627fd3acf27c12791071ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wapmorgan/Mp3Info/zipball/1f98fd2316c81e1b67627fd3acf27c12791071ac",
+                "reference": "1f98fd2316c81e1b67627fd3acf27c12791071ac",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/mp3scan"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wapmorgan\\Mp3Info\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "The fastest php library to extract mp3 tags & meta information.",
+            "keywords": [
+                "audio",
+                "id3",
+                "id3v1",
+                "id3v2",
+                "mp3",
+                "mpeg"
+            ],
+            "time": "2018-03-19T20:01:04+00:00"
         },
         {
             "name": "zendframework/zend-code",
@@ -5568,7 +6039,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "survos/landing-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

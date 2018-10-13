@@ -4,8 +4,11 @@
 
 {% block body %}
 
-    {{ dump(media) }}
+    {% for sentence in media.transcript %}
+        {% for a in sentence.alternatives %}
+            <b>{{ a.transcript }} <i>{{ (a.confidence*100)|number_format }}</i></b><br />
+    {% endfor %}
+    {% endfor %}
 
-    {{ dump(media.transcript) }}
 
 {% endblock %}

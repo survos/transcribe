@@ -1,4 +1,7 @@
 {
+    "bluemoehre/flac-php": {
+        "version": "v1.0.2"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -95,6 +98,9 @@
     "google/cloud-speech": {
         "version": "v0.17.1"
     },
+    "google/cloud-storage": {
+        "version": "v1.9.1"
+    },
     "google/gax": {
         "version": "0.37.0"
     },
@@ -118,6 +124,12 @@
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "knplabs/knp-menu": {
+        "version": "2.3.0"
+    },
+    "knplabs/knp-menu-bundle": {
+        "version": "v2.2.1"
     },
     "monolog/monolog": {
         "version": "1.23.0"
@@ -160,6 +172,9 @@
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
+    },
+    "survos/landing-bundle": {
+        "version": "dev-master"
     },
     "symfony/asset": {
         "version": "v4.1.6"
@@ -365,6 +380,15 @@
             "ref": "dae9b39fd6717970be7601101ce5aa960bf53d9a"
         }
     },
+    "symfony/workflow": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "7c8798612bf94fbe4cb75056a4cd7ea3a9183698"
+        }
+    },
     "symfony/yaml": {
         "version": "v4.1.6"
     },
@@ -379,6 +403,18 @@
     },
     "twig/twig": {
         "version": "v2.5.0"
+    },
+    "wapmorgan/binary-stream": {
+        "version": "0.4.0"
+    },
+    "wapmorgan/file-type-detector": {
+        "version": "1.1.2"
+    },
+    "wapmorgan/media-file": {
+        "version": "0.1.4"
+    },
+    "wapmorgan/mp3info": {
+        "version": "0.0.3"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"

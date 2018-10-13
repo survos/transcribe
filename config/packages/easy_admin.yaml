@@ -1,6 +1,10 @@
 easy_admin:
+
     entities:
-#        # List the entity class name you want to manage
-        - App\Entity\Media
-#        - App\Entity\Category
-#        - App\Entity\User
+
+        Media:
+            class: App\Entity\Media
+            label: 'Media'
+            list:
+                title: '%%entity_label%% listing'
+                fields: ['id', 'filename', 'flacExists', 'transcriptRequested', 'wordCount', 'sentenceCount', 'fileSize']

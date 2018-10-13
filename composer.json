@@ -7,7 +7,9 @@
         "ext-iconv": "*",
         "easycorp/easyadmin-bundle": "^1.17",
         "google/cloud-speech": "^0.17.1",
+        "google/cloud-storage": "^1.9",
         "sensio/framework-extra-bundle": "^5.2",
+        "survos/landing-bundle": "dev-master",
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
         "symfony/finder": "*",
@@ -15,7 +17,8 @@
         "symfony/framework-bundle": "*",
         "symfony/orm-pack": "^1.0",
         "symfony/twig-bundle": "*",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
         "symfony/dotenv": "*",
