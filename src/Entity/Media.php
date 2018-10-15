@@ -49,6 +49,11 @@ class Media
      */
     private $word_count;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $file_size;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -143,12 +148,16 @@ class Media
         return $transcript ? count($transcript): null;
     }
 
-    public function getFileSize(): float
+    public function calcFileSize(): ?float
     {
         if (file_exists($this->getPath())) {
             return filesize($this->getPath()) / (1024 * 1024) ;
         }
-        return -1;
+        return null;
+    }
+
+    public function getFileSize(): ?int {
+        return $this->file_size;
     }
 
     public function getAudioFilePath()
@@ -165,6 +174,13 @@ class Media
     public function rp($addl)
     {
     return array_merge($addl, ['id' => $this->getId()]);
+    }
+
+    public function setFileSize(?int $file_size): self
+    {
+        $this->file_size = $file_size;
+
+        return $this;
     }
 
 }
