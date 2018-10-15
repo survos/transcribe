@@ -143,9 +143,20 @@ class Media
         return $transcript ? count($transcript): null;
     }
 
-    public function getFileSize()
+    public function getFileSize(): float
     {
         return filesize($this->getPath()) / (1024 * 1024) ;
+    }
+
+    public function getAudioFilePath()
+    {
+        return $this->getPath() . '.flac';
+        // return $this->getFilename() . '.wav';
+    }
+
+    public function rp($addl)
+    {
+    return array_merge($addl, ['id' => $this->getId()]);
     }
 
 }

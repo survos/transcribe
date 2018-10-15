@@ -4,11 +4,93 @@
 
 {% block body %}
 
-    {% for sentence in media.transcript %}
-        {% for a in sentence.alternatives %}
-            <b>{{ a.transcript }} <i>{{ (a.confidence*100)|number_format }}</i></b><br />
-    {% endfor %}
-    {% endfor %}
+    <ul style="list-style: none">
+        <li>Audio Files
+            <ul id="xlist">
+                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
+                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
+                <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
+                <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
+
+                {% for sentence in media.transcript %}
+                    {% for a in sentence.alternatives %}
+                    {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
+                    {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
+                        {% set duration = max(2, (end - start + 1)) %}
+                    {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
+                <li><a href="#" data-value="{{ audio }}">{{ a.transcript }}</a> ({{ duration }}s) </li>
+                {% endfor %}
+                {% endfor %}
+
+            </ul>
+        </li>
+    </ul>
+
+    <audio id="audio" controls="controls">
+        <source id="audioSource" src="#"></source>
+        Your browser does not support the audio format.
+    </audio>
+
+
+    <div>
+        {% for sentence in media.transcript %}
+            <table id="list">
+
+                {% for a in sentence.alternatives %}
+                    {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
+                    {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
+                    {#
+                    {{ dump(start, end) }}
+                    #}
+                    {% set audio = path('media_stream', media.rp({start:start, duration: max(2, (end - start + 1)), _format: 'mp3'})) %}
+                    <tr>
+                        <td>
+                            <a href="#" data-value="{{ audio }}">Play {{ audio }}</a>
+                            <br /><a href="{{ audio }}"><i class="fa fa-download">Download</i> <small>{{ audio }}</small> </a>
+
+                        </td>
+
+                        <td>
+                            {{ a.transcript }}
+                        </td>
+                        <td>
+                            <i>{{ (a.confidence*100)|number_format }}</i>
+                        </td>
+                    </tr>
+                    <li>
+
+
+
+
+                    </li>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+
 
 
 {% endblock %}
+
+{% block javascripts %}
+<script>
+    console.log("javascripts");
+    xlist.onclick = function(e) {
+        console.log("list.onClick");
+        e.preventDefault();
+
+        var elm = e.target;
+        // the player
+        var audio = document.getElementById('audio');
+
+        var source = document.getElementById('audioSource');
+        source.src = elm.getAttribute('data-value');
+        console.log(source.src);
+
+
+        audio.load(); //call this to just preload the audio without playing
+        audio.play(); //call this to play the song right away
+    };
+</script>
+
+{% endblock  %}

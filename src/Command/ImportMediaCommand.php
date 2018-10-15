@@ -33,7 +33,8 @@ class ImportMediaCommand extends Command
     {
         $this
             ->setDescription('Add a short description for your command')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Path to media', "C:\\Users\\tacma\\OneDrive\\Pictures\\JUFJ\\Office-Test")
+            ->addArgument('path', InputArgument::OPTIONAL, 'Path to media',
+                "C:\\Users\\tacma\\OneDrive\\Pictures\\JUFJ\\Claire")
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
@@ -73,12 +74,12 @@ class ImportMediaCommand extends Command
         $io->note("Reading from $path");
 
         // Fetch the storage object
+        /*
         $storage = new StorageClient();
         $bucketName = 'JUFJ';
         $objectName = 'amanda-.MOV.flac';
         $object = $storage->bucket($bucketName)->object($objectName);
-
-        dump($object->gcsUri()); die();
+        */
 
 
         $finder = new Finder();

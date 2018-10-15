@@ -49,6 +49,7 @@ class TranscribeCommand extends Command
             ->setDescription('Transcribe videos using Google Speech API')
             ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
+            ->addOption('upload', null, InputOption::VALUE_NONE, 'upload to gs')
         ;
     }
 
@@ -71,7 +72,7 @@ class TranscribeCommand extends Command
         foreach ($qb->getQuery()->getResult() as $media) {
 
             $filename = $media->getPath();
-            $flacFilename = $media->getPath() . '.flac';
+            $flacFilename = $media->getAudioFilePath();
 
             // see if we already have it on gs
             // Fetch the storage object
@@ -84,15 +85,20 @@ class TranscribeCommand extends Command
                 $this->io->error($objectName . ' does not exist');
                 if ( !file_exists($flacFilename)) {
                     $io->note("Creating flac for $filename");
-                    $command = "ffmpeg -i $filename -c:a flac  -ac 1 $flacFilename";
+                    // $command = "ffmpeg -i $filename -c:a wav  -ac 1 $flacFilename";
+                    $command = "ffmpeg -i $filename -ac 1 $flacFilename";
+                    $io->note($command);
                     exec($command);
                 }
 
-                $file = fopen($flacFilename, 'r');
-                $bucket = $storage->bucket($bucketName);
-                $object = $bucket->upload($file, [
-                    'name' => $objectName
-                ]);
+                if ($input->getOption('upload'))
+                {
+                    $file = fopen($flacFilename, 'r');
+                    $bucket = $storage->bucket($bucketName);
+                    $object = $bucket->upload($file, [
+                        'name' => $objectName
+                    ]);
+                }
             }
 
 

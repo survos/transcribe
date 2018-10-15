@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Media;
 use Doctrine\ORM\EntityManagerInterface;
+use FFMpeg;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MediaController extends AbstractController
@@ -17,6 +21,47 @@ class MediaController extends AbstractController
     {
         $this->em = $em;
         $this->mediaRepo = $em->getRepository(Media::class);
+    }
+
+    /**
+     * @Route("/stream/{id}/{start}-{duration}.{_format}", name="media_stream")
+     */
+    public function stream_audio(Request $request, Media $media, $start=0, $duration = 10, $_format='mp3')
+    {
+        // ffmpeg  -t 10 -ss 2 -i C:\Users\tacma\OneDrive\Pictures\JUFJ\Amanda\amanda--6.MOV.wav  x.wav
+
+        $fn = sprintf("%d-%d-%d.mp3", $media->getId(), $start, $duration);
+
+        if (!file_exists($fn)) {
+            // if it exists locally, use it, otherwise open it on gs
+            $audioPath = $media->getAudioFilePath();
+            if (file_exists($audioPath)) {
+                $content = file_get_contents($audioPath);
+            } else {
+                // @todo get it on gs
+
+            }
+
+            $ffmpeg = FFMpeg\FFMpeg::create();
+            $audio = $ffmpeg->open($audioPath);
+            $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($start), FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
+
+            $format = new FFMpeg\Format\Audio\Mp3();
+            $audio->save($format, $fn);
+        }
+
+
+
+        $response =  new BinaryFileResponse($fn, 200, ['Content-Type' => 'audio/mpeg3'], true, ResponseHeaderBag::DISPOSITION_INLINE);
+        $response->headers->set('Content-Type', 'audio/mpeg3');
+        return $response;
+
+        $content = file_get_contents($fn); // hack
+
+        return new Response($content, 200, ['Content-Type' => 'audio/wav']);
+        return $this->render('media/show.html.twig', [
+            'media' => $media
+        ]);
     }
 
     /**
