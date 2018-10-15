@@ -48,6 +48,24 @@ class MediaController extends AbstractController
      */
     public function stream_audio(Request $request, Media $media, $start=0, $duration = 10, $_format='mp3')
     {
+        // path to raw audio (flac)
+        $audioPath = sys_get_temp_dir() . '/' . $media->getAudioFileName();
+
+        if ($_format == 'flac') {
+            if (!file_exists($audioPath)) {
+                $object = $this->getStorageObject($media);
+
+                if ($object->exists()) {
+                    $object->downloadToFile($audioPath);
+                }
+                $response = new BinaryFileResponse($audioPath, 200, ['Content-Type' => 'audio/mpeg3'], true, ResponseHeaderBag::DISPOSITION_INLINE);
+                $response->headers->set('Content-Type', 'audio/mpeg3');
+                return $response;
+            }
+        }
+
+
+
         // ffmpeg  -t 10 -ss 2 -i C:\Users\tacma\OneDrive\Pictures\JUFJ\Amanda\amanda--6.MOV.wav  x.wav
 
         $fn = sprintf("%d-%d-%d.mp3", $media->getId(), $start, $duration);
@@ -55,7 +73,6 @@ class MediaController extends AbstractController
         if (!file_exists($fn)) {
             // if it exists locally, use it, otherwise open it on gs
             // argh, need to cache this somewhere!
-            $audioPath = sys_get_temp_dir() . '/' . $media->getAudioFileName();
             if (file_exists($audioPath)) {
                 // $content = file_get_contents($audioPath);
             } else {

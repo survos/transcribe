@@ -48,6 +48,7 @@
                         <td>
                             <a href="#" data-value="{{ audio }}">Play {{ audio }}</a>
                             <br /><a href="{{ audio }}"><i class="fa fa-download">Download</i> <small>{{ audio }}</small> </a>
+                            <br /><a href="{{ path('media_stream', media.rp({_format: 'flac'}) ) }}"><i class="fa fa-download">Flac</i>  </a>
 
                         </td>
 
