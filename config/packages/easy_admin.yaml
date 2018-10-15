@@ -1,4 +1,7 @@
 easy_admin:
+    formats:
+        # ...
+        number: '%.2f'
 
     entities:
 
@@ -7,4 +10,5 @@ easy_admin:
             label: 'Media'
             list:
                 title: '%%entity_label%% listing'
-                fields: ['id', 'filename', 'flacExists', 'transcriptRequested', 'wordCount', 'sentenceCount', 'fileSize']
+                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'} ]
+                actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']

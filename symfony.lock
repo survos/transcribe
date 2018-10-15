@@ -1,4 +1,7 @@
 {
+    "alchemy/binary-driver": {
+        "version": "v2.0.0"
+    },
     "bluemoehre/flac-php": {
         "version": "v1.0.2"
     },
@@ -86,6 +89,9 @@
             "ref": "66070ea553247b0cd5275e21d0fe5399a25f40be"
         }
     },
+    "evenement/evenement": {
+        "version": "v2.1.0"
+    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
@@ -134,6 +140,9 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "neutron/temporary-filesystem": {
+        "version": "2.3.0"
+    },
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
@@ -145,6 +154,9 @@
     },
     "pagerfanta/pagerfanta": {
         "version": "v2.0.1"
+    },
+    "php-ffmpeg/php-ffmpeg": {
+        "version": "v0.13"
     },
     "psr/cache": {
         "version": "1.0.1"
