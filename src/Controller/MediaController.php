@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FFMpeg;
 use Google\Cloud\Core\Exception\NotFoundException;
 use Google\Cloud\Storage\StorageClient;
+use Google\Cloud\Storage\StorageObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,21 @@ class MediaController extends AbstractController
         $this->mediaRepo = $em->getRepository(Media::class);
     }
 
+    private function getStorageObject(Media $media): ?StorageObject
+    {
+        // $filename = $media->getFilename();
+        $flacFilename = $media->getAudioFileName();
+
+        // see if we already have it on gs
+        // Fetch the storage object
+        $storage = new StorageClient();
+        $bucketName = 'jufj';
+        $objectName = basename($flacFilename);
+        $object = $storage->bucket($bucketName)->object($objectName);
+        return $object;
+
+    }
+
     /**
      * @Route("/stream/{id}/{start}-{duration}.{_format}", name="media_stream")
      */
@@ -41,15 +57,7 @@ class MediaController extends AbstractController
             if (file_exists($audioPath)) {
                 // $content = file_get_contents($audioPath);
             } else {
-                // $filename = $media->getFilename();
-                $flacFilename = $media->getAudioFileName();
-
-                // see if we already have it on gs
-                // Fetch the storage object
-                $storage = new StorageClient();
-                $bucketName = 'jufj';
-                $objectName = basename($flacFilename);
-                $object = $storage->bucket($bucketName)->object($objectName);
+                $object = $this->getStorageObject($media);
 
                 if ($object->exists()) {
                     $object->downloadToFile($audioPath);
@@ -99,8 +107,10 @@ class MediaController extends AbstractController
      */
     public function show(Request $request, Media $media)
     {
+        $object = $this->getStorageObject($media);
         return $this->render('media/show.html.twig', [
-            'media' => $media
+            'media' => $media,
+            'object' => $object
         ]);
     }
 

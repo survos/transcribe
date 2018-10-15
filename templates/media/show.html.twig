@@ -4,6 +4,7 @@
 
 {% block body %}
 
+    {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
     <ul style="list-style: none">
         <li>Audio Files
             <ul id="xlist">
