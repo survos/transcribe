@@ -58,10 +58,12 @@ class MediaController extends AbstractController
                 if ($object->exists()) {
                     $object->downloadToFile($audioPath);
                 }
-                $response = new BinaryFileResponse($audioPath, 200, ['Content-Type' => 'audio/mpeg3'], true, ResponseHeaderBag::DISPOSITION_INLINE);
-                $response->headers->set('Content-Type', 'audio/mpeg3');
-                return $response;
             }
+            
+            $response = new BinaryFileResponse($audioPath, 200, ['Content-Type' => 'audio/mpeg3'], true, ResponseHeaderBag::DISPOSITION_INLINE);
+            $response->headers->set('Content-Type', 'audio/mpeg3');
+            return $response;
+
         }
 
 
