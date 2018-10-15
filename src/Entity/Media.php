@@ -50,7 +50,7 @@ class Media
     private $word_count;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="bigint", nullable=true)
      */
     private $file_size;
 
@@ -151,7 +151,7 @@ class Media
     public function calcFileSize(): ?float
     {
         if (file_exists($this->getPath())) {
-            return filesize($this->getPath()) / (1024 * 1024) ;
+            return filesize($this->getPath()) ;
         }
         return null;
     }

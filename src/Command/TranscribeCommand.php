@@ -59,7 +59,8 @@ class TranscribeCommand extends Command
         $this->io = $io;
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
-            ->where('m.transcriptRequested = true');
+            // ->andWhere('m.transcriptRequested = true')
+        ;
 
         if (!$input->getOption('force')) {
             $qb
@@ -104,13 +105,20 @@ class TranscribeCommand extends Command
 
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
-
-            $io->note("Transcribing $flacFilename");
-            if ($jsonResult = $this->transcribe_auto_punctuation($object))
-            {
-                $cacheFile = $filename . 'json';
-                file_put_contents($cacheFile, $jsonResult);
+            $cacheFile = $filename . 'json';
+            if (file_exists($cacheFile)) {
+                $io->note("Using $cacheFile");
+                $jsonResult = file_get_contents($cacheFile);
+            } else {
+                $io->note("Transcribing $flacFilename");
+                if ($jsonResult = $this->transcribe_auto_punctuation($object))
+                {
+                    $cacheFile = $filename . 'json';
+                    file_put_contents($cacheFile, $jsonResult);
+                }
             }
+
+
 
             /*
             $data = file_get_contents($flacFilename);

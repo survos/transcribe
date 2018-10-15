@@ -101,10 +101,14 @@ class ImportMediaCommand extends Command
             {
                 $media = (new Media())
                     ->setPath($file->getRealPath())
-                    ->setFileSize($file->getSize())
                     ->setFilename($filename);
                 $this->em->persist($media);
             }
+            print $file->getRealPath() . " " . $file->getSize()  . "\n";
+            $media
+                ->setFileSize($media->calcFileSize())
+                ;
+
         }
 
         // recursively get all the files in path
