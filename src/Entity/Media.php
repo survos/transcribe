@@ -145,13 +145,21 @@ class Media
 
     public function getFileSize(): float
     {
-        return filesize($this->getPath()) / (1024 * 1024) ;
+        if (file_exists($this->getPath())) {
+            return filesize($this->getPath()) / (1024 * 1024) ;
+        }
+        return -1;
     }
 
     public function getAudioFilePath()
     {
         return $this->getPath() . '.flac';
         // return $this->getFilename() . '.wav';
+    }
+
+    public function getAudioFileName()
+    {
+        return $this->getFilename() . '.flac';
     }
 
     public function rp($addl)

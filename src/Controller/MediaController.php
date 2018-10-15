@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Media;
 use Doctrine\ORM\EntityManagerInterface;
 use FFMpeg;
+use Google\Cloud\Core\Exception\NotFoundException;
+use Google\Cloud\Storage\StorageClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,11 +36,28 @@ class MediaController extends AbstractController
 
         if (!file_exists($fn)) {
             // if it exists locally, use it, otherwise open it on gs
-            $audioPath = $media->getAudioFilePath();
+            // argh, need to cache this somewhere!
+            $audioPath = sys_get_temp_dir() . '/' . $media->getAudioFileName();
             if (file_exists($audioPath)) {
-                $content = file_get_contents($audioPath);
+                // $content = file_get_contents($audioPath);
             } else {
-                // @todo get it on gs
+                // $filename = $media->getFilename();
+                $flacFilename = $media->getAudioFileName();
+
+                // see if we already have it on gs
+                // Fetch the storage object
+                $storage = new StorageClient();
+                $bucketName = 'jufj';
+                $objectName = basename($flacFilename);
+                $object = $storage->bucket($bucketName)->object($objectName);
+
+                if ($object->exists()) {
+                    $object->downloadToFile($audioPath);
+                    // file_put_contents($audioPath, $content);
+                } else {
+                    throw new NotFoundException("$objectName on $bucketName does not exist " . $object->gcsUri());
+                }
+
 
             }
 
