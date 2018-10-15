@@ -33,7 +33,9 @@ class MediaController extends AbstractController
 
         // see if we already have it on gs
         // Fetch the storage object
-        $storage = new StorageClient();
+        $storage = new StorageClient([
+            'keyFile' => json_decode(getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+        ]);
         $bucketName = 'jufj';
         $objectName = basename($flacFilename);
         $object = $storage->bucket($bucketName)->object($objectName);
