@@ -104,9 +104,8 @@ class ImportMediaCommand extends Command
                     ->setFilename($filename);
                 $this->em->persist($media);
             }
-            print $file->getRealPath() . " " . $file->getSize()  . "\n";
             $media
-                ->setFileSize($media->calcFileSize())
+                ->setFileSize($file->getSize())
                 ;
 
         }
