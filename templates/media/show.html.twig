@@ -27,6 +27,16 @@
         </li>
     </ul>
 
+
+    {% set source = path('media_stream', media.rp({_format: 'flac'}) ) %}
+    <audio id="audio" controls="controls">
+        <source id="audioSource" src="{{ source  }}"></source>
+        Your browser does not support the audio format.
+    </audio>
+    <br /><a href="{{ source }}">{{ source }}</a>
+    <br />
+
+
     <audio id="audio" controls="controls">
         <source id="audioSource" src="#"></source>
         Your browser does not support the audio format.
