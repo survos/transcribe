@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
@@ -12,6 +13,22 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Media
 {
+
+    use MarkingTrait;
+
+    const
+        PLACE_START = 'start',
+        PLACE_AUDIO_LOCAL = 'local',
+        PLACE_AUDIO_UPLOADED = 'uploaded',
+        PLACE_TRANSCRIBED = 'transcribed',
+        PLACE_MP3_UPLOADED = 'transcribed';
+
+    const
+        TRANSITION_EXRACT_RAW_AUDIO = 'extract_raw_audio',
+        TRANSITION_UPLOAD_RAW = 'upload_raw',
+        TRANSITION_TRANSCRIBE = 'transcribe'
+    ;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -53,6 +70,11 @@ class Media
      * @ORM\Column(type="bigint", nullable=true)
      */
     private $file_size;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $duration;
 
     public function __construct()
     {
@@ -179,6 +201,18 @@ class Media
     public function setFileSize(?int $file_size): self
     {
         $this->file_size = $file_size;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "345898bf4355fd311232d67f38c67986",
+    "content-hash": "0934f97449ed6bac041ef1509e8fa3ca",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -3006,6 +3006,40 @@
             ],
             "description": "Add a landing and login page to a Symfony4 application",
             "time": "2018-09-25T13:38:06+00:00"
+        },
+        {
+            "name": "survos/workflow-bundle",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../Survos/WorkflowBundle",
+                "reference": "a7aefbb35c8f42e41f92cb0c02a843a90366d2c5",
+                "shasum": null
+            },
+            "require": {
+                "symfony/workflow": "^4.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": "true"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\WorkflowBundle\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Add some functionality to the Symfony Workflow Component"
         },
         {
             "name": "symfony/apache-pack",
@@ -6297,7 +6331,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "survos/landing-bundle": 20
+        "survos/landing-bundle": 20,
+        "survos/workflow-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

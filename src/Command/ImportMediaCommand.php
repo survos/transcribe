@@ -15,6 +15,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use wapmorgan\MediaFile\MediaFile;
 
+use FFMpeg;
+
+
 class ImportMediaCommand extends Command
 {
     protected static $defaultName = 'app:import-media';
@@ -41,6 +44,14 @@ class ImportMediaCommand extends Command
 
     private function info($filename)
     {
+
+        $ffprobe = FFMpeg\FFProbe::create();
+        $fileInfo = $ffprobe
+            ->format($filename) // extracts file informations
+            ->all();
+
+        return $fileInfo;
+
         try {
 
             $media = MediaFile::open($filename);
@@ -95,7 +106,7 @@ class ImportMediaCommand extends Command
 
             $filename = $file->getRelativePathname();
 
-            // $this->info($file->getRealPath());
+            $info = $this->info($file->getRealPath());
 
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
@@ -106,6 +117,7 @@ class ImportMediaCommand extends Command
             }
             print $file->getRealPath() . " " . $file->getSize()  . "\n";
             $media
+                ->setDuration(round($info['duration']))
                 ->setFileSize($media->calcFileSize())
                 ;
 

@@ -22,6 +22,7 @@
                 <td>{{ m.transcriptRequested ? 'T'}}</td>
                 <td>{{ m.sentenceCount }}</td>
                 <td>{{ (m.fileSize / (1024 * 1024))|number_format(2) }}M</td>
+                <td><a href="http://jufj.storage.googleapis.com/{{ m.audioFileName }}">{{ m.audioFileName }}</a></td>
             </tr>
 
         {% endfor %}

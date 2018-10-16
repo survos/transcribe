@@ -94,11 +94,20 @@ class TranscribeCommand extends Command
 
                 if ($input->getOption('upload'))
                 {
+                    $options = ['gs' => ['acl' => 'public-read']];
+                    $context = stream_context_create($options);
+                    $fileName = "gs://${my_bucket}/public_file.txt";
+                    file_put_contents($fileName, $publicFileText, 0, $context);
+
+
+                    $publicUrl = CloudStorageTools::getPublicUrl($fileName, false);
+
                     $file = fopen($flacFilename, 'r');
                     $bucket = $storage->bucket($bucketName);
                     $object = $bucket->upload($file, [
                         'name' => $objectName
                     ]);
+                    $object->acl()->add();
                 }
             }
 
@@ -196,7 +205,9 @@ class TranscribeCommand extends Command
         ;
 
         // create the speech client
-        $client = new SpeechClient();
+        $client = new SpeechClient([
+            'keyFile' => 'x'
+        ]);
 
 
         /** @var OperationResponse $operationResponse */

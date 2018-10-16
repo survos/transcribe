@@ -32,6 +32,8 @@ class MediaController extends AbstractController
         $flacFilename = $media->getAudioFileName();
 
         // see if we already have it on gs
+        // export GOOGLE_APPLICATION_CREDENTIALS=$(cat account.json) or export GOOGLE_CREDENTIALS="account.json":
+
         // Fetch the storage object
         $storage = new StorageClient([
             'keyFile' => (array)json_decode(getenv('GOOGLE_APPLICATION_CREDENTIALS'), true)
