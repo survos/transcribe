@@ -1,2 +1,22 @@
 framework:
-    workflows: ~
+    workflows:
+        media:
+            type: 'state_machine'
+            marking_store:
+                arguments: marking
+            supports:
+                - App\Entity\Media
+            initial_place: !php/const App\Entity\Media::PLACE_START
+            places:
+                !php/const App\Entity\Media::PLACE_START: ~
+                !php/const App\Entity\Media::PLACE_AUDIO_LOCAL: ~
+                !php/const App\Entity\Media::PLACE_TRANSCRIBED: ~
+                !php/const App\Entity\Media::PLACE_MP3_UPLOADED:
+                    metadata:
+                        title: Travis start
+                        color: green
+
+            transitions:
+                !php/const App\Entity\Media::TRANSITION_EXRACT_RAW_AUDIO:
+                    from: !php/const App\Entity\Media::PLACE_START
+                    to: !php/const App\Entity\Media::PLACE_AUDIO_LOCAL

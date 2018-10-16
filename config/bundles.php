@@ -16,4 +16,5 @@ return [
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Survos\LandingBundle\SurvosLandingBundle::class => ['all' => true],
+    Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
 ];

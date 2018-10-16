@@ -1,0 +1,7 @@
+survos_workflow:
+  direction: LR
+  entities:
+    - App\Entity\Loan
+    - App\Entity\License
+    - App\Entity\LoanTransaction
+

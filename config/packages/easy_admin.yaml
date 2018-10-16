@@ -3,6 +3,12 @@ easy_admin:
         # ...
         number: '%.2f'
 
+    design:
+        menu:
+            - {route: 'survos_landing', label: 'Home' }
+            - {entity: Media}
+            - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
+
     entities:
 
         Media:
@@ -10,5 +16,5 @@ easy_admin:
             label: 'Media'
             list:
                 title: '%%entity_label%% listing'
-                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'} ]
+                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'duration', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'} ]
                 actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']
