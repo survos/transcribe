@@ -173,9 +173,6 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
-    "ralouphie/getallheaders": {
-        "version": "2.0.5"
-    },
     "rize/uri-template": {
         "version": "0.3.2"
     },
@@ -460,5 +457,8 @@
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
+    },
+    "zendframework/zend-eventmanager": {
+        "version": "3.2.1"
     }
 }
