@@ -8,9 +8,13 @@ easy_admin:
             - {route: 'survos_landing', label: 'Home' }
             - {entity: Project}
             - {entity: Media}
+            - {entity: Marker }
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
 
     entities:
+
+        Marker:
+            class: App\Entity\Marker
 
         Project:
             class: App\Entity\Project
@@ -22,5 +26,5 @@ easy_admin:
             label: 'Media'
             list:
                 title: '%%entity_label%% listing'
-                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'duration', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'}, 'transcribeSize' ]
+                fields: ['id', 'filename', {property: 'transcriptRequested', label: 'Transcribe?'}, 'flacExists', 'wordCount', 'duration', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'}, 'transcribeSize' ]
                 actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']

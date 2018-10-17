@@ -173,6 +173,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "ralouphie/getallheaders": {
+        "version": "2.0.5"
+    },
     "rize/uri-template": {
         "version": "0.3.2"
     },
@@ -186,9 +189,6 @@
         }
     },
     "survos/landing-bundle": {
-        "version": "dev-master"
-    },
-    "survos/workflow-bundle": {
         "version": "dev-master"
     },
     "survos/workflow-extension-bundle": {
@@ -220,6 +220,9 @@
             "version": "3.3",
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
+    },
+    "symfony/contracts": {
+        "version": "1.0-dev"
     },
     "symfony/debug": {
         "version": "v4.1.6"
@@ -341,9 +344,6 @@
             "ref": "5f514d9d3b8a8aac3d62ae6a86b18b90ed0c7826"
         }
     },
-    "symfony/security": {
-        "version": "v4.1.6"
-    },
     "symfony/security-bundle": {
         "version": "3.3",
         "recipe": {
@@ -352,6 +352,18 @@
             "version": "3.3",
             "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
         }
+    },
+    "symfony/security-core": {
+        "version": "4.2-dev"
+    },
+    "symfony/security-csrf": {
+        "version": "4.2-dev"
+    },
+    "symfony/security-guard": {
+        "version": "4.2-dev"
+    },
+    "symfony/security-http": {
+        "version": "4.2-dev"
     },
     "symfony/stopwatch": {
         "version": "v4.1.6"
@@ -388,6 +400,9 @@
     },
     "symfony/var-dumper": {
         "version": "v4.1.6"
+    },
+    "symfony/var-exporter": {
+        "version": "4.2-dev"
     },
     "symfony/web-profiler-bundle": {
         "version": "3.3",
@@ -445,8 +460,5 @@
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }

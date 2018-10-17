@@ -11,7 +11,7 @@
         "php-ffmpeg/php-ffmpeg": "^0.13.0",
         "sensio/framework-extra-bundle": "^5.2",
         "survos/landing-bundle": "dev-master",
-        "survos/workflow-extension-bundle": "dev-master",
+        "survos/workflow-extension-bundle": "*",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
@@ -71,7 +71,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.1.*"
+            "require": "4.2.*"
         }
     }
 }
