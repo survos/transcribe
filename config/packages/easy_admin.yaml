@@ -6,15 +6,21 @@ easy_admin:
     design:
         menu:
             - {route: 'survos_landing', label: 'Home' }
+            - {entity: Project}
             - {entity: Media}
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
 
     entities:
+
+        Project:
+            class: App\Entity\Project
+            label: 'Bin'
+
 
         Media:
             class: App\Entity\Media
             label: 'Media'
             list:
                 title: '%%entity_label%% listing'
-                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'duration', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'} ]
+                fields: ['id', 'filename', 'transcriptRequested', 'wordCount', 'duration', 'sentenceCount', {property: 'fileSize', type: 'float', format: '%3.1f'}, 'transcribeSize' ]
                 actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']

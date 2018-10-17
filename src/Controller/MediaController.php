@@ -38,7 +38,7 @@ class MediaController extends AbstractController
         $storage = new StorageClient([
             'keyFile' => (array)json_decode(getenv('GOOGLE_APPLICATION_CREDENTIALS'), true)
         ]);
-        $bucketName = 'jufj';
+        $bucketName = $media->getBucketName();
         $objectName = basename($flacFilename);
         $object = $storage->bucket($bucketName)->object($objectName);
         return $object;

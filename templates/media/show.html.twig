@@ -28,7 +28,7 @@
     </ul>
 
 
-    {% set source = path('media_stream', media.rp({_format: 'flac'}) ) %}
+    {% set source = media.publicUrl('flac') %}
     <audio id="audio" controls="controls">
         <source id="audioSource" src="{{ source  }}"></source>
         Your browser does not support the audio format.
@@ -79,7 +79,6 @@
             </table>
         {% endfor %}
     </div>
-
 
 
 {% endblock %}

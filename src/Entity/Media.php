@@ -76,6 +76,12 @@ class Media
      */
     private $duration;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="media")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -215,6 +221,40 @@ class Media
         $this->duration = $duration;
 
         return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getPublicUrl($_format='flac')
+    {
+        return sprintf("https://storage.googleapis.com/%s/%s.%s",
+            $this->getBucketName(), $this->getBaseName(), $_format);
+
+    }
+
+    public function getBucketName()
+    {
+        return $this->getProject()->getBucketName();
+    }
+
+    public function getBaseName()
+    {
+        return basename($this->getFilename());
+    }
+
+    public function getTranscribeSize()
+    {
+        return $this->getTranscriptJson() ? strlen($this->getTranscriptJson()) : -1;
     }
 
 }
