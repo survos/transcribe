@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0934f97449ed6bac041ef1509e8fa3ca",
+    "content-hash": "0247c0d7ff2c574e217707de9cab1c6b",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -3008,13 +3008,18 @@
             "time": "2018-09-25T13:38:06+00:00"
         },
         {
-            "name": "survos/workflow-bundle",
+            "name": "survos/workflow-extension-bundle",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/workflow-bundle.git",
+                "reference": "9c1cac596dc4d753d4bf51eb35835b6ecc710f4c"
+            },
             "dist": {
-                "type": "path",
-                "url": "../Survos/WorkflowBundle",
-                "reference": "a7aefbb35c8f42e41f92cb0c02a843a90366d2c5",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/workflow-bundle/zipball/9c1cac596dc4d753d4bf51eb35835b6ecc710f4c",
+                "reference": "9c1cac596dc4d753d4bf51eb35835b6ecc710f4c",
+                "shasum": ""
             },
             "require": {
                 "symfony/workflow": "^4.1"
@@ -3030,6 +3035,7 @@
                     "Survos\\WorkflowBundle\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3039,7 +3045,8 @@
                     "email": "tacman@gmail.com"
                 }
             ],
-            "description": "Add some functionality to the Symfony Workflow Component"
+            "description": "Add some functionality to the Symfony Workflow Component",
+            "time": "2018-10-17T14:09:08+00:00"
         },
         {
             "name": "symfony/apache-pack",
@@ -6146,6 +6153,40 @@
             "time": "2018-10-10T09:24:14+00:00"
         },
         {
+            "name": "survos/workflow-bundle",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../Survos/WorkflowBundle",
+                "reference": "a7aefbb35c8f42e41f92cb0c02a843a90366d2c5",
+                "shasum": null
+            },
+            "require": {
+                "symfony/workflow": "^4.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": "true"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\WorkflowBundle\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Add some functionality to the Symfony Workflow Component"
+        },
+        {
             "name": "symfony/dotenv",
             "version": "v4.1.6",
             "source": {
@@ -6329,10 +6370,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "survos/landing-bundle": 20,
-        "survos/workflow-bundle": 20
+        "survos/workflow-extension-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

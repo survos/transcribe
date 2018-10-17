@@ -191,6 +191,9 @@
     "survos/workflow-bundle": {
         "version": "dev-master"
     },
+    "survos/workflow-extension-bundle": {
+        "version": "dev-master"
+    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
