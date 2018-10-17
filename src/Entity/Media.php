@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -82,10 +84,16 @@ class Media
      */
     private $project;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Marker", mappedBy="media", orphanRemoval=true)
+     */
+    private $markers;
+
     public function __construct()
     {
         $this->flacExists = false;
         $this->transcriptRequested = false;
+        $this->markers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -255,6 +263,47 @@ class Media
     public function getTranscribeSize()
     {
         return $this->getTranscriptJson() ? strlen($this->getTranscriptJson()) : -1;
+    }
+
+    public function getProjectCode()
+    {
+        return $this->getProject()->getCode();
+    }
+
+    public function __toString()
+    {
+        return sprintf("%s/%s", $this->getProjectCode(), $this->getBaseName());
+    }
+
+    /**
+     * @return Collection|Marker[]
+     */
+    public function getMarkers(): Collection
+    {
+        return $this->markers;
+    }
+
+    public function addMarker(Marker $marker): self
+    {
+        if (!$this->markers->contains($marker)) {
+            $this->markers[] = $marker;
+            $marker->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarker(Marker $marker): self
+    {
+        if ($this->markers->contains($marker)) {
+            $this->markers->removeElement($marker);
+            // set the owning side to null (unless already changed)
+            if ($marker->getMedia() === $this) {
+                $marker->setMedia(null);
+            }
+        }
+
+        return $this;
     }
 
 }

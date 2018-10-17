@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Marker;
 use App\Entity\Media;
+use App\Form\MarkerFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use FFMpeg;
 use Google\Cloud\Core\Exception\NotFoundException;
@@ -10,6 +12,7 @@ use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -130,9 +133,23 @@ class MediaController extends AbstractController
      */
     public function show(Request $request, Media $media)
     {
+
+        $marker = (new Marker())
+            ->setMedia($media);
+
+        $form = $this->createForm(MarkerFormType::class, $marker);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($marker);
+            $this->em->flush();
+            // return JSON if it's an ajax request?
+            return new JsonResponse(['status' => 'ok']);
+        }
+
         $object = $this->getStorageObject($media);
         return $this->render('media/show.html.twig', [
             'media' => $media,
+            'form' => $form->createView(),
             'object' => $object
         ]);
     }

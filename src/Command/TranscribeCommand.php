@@ -84,7 +84,7 @@ class TranscribeCommand extends Command
             ;
         /** @var Media $media */
 
-        // @todo Note: Speech-to-Text supports WAV files with LINEAR16 or MULAW encoded audio.  So we could store wav data in db and stream it.
+        // Note: Speech-to-Text also supports WAV files with LINEAR16 or MULAW encoded audio.
 
 
         foreach ($qb->getQuery()->getResult() as $media) {
@@ -95,13 +95,9 @@ class TranscribeCommand extends Command
             $filename = $media->getPath();
             $flacFilename = $media->getAudioFilePath();
 
-            // see if we already have it on gs
-            // Fetch the storage object
-            $storage = new StorageClient();
 
             $objectName = basename($flacFilename); // hmm, might need the directory here!
             $object = $bucket->object($objectName);
-
 
             // if object is not in cloud
             if (!$object->exists()) {
@@ -125,14 +121,14 @@ class TranscribeCommand extends Command
                         'name' => $objectName
                     ]);
                 }
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                printf('gs://%s/%s is now public' . PHP_EOL, $bucket->name(), $objectName);
             }
 
-            $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
-            printf('gs://%s/%s is now public' . PHP_EOL, $bucket->name(), $objectName);
-
-            // $object->acl()->add('publicRead');
-
-
+            if ($object->exists()) {
+                $media->setFlacExists(true);
+                $io->note(sprintf("Flac file exists in gs: %s ", $object->name()) );
+            }
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
             $cacheFile = $filename . 'json';
@@ -140,6 +136,7 @@ class TranscribeCommand extends Command
                 $io->note("Using $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
             } else {
+                $jsonResult = null;
                 if ($input->getOption('transcribe')) {
                     $io->note("Transcribing $flacFilename");
                     if ($jsonResult = $this->transcribe_auto_punctuation($object))
@@ -176,13 +173,17 @@ class TranscribeCommand extends Command
             */
 
 
+            if ($jsonResult) {
+                $media
+                    ->setTranscriptRequested(true) // since it already exists
+                    ->setTranscriptJson($jsonResult);
 
-            $media
-                ->setTranscriptJson($jsonResult);
+            }
             $this->em->flush();
 
         }
 
+        $this->em->flush();
 
 
         $io->success('Finished transcribing');
@@ -234,8 +235,6 @@ class TranscribeCommand extends Command
 
                  /** @var LongRunningRecognizeResponse $results */
                  $results = $operationResponse->getResult();
-                 printf("Class: %s\n", get_class($results));
-                 // dump($results);
                  // doSomethingWith($result)
              } else {
                  $error = $operationResponse->getError();
@@ -251,8 +250,6 @@ class TranscribeCommand extends Command
 
         /** @var SpeechRecognitionResult $result */
         foreach ($results->getResults() as $result) {
-            printf("Class: %s\n", get_class($result));
-            dump($result);
             $alternatives = $result->getAlternatives();
             if (!empty($alternatives[0]))
             {

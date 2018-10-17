@@ -1,49 +1,86 @@
-{% extends 'base.html.twig' %}
+{% extends '@SurvosLanding/public_base.html.twig' %}
 
 {% block title %}Media {{ media.filename }}!{% endblock %}
 
 {% block body %}
 
-    {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
-    <ul style="list-style: none">
-        <li>Audio Files
-            <ul id="xlist">
-                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
+    <div class="row">
+        <div class="col-sm-12">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
 
-                {% for sentence in media.transcript %}
-                    {% for a in sentence.alternatives %}
+        <input type="submit" class="btn" value="Create" />
+        {{ form_end(form) }}
+
+            <ul>
+                {% for marker in media.markers %}
+                    <li>{{ marker.title }} <i>{{ marker.note }}</i></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+        {% set source = media.publicUrl('flac') %}
+        <audio id="audio" controls="controls" style="width: 100%;">
+            <source id="audioSource" src="{{ source  }}"></source>
+            Your browser does not support the audio format.
+        </audio>
+        <br /><a href="{{ source }}">{{ source }}</a>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-6">
+            {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
+            <ul style="list-style: none">
+                <li>Audio Files
+                    <ul id="xlist">
+                        {#
+                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
+                        #}
+
+                        {% for sentence in media.transcript %}
+                            {% for a in sentence.alternatives %}
+                                {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
+                                {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
+                                {% set duration = max(2, (end - start + 1)) %}
+                                {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
+                                <li><a href="#" data-value="{{ start }}">{{ start }}: {{ a.transcript }}</a> ({{ duration }}s) </li>
+                            {% endfor %}
+                        {% endfor %}
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <h3>Transcript by word</h3>
+            {% set idx = 0 %}
+            {% for sentence in media.transcript %}
+                <p>
+                {% for a in sentence.alternatives %}
                     {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
                     {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
-                        {% set duration = max(2, (end - start + 1)) %}
-                    {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
-                <li><a href="#" data-value="{{ audio }}">{{ a.transcript }}</a> ({{ duration }}s) </li>
+                    {% for word in a.words %}
+                        {% set idx = idx + 1 %}
+                        <span class="word" data-word-index={{ idx }} data-start="{{ word.startTime|trim('s') }}">{{ word.word }}</span>
+                    {% endfor %}
                 {% endfor %}
-                {% endfor %}
-
-            </ul>
-        </li>
-    </ul>
-
-
-    {% set source = media.publicUrl('flac') %}
-    <audio id="audio" controls="controls">
-        <source id="audioSource" src="{{ source  }}"></source>
-        Your browser does not support the audio format.
-    </audio>
-    <br /><a href="{{ source }}">{{ source }}</a>
-    <br />
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 
 
-    <audio id="audio" controls="controls">
-        <source id="audioSource" src="#"></source>
-        Your browser does not support the audio format.
-    </audio>
-
-
-    <div>
+    <h3>Transcript by sentence</h3>
+        <div>
         {% for sentence in media.transcript %}
             <table id="list">
 
@@ -84,8 +121,36 @@
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    console.log("javascripts");
+{{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script>
+
+    $(function() {
+
+        $('#myForm').ajaxForm(function() {
+            alert("Thank you for your comment!");
+        });
+
+        $('.word').click( function (e) {
+            console.log(e, $(this))
+
+            if (e.shiftKey) {
+                $(this).css("color", "red");
+                stopTime = $(this).data('start') + 1;
+                // get the phrase and add to the form
+                audio.pause();
+            } else {
+                $(this).css("color", "green");
+                time = $(this).data('start');
+                word_index = $(this).data('word-index');
+                $('#marker_form_firstWordIndex').val(word_index);
+                audio.currentTime = time;
+                audio.play();
+            }
+        });
+
+
+    console.log("jquery loaded");
     xlist.onclick = function(e) {
         console.log("list.onClick");
         e.preventDefault();
@@ -95,13 +160,16 @@
         var audio = document.getElementById('audio');
 
         var source = document.getElementById('audioSource');
-        source.src = elm.getAttribute('data-value');
-        console.log(source.src);
+//         source.src = elm.getAttribute('data-value');
+        time = elm.getAttribute('data-value');
+        console.log(time);
 
+        audio.currentTime = time;
 
-        audio.load(); //call this to just preload the audio without playing
+        // audio.load(); //call this to just preload the audio without playing
         audio.play(); //call this to play the song right away
     };
+    });
 </script>
 
 {% endblock  %}

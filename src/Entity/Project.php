@@ -102,4 +102,9 @@ class Project
     {
         return 'survos_' . $this->getCode();
     }
+
+    public function __toString()
+    {
+        return $this->getCode();
+    }
 }
