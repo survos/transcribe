@@ -32,10 +32,11 @@
         </div>
     </div>
 
+    {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
 
     <div class="row">
+        {% if false %}
         <div class="col-lg-6">
-            {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
             <ul style="list-style: none">
                 <li>Audio Files
                     <ul id="xlist">
@@ -60,8 +61,33 @@
                 </li>
             </ul>
         </div>
+        {% endif %}
+
         <div class="col-lg-6">
             <h3>Transcript by word</h3>
+
+            <div id="transcript">
+
+            {% for words in media.words|batch(50) %}
+                <p>
+                    {% for word in words %}
+                        {# if the word in in a marker, display the entire marker instead, in the right color #}
+                        {% if word.marker %}
+                           {% if word.marker.firstWordIdx == word.idx %}
+                                {% set marker = word.marker %}
+                                <i>{{ marker.idx }} {{ marker.note }}</i>
+                            {% endif %}
+                            {% else %}
+                                <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+
+
+            {% endfor %}
+            </div>
+
+            {#
             {% set idx = 0 %}
             {% for sentence in media.transcript %}
                 <p>
@@ -70,11 +96,12 @@
                     {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
                     {% for word in a.words %}
                         {% set idx = idx + 1 %}
-                        <span class="word" data-word-index={{ idx }} data-start="{{ word.startTime|trim('s') }}">{{ word.word }}</span>
+                        <span class="word" data-word-index={{ idx }} data-start="{{ word.startTime }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
                     {% endfor %}
                 {% endfor %}
                 </p>
             {% endfor %}
+            #}
         </div>
     </div>
 
@@ -106,18 +133,22 @@
                             <i>{{ (a.confidence*100)|number_format }}</i>
                         </td>
                     </tr>
-                    <li>
-
-
-
-
-                    </li>
                 {% endfor %}
             </table>
         {% endfor %}
     </div>
 
+    {% if app.request.get('debug') %}
+        <pre>
+            {{ media.transcriptJson }}
+        </pre>
+        {{ dump(media.transcript) }}
+    {% endif %}
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -127,29 +158,46 @@
 
     $(function() {
 
+        var element = $("#transcript");
+
+        element.attr('unselectable', 'on').css('user-select', 'none').on('selectstart dragstart', false);
+
+        {#
         $('#myForm').ajaxForm(function() {
             alert("Thank you for your comment!");
         });
+        #}
 
         $('.word').click( function (e) {
+            word_index = $(this).data('word-index');
             console.log(e, $(this))
 
             if (e.shiftKey) {
                 $(this).css("color", "red");
-                stopTime = $(this).data('start') + 1;
+                stopTime = $(this).data('end');
+                $('#marker_form_lastWordIndex').val(word_index);
                 // get the phrase and add to the form
-                audio.pause();
+
+
+
+                $('#audio').bind('timeupdate', function () {
+                    console.log(stopTime);
+                    if (this.currentTime > stopTime) this.pause();
+                });
+                audio.play();
+
             } else {
                 $(this).css("color", "green");
                 time = $(this).data('start');
-                word_index = $(this).data('word-index');
                 $('#marker_form_firstWordIndex').val(word_index);
+                console.log(time)
                 audio.currentTime = time;
-                audio.play();
+                audio.pause();
             }
         });
 
 
+        {# this is good for the .flac list
     console.log("jquery loaded");
     xlist.onclick = function(e) {
         console.log("list.onClick");
@@ -169,6 +217,7 @@
         // audio.load(); //call this to just preload the audio without playing
         audio.play(); //call this to play the song right away
     };
+        #}
     });
 </script>
 
