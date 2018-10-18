@@ -17,6 +17,7 @@ class MarkerFormType extends AbstractType
             ->add('color')
             ->add('idx')
             ->add('firstWordIndex')
+            ->add('lastWordIndex')
             ->add('media', null, [
                 'disabled' => true
             ])

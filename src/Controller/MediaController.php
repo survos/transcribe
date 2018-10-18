@@ -143,7 +143,8 @@ class MediaController extends AbstractController
             $this->em->persist($marker);
             $this->em->flush();
             // return JSON if it's an ajax request?
-            return new JsonResponse(['status' => 'ok']);
+            return $this->redirectToRoute('media_show', $media->rp());
+            // return new JsonResponse(['status' => 'ok']);
         }
 
         $object = $this->getStorageObject($media);

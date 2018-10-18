@@ -89,11 +89,18 @@ class Media
      */
     private $markers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Word", mappedBy="media", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OrderBy({"idx" = "asc"})
+     */
+    private $words;
+
     public function __construct()
     {
         $this->flacExists = false;
         $this->transcriptRequested = false;
         $this->markers = new ArrayCollection();
+        $this->words = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,9 +214,9 @@ class Media
         return $this->getFilename() . '.flac';
     }
 
-    public function rp($addl)
+    public function rp($addl=[])
     {
-    return array_merge($addl, ['id' => $this->getId()]);
+        return array_merge($addl, ['id' => $this->getId()]);
     }
 
     public function setFileSize(?int $file_size): self
@@ -300,6 +307,37 @@ class Media
             // set the owning side to null (unless already changed)
             if ($marker->getMedia() === $this) {
                 $marker->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Word[]
+     */
+    public function getWords(): Collection
+    {
+        return $this->words;
+    }
+
+    public function addWord(Word $word): self
+    {
+        if (!$this->words->contains($word)) {
+            $this->words[] = $word;
+            $word->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWord(Word $word): self
+    {
+        if ($this->words->contains($word)) {
+            $this->words->removeElement($word);
+            // set the owning side to null (unless already changed)
+            if ($word->getMedia() === $this) {
+                $word->setMedia(null);
             }
         }
 

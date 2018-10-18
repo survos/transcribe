@@ -105,8 +105,11 @@ class ImportMediaCommand extends Command
         }
 
         // update the dir in the project, may have changed with --dir
-        $project
-            ->setBasePath($dir);
+        if (!empty($dir) || $dir = $input->getOption('dir'))
+        {
+            $project
+                ->setBasePath($dir);
+        }
 
         // now that we have a project, read the files
 

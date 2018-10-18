@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,21 @@ class Marker
      * @ORM\Column(type="integer")
      */
     private $first_word_index;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Word", mappedBy="marker")
+     */
+    private $words;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $last_word_index;
+
+    public function __construct()
+    {
+        $this->words = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +137,49 @@ class Marker
     public function setFirstWordIndex(int $first_word_index): self
     {
         $this->first_word_index = $first_word_index;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Word[]
+     */
+    public function getWords(): Collection
+    {
+        return $this->words;
+    }
+
+    public function addWord(Word $word): self
+    {
+        if (!$this->words->contains($word)) {
+            $this->words[] = $word;
+            $word->setMarker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWord(Word $word): self
+    {
+        if ($this->words->contains($word)) {
+            $this->words->removeElement($word);
+            // set the owning side to null (unless already changed)
+            if ($word->getMarker() === $this) {
+                $word->setMarker(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLastWordIndex(): ?int
+    {
+        return $this->last_word_index;
+    }
+
+    public function setLastWordIndex(int $last_word_index): self
+    {
+        $this->last_word_index = $last_word_index;
 
         return $this;
     }

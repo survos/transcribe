@@ -4,7 +4,9 @@ namespace App\Command;
 
 use App\Entity\Media;
 use App\Entity\Project;
+use App\Entity\Word;
 use App\Repository\ProjectRepository;
+use App\Repository\WordRepository;
 use Google\ApiCore\OperationResponse;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
@@ -37,17 +39,22 @@ class TranscribeCommand extends Command
 
     private $mediaRepository;
     private $projectRepository;
+    private $wordRepository;
     private $em;
     /** @var SymfonyStyle */
     private $io;
 
     private $storageClient;
 
-    public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository, ProjectRepository $projectRepository)
+    public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository,
+                                ProjectRepository $projectRepository,
+    WordRepository $wordRepository
+    )
     {
         parent::__construct($name);
         $this->mediaRepository = $mediaRepository;
         $this->projectRepository = $projectRepository;
+        $this->wordRepository = $wordRepository;
         $this->em = $em;
 
         // probably a way to auto-wire this!
@@ -74,7 +81,7 @@ class TranscribeCommand extends Command
 
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
-            // ->andWhere('m.transcriptRequested = true')
+            ->andWhere('m.transcriptRequested = true')
         ;
 
         if (!$input->getOption('force')) {
@@ -133,13 +140,13 @@ class TranscribeCommand extends Command
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
             $cacheFile = $filename . 'json';
             if (file_exists($cacheFile)) {
-                $io->note("Using $cacheFile");
+                $io->note("Using cache file: $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
             } else {
                 $jsonResult = null;
                 if ($input->getOption('transcribe')) {
                     $io->note("Transcribing $flacFilename");
-                    if ($jsonResult = $this->transcribe_auto_punctuation($object))
+                    if ($jsonResult = $this->transcribe_auto_punctuation($object, $media))
                     {
                         $cacheFile = $filename . 'json';
                         file_put_contents($cacheFile, $jsonResult);
@@ -174,6 +181,44 @@ class TranscribeCommand extends Command
 
 
             if ($jsonResult) {
+
+                $result = json_decode($jsonResult, true);
+                $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
+                $this->em->flush(); // hack
+
+                $idx = 0;
+                foreach ($result as $sentence) {
+                    $x = $sentence['alternatives'][0];
+                    foreach ($x['words'] as $word) {
+                        $idx++;
+                        try {
+                            foreach (['startTime', 'endTime'] as $v) {
+                                $word[$v] = sprintf("%3.1f", rtrim($word[$v], 's'));
+                            }
+                            $w = $word['word']; // the string
+                            $lastChar = substr($w, -1);
+                            if ( in_array($lastChar, ['?', '.', '!']) ) {
+                                $punct = $lastChar;
+                                // remove last char from word?
+                            } else {
+                                $punct = null;
+                            }
+                            $wordObject = (new Word())
+                                // ->setMedia($media)
+                                ->setIdx($idx)
+                                ->setEndPunctuation($punct)
+                                ->setWord($w)
+                                ->setStartTime($word['startTime'])
+                                ->setEndTime($word['endTime'])
+                            ;
+                        } catch (\Exception $e) {
+                            dump($word);
+                            throw new \Exception($e->getMessage());
+                        }
+                        $media->addWord($wordObject);
+                    }
+                }
+
                 $media
                     ->setTranscriptRequested(true) // since it already exists
                     ->setTranscriptJson($jsonResult);
@@ -192,7 +237,7 @@ class TranscribeCommand extends Command
     /**
      * Transcribe the given audio file with auto punctuation enabled
      */
-    function transcribe_auto_punctuation(StorageObject $object)
+    function transcribe_auto_punctuation(StorageObject $object, Media $media)
     {
 
 
@@ -258,12 +303,7 @@ class TranscribeCommand extends Command
 
                 $transcript = $mostLikely->getTranscript();
                 $confidence = $mostLikely->getConfidence();
-                /** @var WordInfo $wordInfo */
-                foreach ($mostLikely->getWords() as $wordInfo) {
-                    $words[] = [
-                        // $wordInfo->serializeToJsonString()
-                    ];
-                }
+
                 printf('Transcript: %s' . PHP_EOL, $transcript);
                 printf('Confidence: %s' . PHP_EOL, $confidence);
 
