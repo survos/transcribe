@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c28a82c77f1d72c4090c5419cbde564",
+    "content-hash": "c0322f0b5be67ca536ffb35b887925ce",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -6673,7 +6673,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "survos/landing-bundle": 20
+        "survos/landing-bundle": 20,
+        "survos/workflow-extension-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

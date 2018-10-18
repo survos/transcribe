@@ -107,4 +107,11 @@ class Project
     {
         return $this->getCode();
     }
+
+    // @todo: should be code...
+    public function rp($addl=[])
+    {
+        return array_merge($addl, ['id' => $this->getId()]);
+    }
+
 }

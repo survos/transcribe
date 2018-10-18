@@ -2,21 +2,26 @@
 
 {% block title %}Media {{ media.filename }}!{% endblock %}
 
+{% block markerForm %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+<input type="submit" class="btn" value="Create" />
+{{ form_end(form) }}
+{% endblock %}
+
+{% block listMarkers %}
+<ul>
+    {% for marker in media.markers %}
+        <li>{{ marker.title }} <i>{{ marker.note }}</i></li>
+    {% endfor %}
+</ul>
+{% endblock %}
 {% block body %}
 
     <div class="row">
         <div class="col-sm-12">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
 
-        <input type="submit" class="btn" value="Create" />
-        {{ form_end(form) }}
-
-            <ul>
-                {% for marker in media.markers %}
-                    <li>{{ marker.title }} <i>{{ marker.note }}</i></li>
-                {% endfor %}
-            </ul>
         </div>
     </div>
 
@@ -64,11 +69,16 @@
         {% endif %}
 
         <div class="col-lg-6">
+            {{ block('markerForm') }}
+            {{ block('listMarkers') }}
+        </div>
+
+            <div class="col-lg-6">
             <h3>Transcript by word</h3>
 
             <div id="transcript">
 
-            {% for words in media.words|batch(50) %}
+            {% for words in media.words|batch(150) %}
                 <p>
                     {% for word in words %}
                         {# if the word in in a marker, display the entire marker instead, in the right color #}
@@ -86,6 +96,7 @@
 
             {% endfor %}
             </div>
+
 
             {#
             {% set idx = 0 %}
@@ -106,6 +117,7 @@
     </div>
 
 
+    {% if false %}
     <h3>Transcript by sentence</h3>
         <div>
         {% for sentence in media.transcript %}
@@ -137,12 +149,12 @@
             </table>
         {% endfor %}
     </div>
+    {% endif %}
 
     {% if app.request.get('debug') %}
         <pre>
             {{ media.transcriptJson }}
         </pre>
-        {{ dump(media.transcript) }}
     {% endif %}
 
 {% endblock %}
@@ -182,7 +194,7 @@
 
                 $('#audio').bind('timeupdate', function () {
                     console.log(stopTime);
-                    if (this.currentTime > stopTime) this.pause();
+                    if (this.currentTime > stopTime+1.0) this.pause();
                 });
                 audio.play();
 
