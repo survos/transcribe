@@ -13,7 +13,7 @@
 {% block listMarkers %}
 <ul>
     {% for marker in media.markers %}
-        <li>{{ marker.title }} <i>{{ marker.note }}</i></li>
+        <li style="color:{{ marker.color }}">{{ marker.firstWordIndex }}-{{ marker.lastWordIndex }}: {{ marker.title }} <i>{{ marker.note }}</i></li>
     {% endfor %}
 </ul>
 {% endblock %}
@@ -68,13 +68,13 @@
         </div>
         {% endif %}
 
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             {{ block('markerForm') }}
             {{ block('listMarkers') }}
         </div>
 
-            <div class="col-lg-6">
-            <h3>Transcript by word</h3>
+            <div class="col-lg-8">
+            <h3>Transcript {{ media.filename }}</h3>
 
             <div id="transcript">
 
@@ -88,7 +88,7 @@
                                 <i>{{ marker.idx }} {{ marker.note }}</i>
                             {% endif %}
                             {% else %}
-                                <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                                <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
                         {% endif %}
                     {% endfor %}
                 </p>
@@ -188,6 +188,8 @@
                 $(this).css("color", "red");
                 stopTime = $(this).data('end');
                 $('#marker_form_lastWordIndex').val(word_index);
+                $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
+
                 // get the phrase and add to the form
 
 
@@ -200,8 +202,10 @@
 
             } else {
                 $(this).css("color", "green");
+                startWord = $(this);
                 time = $(this).data('start');
                 $('#marker_form_firstWordIndex').val(word_index);
+                $('#marker_form_title').val(startWord.data('word'));
                 console.log(time)
                 audio.currentTime = time;
                 audio.pause();
