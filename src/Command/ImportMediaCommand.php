@@ -154,6 +154,10 @@ class ImportMediaCommand extends Command
                 ->setFileSize($media->calcFileSize())
                 ;
 
+            if (file_exists($file->getRealPath() . 'json')) {
+                $media->setTranscriptRequested(true);
+            }
+
         }
 
         // recursively get all the files in path

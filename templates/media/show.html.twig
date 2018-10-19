@@ -191,6 +191,12 @@
                 $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
 
                 // get the phrase and add to the form
+                let title = '';
+                for (let i = startWordIndex; i <= word_index; i++) {
+
+                    title = title + $('#w_' + i).data('word') + ' ';
+                }
+                $('#marker_form_title').val(title);
 
 
 
@@ -204,6 +210,7 @@
                 $(this).css("color", "green");
                 startWord = $(this);
                 time = $(this).data('start');
+                startWordIndex = word_index;
                 $('#marker_form_firstWordIndex').val(word_index);
                 $('#marker_form_title').val(startWord.data('word'));
                 console.log(time)

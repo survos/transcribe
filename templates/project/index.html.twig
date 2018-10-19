@@ -18,6 +18,7 @@
         {% for p in projects %}
             <tr>
                 <td><a href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
+                <td>{{ p.basePath }}</td>
                 <td>{{ p.media.count}}</td>
             </tr>
         {% endfor %}
@@ -25,4 +26,6 @@
     </table>
 
 </div>
+
+    <a href="{{ path('easyadmin') }}">EZ Admin</a>
 {% endblock %}

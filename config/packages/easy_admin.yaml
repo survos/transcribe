@@ -34,7 +34,7 @@ easy_admin:
                     - 'id'
                     - 'filename'
                     - {property: 'transcriptRequested', label: 'Transcribe?'}
-                    - 'flacExists'
+                    - project
                     - words
                     - 'duration'
                     - sentenceCount

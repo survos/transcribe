@@ -128,13 +128,12 @@ class TranscribeCommand extends Command
                         'name' => $objectName
                     ]);
                 }
-                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
-                printf('gs://%s/%s is now public' . PHP_EOL, $bucket->name(), $objectName);
             }
 
             if ($object->exists()) {
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
                 $media->setFlacExists(true);
-                $io->note(sprintf("Flac file exists in gs: %s ", $object->name()) );
+                $io->note(sprintf("Public Flac file exists in gs: %s ", $object->name()) );
             }
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
@@ -181,6 +180,7 @@ class TranscribeCommand extends Command
 
 
             if ($jsonResult) {
+                $io->note("Import words from JSON");
 
                 $result = json_decode($jsonResult, true);
                 $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
