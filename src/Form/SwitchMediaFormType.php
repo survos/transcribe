@@ -20,7 +20,7 @@ class SwitchMediaFormType extends AbstractType
             ->add('media', EntityType::class, [
                 'class' => Media::class,
                 'property_path' => 'filename',
-                'choices' => $media->getProject()->getMedia(),
+                'choices' => $media->getProject()->getMedia()->filter(function (Media $media) { return $media->getFlacExists(); }),
                 'mapped' => false,
                 'data' => $media
             ])

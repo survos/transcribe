@@ -10,7 +10,7 @@ $(function() {
         console.log(e, $(this))
 
         if (e.shiftKey) {
-            $(this).css("color", "red");
+            // $(this).css("color", "red");
             stopTime = $(this).data('end');
             $('#marker_form_lastWordIndex').val(word_index);
             // $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
@@ -27,7 +27,8 @@ $(function() {
                         title = title + '..';
                     }
                 }
-                $('#w_' + i).css("text-decoration", "underline overline");
+                $('#w_' + i).addClass('newMarker');
+                // $('#w_' + i).css("text-decoration", "underline overline");
                 note = note + $('#w_' + i).data('word') + ' ';
             }
             // $('#marker_form_title').val(title);
@@ -42,7 +43,10 @@ $(function() {
             audio.play();
 
         } else {
-            $(this).css("text-decoration", "underline overline");
+            $('.newMarker').removeClass('newMarker');
+
+            $(this).addClass('newMarker');
+            // $(this).css("text-decoration", "underline overline");
             startWord = $(this);
 
             time = $(this).data('start');
