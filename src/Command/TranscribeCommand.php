@@ -3,7 +3,12 @@
 namespace App\Command;
 
 use App\Entity\Media;
+use App\Entity\Project;
+use App\Entity\Word;
+use App\Repository\ProjectRepository;
+use App\Repository\WordRepository;
 use Google\ApiCore\OperationResponse;
+use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
 use Symfony\Component\Console\Command\Command;
@@ -11,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,24 +38,39 @@ class TranscribeCommand extends Command
     protected static $defaultName = 'app:transcribe';
 
     private $mediaRepository;
+    private $projectRepository;
+    private $wordRepository;
     private $em;
     /** @var SymfonyStyle */
     private $io;
 
-    public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository)
+    private $storageClient;
+
+    public function __construct($name=null, EntityManagerInterface $em, MediaRepository $mediaRepository,
+                                ProjectRepository $projectRepository,
+    WordRepository $wordRepository
+    )
     {
         parent::__construct($name);
         $this->mediaRepository = $mediaRepository;
+        $this->projectRepository = $projectRepository;
+        $this->wordRepository = $wordRepository;
         $this->em = $em;
+
+        // probably a way to auto-wire this!
+        $this->storageClient = new StorageClient([
+
+        ]);
     }
 
     protected function configure()
     {
         $this
             ->setDescription('Transcribe videos using Google Speech API')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
-            ->addOption('upload', null, InputOption::VALUE_NONE, 'upload to gs')
+            ->addOption('upload', null, InputOption::VALUE_NONE, 'upload flac to gs')
+            ->addOption('mp3', null, InputOption::VALUE_NONE, 'upload mp3 to gs')
+            ->addOption('transcribe', null, InputOption::VALUE_NONE, 'call text-to-speech')
         ;
     }
 
@@ -58,8 +79,9 @@ class TranscribeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $this->io = $io;
 
+
         $qb = $this->mediaRepository->createQueryBuilder('m')
-            // ->andWhere('m.transcriptRequested = true')
+            ->andWhere('m.transcriptRequested = true')
         ;
 
         if (!$input->getOption('force')) {
@@ -69,56 +91,67 @@ class TranscribeCommand extends Command
             ;
         /** @var Media $media */
 
-        // @todo Note: Speech-to-Text supports WAV files with LINEAR16 or MULAW encoded audio.  So we could store wav data in db and stream it.
+        // Note: Speech-to-Text also supports WAV files with LINEAR16 or MULAW encoded audio.
+
+
         foreach ($qb->getQuery()->getResult() as $media) {
+
+            $projectCode = $media->getProject()->getCode();
+            $bucket = $this->getBucket($projectCode);
 
             $filename = $media->getPath();
             $flacFilename = $media->getAudioFilePath();
 
-            // see if we already have it on gs
-            // Fetch the storage object
-            $storage = new StorageClient();
-            $bucketName = 'jufj';
-            $objectName = basename($flacFilename);
-            $object = $storage->bucket($bucketName)->object($objectName);
 
+            $objectName = basename($flacFilename); // hmm, might need the directory here!
+            $object = $bucket->object($objectName);
+
+            // if object is not in cloud
             if (!$object->exists()) {
-                $this->io->error($objectName . ' does not exist');
-                if ( !file_exists($flacFilename)) {
-                    $io->note("Creating flac for $filename");
-                    // $command = "ffmpeg -i $filename -c:a wav  -ac 1 $flacFilename";
-                    $command = "ffmpeg -i $filename -ac 1 $flacFilename";
-                    $io->note($command);
-                    exec($command);
-                }
+                $this->io->note($objectName . ' does not exist');
+                $this->createFlac($filename, $flacFilename, $io);
 
                 if ($input->getOption('upload'))
                 {
+                    /*
+                    $options = ['gs' => ['acl' => 'public-read']];
+                    $context = stream_context_create($options);
+                    $fileName = "gs://${my_bucket}/public_file.txt";
+                    file_put_contents($fileName, $publicFileText, 0, $context);
+                    */
+
+
+                    // $publicUrl = CloudStorageTools::getPublicUrl($fileName, false);
+
                     $file = fopen($flacFilename, 'r');
-                    $bucket = $storage->bucket($bucketName);
                     $object = $bucket->upload($file, [
                         'name' => $objectName
                     ]);
                 }
             }
 
-
+            if ($object->exists()) {
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                $media->setFlacExists(true);
+                $io->note(sprintf("Public Flac file exists in gs: %s ", $object->name()) );
+            }
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
             $cacheFile = $filename . 'json';
             if (file_exists($cacheFile)) {
-                $io->note("Using $cacheFile");
+                $io->note("Using cache file: $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
             } else {
-                $io->note("Transcribing $flacFilename");
-                if ($jsonResult = $this->transcribe_auto_punctuation($object))
-                {
-                    $cacheFile = $filename . 'json';
-                    file_put_contents($cacheFile, $jsonResult);
+                $jsonResult = null;
+                if ($input->getOption('transcribe')) {
+                    $io->note("Transcribing $flacFilename");
+                    if ($jsonResult = $this->transcribe_auto_punctuation($object, $media))
+                    {
+                        $cacheFile = $filename . 'json';
+                        file_put_contents($cacheFile, $jsonResult);
+                    }
                 }
             }
-
-
 
             /*
             $data = file_get_contents($flacFilename);
@@ -146,20 +179,57 @@ class TranscribeCommand extends Command
             */
 
 
+            if ($jsonResult) {
+                $io->note("Import words from JSON");
 
-            $media
-                ->setTranscriptJson($jsonResult);
+                $result = json_decode($jsonResult, true);
+                $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
+                $this->em->flush(); // hack
+
+                $idx = 0;
+                foreach ($result as $sentence) {
+                    $x = $sentence['alternatives'][0];
+                    foreach ($x['words'] as $word) {
+                        $idx++;
+                        try {
+                            foreach (['startTime', 'endTime'] as $v) {
+                                $word[$v] = sprintf("%3.1f", rtrim($word[$v], 's'));
+                            }
+                            $w = $word['word']; // the string
+                            $lastChar = substr($w, -1);
+                            if ( in_array($lastChar, ['?', '.', '!']) ) {
+                                $punct = $lastChar;
+                                // remove last char from word?
+                            } else {
+                                $punct = null;
+                            }
+                            $wordObject = (new Word())
+                                // ->setMedia($media)
+                                ->setIdx($idx)
+                                ->setEndPunctuation($punct)
+                                ->setWord($w)
+                                ->setStartTime($word['startTime'])
+                                ->setEndTime($word['endTime'])
+                            ;
+                        } catch (\Exception $e) {
+                            dump($word);
+                            throw new \Exception($e->getMessage());
+                        }
+                        $media->addWord($wordObject);
+                    }
+                }
+
+                $media
+                    ->setTranscriptRequested(true) // since it already exists
+                    ->setTranscriptJson($jsonResult);
+
+            }
             $this->em->flush();
-            print $media->getTranscriptJson();
 
         }
 
+        $this->em->flush();
 
-        $arg1 = $input->getArgument('arg1');
-
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
-        }
 
         $io->success('Finished transcribing');
     }
@@ -167,7 +237,7 @@ class TranscribeCommand extends Command
     /**
      * Transcribe the given audio file with auto punctuation enabled
      */
-    function transcribe_auto_punctuation(StorageObject $object)
+    function transcribe_auto_punctuation(StorageObject $object, Media $media)
     {
 
 
@@ -196,7 +266,9 @@ class TranscribeCommand extends Command
         ;
 
         // create the speech client
-        $client = new SpeechClient();
+        $client = new SpeechClient([
+            'keyFile' => 'x'
+        ]);
 
 
         /** @var OperationResponse $operationResponse */
@@ -208,8 +280,6 @@ class TranscribeCommand extends Command
 
                  /** @var LongRunningRecognizeResponse $results */
                  $results = $operationResponse->getResult();
-                 printf("Class: %s\n", get_class($results));
-                 // dump($results);
                  // doSomethingWith($result)
              } else {
                  $error = $operationResponse->getError();
@@ -225,8 +295,6 @@ class TranscribeCommand extends Command
 
         /** @var SpeechRecognitionResult $result */
         foreach ($results->getResults() as $result) {
-            printf("Class: %s\n", get_class($result));
-            dump($result);
             $alternatives = $result->getAlternatives();
             if (!empty($alternatives[0]))
             {
@@ -235,12 +303,7 @@ class TranscribeCommand extends Command
 
                 $transcript = $mostLikely->getTranscript();
                 $confidence = $mostLikely->getConfidence();
-                /** @var WordInfo $wordInfo */
-                foreach ($mostLikely->getWords() as $wordInfo) {
-                    $words[] = [
-                        // $wordInfo->serializeToJsonString()
-                    ];
-                }
+
                 printf('Transcript: %s' . PHP_EOL, $transcript);
                 printf('Confidence: %s' . PHP_EOL, $confidence);
 
@@ -249,5 +312,61 @@ class TranscribeCommand extends Command
 
         return  json_encode($x, JSON_PRETTY_PRINT);
     }
+
+    /**
+     * @param $filename
+     * @param $flacFilename
+     * @param $io
+     */
+    protected function createFlac($filename, $flacFilename, $io): void
+    {
+        if (!file_exists($flacFilename)) {
+            $io->note("Creating flac for $filename");
+            // $command = "ffmpeg -i $filename -c:a wav  -ac 1 $flacFilename";
+            $command = "ffmpeg -i $filename -ac 1 $flacFilename";
+            $this->io->note($command);
+            exec($command);
+        }
+    }
+
+
+    /**
+     * Create a Cloud Storage Bucket.
+     *
+     * @param string $bucketName name of the bucket to create.
+     * @param string $options options for the new bucket.
+     *
+     * @return Google\Cloud\Storage\Bucket the newly created bucket.
+     */
+    function getBucket($bucketName, $options = [], $purgeFirst = false): Bucket
+    {
+        // delete it while testing
+        $bucketName = 'survos_' . $bucketName;
+
+        $bucket = $this->storageClient->bucket($bucketName);
+
+        //
+        if ($bucket->exists()) {
+            if ($purgeFirst) {
+                $bucket->delete();
+            } else {
+                return $bucket;
+            }
+        }
+
+        $options = [
+            'predefinedAcl' => 'publicRead',
+            // 'storageClass' => 'REGIONAL',
+            'acl' => 'public-read'
+        ];
+
+        // if (!$bucket = $this->storageClient->bucket($bucketName))
+        {
+            $bucket = $this->storageClient->createBucket($bucketName, $options);
+        }
+
+        return $bucket;
+    }
+
 
 }

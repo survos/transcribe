@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-</html>
+{% extends "@SurvosLanding/public_base.html.twig" %}
+
+
+{% block breadcrumbs %}
+
+    <li>
+        <a href="{{ path('survos_landing') }}">Home</a>
+    </li>
+
+{% endblock %}
+{% block body %}
+    <ul class="list-inline">
+    {{ block('breadcrumbs') }}
+    </ul>
+
+    {{ block('content') }}
+{% endblock %}

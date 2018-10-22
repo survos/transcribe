@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
@@ -12,6 +15,22 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Media
 {
+
+    use MarkingTrait;
+
+    const
+        PLACE_START = 'start',
+        PLACE_AUDIO_LOCAL = 'local',
+        PLACE_AUDIO_UPLOADED = 'uploaded',
+        PLACE_TRANSCRIBED = 'transcribed',
+        PLACE_MP3_UPLOADED = 'transcribed';
+
+    const
+        TRANSITION_EXRACT_RAW_AUDIO = 'extract_raw_audio',
+        TRANSITION_UPLOAD_RAW = 'upload_raw',
+        TRANSITION_TRANSCRIBE = 'transcribe'
+    ;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -54,10 +73,44 @@ class Media
      */
     private $file_size;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $duration;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="media")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Marker", mappedBy="media", orphanRemoval=true)
+     */
+    private $markers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Word", mappedBy="media", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OrderBy({"idx" = "asc"})
+     */
+    private $words;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $speaker;
+
+    /**
+     * @ORM\Column(type="string", length=80, nullable=true)
+     */
+    private $display;
+
     public function __construct()
     {
         $this->flacExists = false;
         $this->transcriptRequested = false;
+        $this->markers = new ArrayCollection();
+        $this->words = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,14 +224,156 @@ class Media
         return $this->getFilename() . '.flac';
     }
 
-    public function rp($addl)
+    public function rp($addl=[])
     {
-    return array_merge($addl, ['id' => $this->getId()]);
+        return array_merge($addl, ['id' => $this->getId()]);
     }
 
     public function setFileSize(?int $file_size): self
     {
         $this->file_size = $file_size;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getPublicUrl($_format='flac')
+    {
+        return sprintf("https://storage.googleapis.com/%s/%s.%s",
+            $this->getBucketName(), $this->getBaseName(), $_format);
+
+    }
+
+    public function getBucketName()
+    {
+        return $this->getProject()->getBucketName();
+    }
+
+    public function getBaseName()
+    {
+        return basename($this->getFilename());
+    }
+
+    public function getTranscribeSize()
+    {
+        return $this->getTranscriptJson() ? strlen($this->getTranscriptJson()) : -1;
+    }
+
+    public function getProjectCode()
+    {
+        return $this->getProject()->getCode();
+    }
+
+    public function __toString()
+    {
+        return sprintf("%s/%s", $this->getProjectCode(), $this->getBaseName());
+    }
+
+    /**
+     * @return Collection|Marker[]
+     */
+    public function getMarkers(): Collection
+    {
+        return $this->markers;
+    }
+
+    public function addMarker(Marker $marker): self
+    {
+        if (!$this->markers->contains($marker)) {
+            $this->markers[] = $marker;
+            $marker->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarker(Marker $marker): self
+    {
+        if ($this->markers->contains($marker)) {
+            $this->markers->removeElement($marker);
+            // set the owning side to null (unless already changed)
+            if ($marker->getMedia() === $this) {
+                $marker->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Word[]
+     */
+    public function getWords(): Collection
+    {
+        return $this->words;
+    }
+
+    public function addWord(Word $word): self
+    {
+        if (!$this->words->contains($word)) {
+            $this->words[] = $word;
+            $word->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWord(Word $word): self
+    {
+        if ($this->words->contains($word)) {
+            $this->words->removeElement($word);
+            // set the owning side to null (unless already changed)
+            if ($word->getMedia() === $this) {
+                $word->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSpeaker(): ?string
+    {
+        return $this->speaker;
+    }
+
+    public function setSpeaker(?string $speaker): self
+    {
+        $this->speaker = $speaker;
+
+        return $this;
+    }
+
+    public function getDisplay(): ?string
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(?string $display): self
+    {
+        $this->display = $display;
 
         return $this;
     }

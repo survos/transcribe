@@ -1,39 +1,158 @@
-{% extends 'base.html.twig' %}
+{% extends '@SurvosLanding/public_base.html.twig' %}
+
+{% import _self as macro %}
 
 {% block title %}Media {{ media.filename }}!{% endblock %}
 
-{% block body %}
+{% block markerForm %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
 
+
+<input type="submit" class="btn" value="Create" />
+{{ form_end(form) }}
+{% endblock %}
+
+{# this could really be a menuitem, too #}
+{% block switchMediaForm %}
+    {# todo: make this inline and auto-jump #}
+    {{ form_start(switchForm) }}
+    {{ form_widget(switchForm) }}
+
+    <input type="submit" class="btn btn-xs" value="Switch" />
+    {{ form_end(switchForm) }}
+
+{% endblock %}
+
+    {% macro mediaWords(media) %}
+        {% for words in media.words|batch(150) %}
+            <p>
+                {% for word in words %}
+                    {# if the word in in a marker, display the entire marker instead, in the right color #}
+                    {% if word.marker %}
+                        {% if word.marker.firstWordIdx == word.idx %}
+                            {% set marker = word.marker %}
+                            <i>{{ marker.idx }} {{ marker.note }}</i>
+                        {% endif %}
+                    {% else %}
+                        <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                    {% endif %}
+                {% endfor %}
+            </p>
+
+
+        {% endfor %}
+
+    {% endmacro %}
+
+
+{% block breadcrumbs %}
+<a href="{{ path('project_show', media.project.rp) }}">{{ media.project.code }}</a> /
+<a href="{{ path('media_show', media.rp) }}">{{ media.filename }}</a>
+{% endblock %}
+
+{% block listMarkers %}
+<ul>
+    {% for marker in media.markers %}
+        <li style="color:{{ marker.color }}">{{ marker.firstWordIndex }}-{{ marker.lastWordIndex }}: {{ marker.title }} <i>{{ marker.note }}</i></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            {{ block('breadcrumbs') }}
+        </div>
+    </div>
+
+    <div class="row">
+        {% set source = media.publicUrl('flac') %}
+        <div class="col-sm-12">
+            {% if offline %}
+            OFFLINE
+            {% else %}
+        <audio id="audio" controls="controls" style="width: 100%;">
+            <source id="audioSource" {% if not offline %}src="{{ source  }}">{% endif %}</source>
+            Your browser does not support the audio format.
+        </audio>
+            {% endif %}
+        <br /><a href="{{ source }}">{{ source }}</a>
+
+        </div>
+    </div>
+
+    {% if offline %}OFFLINE{% else %}
     {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
-    <ul style="list-style: none">
-        <li>Audio Files
-            <ul id="xlist">
-                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
-                <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
+    {% endif %}
+    <div class="row">
+        {% if false %}
+        <div class="col-lg-6">
+            <ul style="list-style: none">
+                <li>Audio Files
+                    <ul id="xlist">
+                        {#
+                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
+                        <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
+                        #}
 
-                {% for sentence in media.transcript %}
-                    {% for a in sentence.alternatives %}
+                        {% for sentence in media.transcript %}
+                            {% for a in sentence.alternatives %}
+                                {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
+                                {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
+                                {% set duration = max(2, (end - start + 1)) %}
+                                {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
+                                <li><a href="#" data-value="{{ start }}">{{ start }}: {{ a.transcript }}</a> ({{ duration }}s) </li>
+                            {% endfor %}
+                        {% endfor %}
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="col-lg-4">
+            {{ block('markerForm') }}
+            {{ block('listMarkers') }}
+        </div>
+
+            <div class="col-lg-8">
+                {{ block('switchMediaForm') }}
+            <h3>Transcript {{ media.filename }}</h3>
+
+            <div id="transcript">
+
+                {{ macro.mediaWords(media) }}
+
+            </div>
+
+
+            {#
+            {% set idx = 0 %}
+            {% for sentence in media.transcript %}
+                <p>
+                {% for a in sentence.alternatives %}
                     {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
                     {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
-                        {% set duration = max(2, (end - start + 1)) %}
-                    {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
-                <li><a href="#" data-value="{{ audio }}">{{ a.transcript }}</a> ({{ duration }}s) </li>
+                    {% for word in a.words %}
+                        {% set idx = idx + 1 %}
+                        <span class="word" data-word-index={{ idx }} data-start="{{ word.startTime }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                    {% endfor %}
                 {% endfor %}
-                {% endfor %}
-
-            </ul>
-        </li>
-    </ul>
-
-    <audio id="audio" controls="controls">
-        <source id="audioSource" src="#"></source>
-        Your browser does not support the audio format.
-    </audio>
+                </p>
+            {% endfor %}
+            #}
+        </div>
+    </div>
 
 
-    <div>
+    {% if false %}
+    <h3>Transcript by sentence</h3>
+        <div>
         {% for sentence in media.transcript %}
             <table id="list">
 
@@ -59,40 +178,29 @@
                             <i>{{ (a.confidence*100)|number_format }}</i>
                         </td>
                     </tr>
-                    <li>
-
-
-
-
-                    </li>
                 {% endfor %}
             </table>
         {% endfor %}
     </div>
+    {% endif %}
 
-
+    {% if app.request.get('debug') %}
+        <pre>
+            {{ media.transcriptJson }}
+        </pre>
+    {% endif %}
 
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block javascripts %}
-<script>
-    console.log("javascripts");
-    xlist.onclick = function(e) {
-        console.log("list.onClick");
-        e.preventDefault();
-
-        var elm = e.target;
-        // the player
-        var audio = document.getElementById('audio');
-
-        var source = document.getElementById('audioSource');
-        source.src = elm.getAttribute('data-value');
-        console.log(source.src);
-
-
-        audio.load(); //call this to just preload the audio without playing
-        audio.play(); //call this to play the song right away
-    };
-</script>
+{{ parent() }}
+    {% if not offline %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    {% endif %}
+    <script src="/js/markers.js"></script>
 
 {% endblock  %}

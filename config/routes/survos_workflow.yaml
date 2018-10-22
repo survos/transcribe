@@ -1,0 +1,5 @@
+survos_workflow_bundle:
+    resource: '@SurvosWorkflowBundle/Controller/WorkflowController.php'
+    # resource: '@EasyAdminBundle/Controller/AdminController.php'
+    prefix: /workflow
+    type: annotation
