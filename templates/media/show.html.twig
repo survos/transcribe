@@ -25,17 +25,20 @@
 {% endblock %}
 
 {% macro listMarkers(markers) %}
-    <ol>
+    <ol class="sortable">
         {% for m in markers %}
             {% if not m.hidden and not m.irrelevant %}
 
-                <li style="color: {{ m.color }}">
+
+                <li id="marker_{{ m.id }}" style="color: {{ m.color }}">
                     <span class="hover">
                         <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
                     </span>
-                    {{ m.note }}</li>
+                    {{ m.note }}
+                </li>
             {% endif %}
         {% endfor %}
+
     </ol>
 
 {% endmacro %}

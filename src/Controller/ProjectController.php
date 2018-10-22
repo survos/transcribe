@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Marker;
 use App\Entity\Project;
+use App\Entity\Word;
 use App\Form\MarkerFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -45,6 +48,21 @@ class ProjectController extends AbstractController
             'markers' => $markers
         ]);
     }
+
+    /**
+     * @Route("/{id}/reorder", name="marker_reorder", methods="GET|POST")
+     */
+    public function reorder(Request $request, Project $project): Response
+    {
+        $ids = $request->get('marker');
+        foreach ($ids as $idx=>$id) {
+            $marker = $this->em->getRepository(Marker::class)->find($id);
+            $marker->setIdx($idx);
+        }
+        $this->em->flush();
+        return $this->redirectToRoute('project_show', $project->rp());
+    }
+
 
     /**
      * @Route("/select-markers/{id}", name="project_select_markers")

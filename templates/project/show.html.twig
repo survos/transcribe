@@ -13,7 +13,8 @@
     {% import "media/show.html.twig" as macro %}
 
     <div id="navbar" class="audio_transcriber">
-        transcription blcok
+
+        Soundbite player
         {{ macro.audio_player(false) }}
     </div>
 
@@ -69,4 +70,26 @@
 
 {% block javascripts %}
 {{ parent() }}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+    $( function() {
+        $('#order').text("start");
+        console.log("Sortable!");
+        $( ".sortable" ).sortable({
+            update: function( event, ui ) {
+                var data = $(this).sortable('serialize');
+                console.log('data', data);
+                $('#marker_order').text('order: ' + data);
+                $.ajax({
+                    data: data,
+                    type: 'GET',
+                    url: '{{ path('marker_reorder', project.rp) }}'
+                });
+            }
+        });
+        $( ".sortable" ).disableSelection();
+    } );
+    </script>
+
 {% endblock  %}

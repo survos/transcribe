@@ -54,6 +54,7 @@ class MarkerController extends AbstractController
         return $this->render('marker/show.html.twig', ['marker' => $marker]);
     }
 
+
     /**
      * @Route("/{id}/edit", name="marker_edit", methods="GET|POST")
      */
