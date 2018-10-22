@@ -6,6 +6,8 @@
 {{ parent() }}
     <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></li>
 {% endblock %}
+
+
 {% block content  %}
 
     {% import "media/show.html.twig" as macro %}
@@ -20,14 +22,7 @@
 
     <div class="row">
         <div class="col-md-5">
-            Markers
-            <ol>
-                {% for m in markers %}
-                    {% if not m.hidden and not m.irrelevant %}
-                    <li style="color: {{ m.color }}">{{ m.note }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ol>
+
         </div>
         <div class="col-md-7">
 
@@ -67,14 +62,6 @@
     {% endfor %}
     </tbody>
 </table>
-{% endblock %}
-
-{% block listMarkers %}
-    <ul>
-        {% for marker in media.markers %}
-            <li style="color:{{ marker.color }}">{{ marker.firstWordIndex }}-{{ marker.lastWordIndex }}: {{ marker.title }} <i>{{ marker.note }}</i></li>
-        {% endfor %}
-    </ul>
 {% endblock %}
 
 {% block javascripts %}

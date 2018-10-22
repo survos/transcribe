@@ -9,7 +9,7 @@
         {{ form_widget(form) }}
 
 
-<input type="submit" class="btn" value="Create" />
+<input type="submit" class="btn btn-success" value="Add Soundbite" />
 {{ form_end(form) }}
 {% endblock %}
 
@@ -23,6 +23,23 @@
     {{ form_end(switchForm) }}
 
 {% endblock %}
+
+{% macro listMarkers(markers) %}
+    <ol>
+        {% for m in markers %}
+            {% if not m.hidden and not m.irrelevant %}
+
+                <li style="color: {{ m.color }}">
+                    <span class="hover">
+                        <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
+                    </span>
+                    {{ m.note }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+
+{% endmacro %}
+
 
     {% macro mediaWords(media) %}
         {% set markers = media.markersByWordIndex %}
@@ -65,15 +82,6 @@
     </li>
 {% endblock %}
 
-{% block listMarkers %}
-<ul>
-    {% for marker in media.markers %}
-        {% if not marker.irrelevant and not marker.hidden %}
-        <li style="color:{{ marker.color }}">{{ marker.note }}</li>
-        {% endif %}
-    {% endfor %}
-</ul>
-{% endblock %}
 
 {% macro audio_player(media) %}
     {% if media %}
@@ -120,15 +128,15 @@
     {% endif %}
     <div class="row">
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-md-4">
 
             {{ block('markerForm') }}
             <div class="markerList">
-                {{ block('listMarkers') }}
+                {{ macro.listMarkers(media.markers) }}
             </div>
         </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-8 col-md-8">
                 {{ block('switchMediaForm') }}
             <h3>Transcript {{ media.filename }}</h3>
 
