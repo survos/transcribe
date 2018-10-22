@@ -13,10 +13,16 @@ class MarkerFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $colors = ['red', 'cyan', 'green'];
+        $colors = ['blue', 'cyan', 'green', 'yellow', 'red', 'purple', 'pink'];
         $builder
-            ->add('title')
-            ->add('note')
+            ->add('note', null, [
+                'required' => true
+            ])
+            ->add('title', null, [
+                'required' => false,
+                'attr' => [
+                'placeholder' => "Defaults to start and end of transcription"
+            ]])
             ->add('color', ChoiceType::class, [
                 'choices' => array_combine($colors, $colors)
             ])

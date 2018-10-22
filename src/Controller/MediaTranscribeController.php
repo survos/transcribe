@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Marker;
 use App\Entity\Media;
+use App\Entity\Word;
 use App\Form\MarkerFormType;
 use App\Form\SwitchMediaFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,10 +25,12 @@ class MediaTranscribeController extends AbstractController
 
     private $em;
     private $mediaRepo;
+    private $wordRepo;
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
         $this->mediaRepo = $em->getRepository(Media::class);
+        $this->wordRepo = $em->getRepository(Word::class);
     }
 
     private function getStorageObject(Media $media): ?StorageObject
@@ -130,7 +133,7 @@ class MediaTranscribeController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}", name="media_show")
+     * @Route("/media-show/{id}", name="media_show")
      */
     public function show(Request $request, Media $media)
     {
@@ -150,6 +153,28 @@ class MediaTranscribeController extends AbstractController
         $form = $this->createForm(MarkerFormType::class, $marker);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $words = $this->wordRepo->createQueryBuilder('w')
+                ->where('w.id >= :start')
+                ->andWhere('w.id <= :end')
+                ->setParameters([
+                    'start' => $marker->getFirstWordIndex(),
+                    'end' => $marker->getLastWordIndex()
+                ])
+                ->getQuery()
+                ->getResult();
+            /** @var Word $word */
+            foreach ($words as $word) {
+                $word->setMarker($marker);
+            }
+
+            // calculate the title from the marker note (transcription)
+            if (!$marker->getTitle()) {
+                $strings = explode("\n", wordwrap($marker->getNote(), 20));
+                $title = $strings[0] . ( count($strings) > 1 ? '..' . end($strings) : '' ) ;
+                $marker->setTitle($title);
+            }
+            $word->setMarker($marker);
             $this->em->persist($marker);
             $this->em->flush();
             // return JSON if it's an ajax request?

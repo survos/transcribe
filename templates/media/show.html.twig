@@ -1,4 +1,4 @@
-{% extends '@SurvosLanding/public_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% import _self as macro %}
 
@@ -25,17 +25,24 @@
 {% endblock %}
 
     {% macro mediaWords(media) %}
+        {% set markers = media.markersByWordIndex %}
         {% for words in media.words|batch(150) %}
             <p>
                 {% for word in words %}
                     {# if the word in in a marker, display the entire marker instead, in the right color #}
                     {% if word.marker %}
-                        {% if word.marker.firstWordIdx == word.idx %}
+                        {% if word.marker.firstWordIndex == word.id %}
                             {% set marker = word.marker %}
-                            <i>{{ marker.idx }} {{ marker.note }}</i>
-                        {% endif %}
+                        <span style="color: {{ word.marker.color }}">
+                            {{ word.marker.note }}
+                        </span>
+                            {% else %}
+                                {#
+                            <strike>{{ word.word }}</strike>
+                            #}
+                            {% endif %}
                     {% else %}
-                        <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                        <span id="w_{{ word.id }}" class="word" data-word-index={{ word.id }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
                     {% endif %}
                 {% endfor %}
             </p>
@@ -54,10 +61,28 @@
 {% block listMarkers %}
 <ul>
     {% for marker in media.markers %}
-        <li style="color:{{ marker.color }}">{{ marker.firstWordIndex }}-{{ marker.lastWordIndex }}: {{ marker.title }} <i>{{ marker.note }}</i></li>
+        <li style="color:{{ marker.color }}">{{ marker.note }}</li>
     {% endfor %}
 </ul>
 {% endblock %}
+
+{% macro audio_player(media) %}
+    {% if media %}
+        {% set source = media.publicUrl('flac') %}
+        <a href="{{ source }}">{{ source }}</a><br />
+    {% endif %}
+    <div class="col-sm-12">
+        {% if offline %}
+            OFFLINE
+        {% else %}
+            <audio id="audio" controls="controls" style="width: 100%;">
+                <source id="audioSource" {% if media and not offline %}src="{{ source  }}">{% endif %}</source>
+                Your browser does not support the audio format.
+            </audio>
+        {% endif %}
+
+    </div>
+{% endmacro %}
 
 {% block content %}
 
@@ -67,64 +92,33 @@
         </div>
     </div>
 
-    <div class="row">
-        {% set source = media.publicUrl('flac') %}
-        <div class="col-sm-12">
-            {% if offline %}
-            OFFLINE
-            {% else %}
-        <audio id="audio" controls="controls" style="width: 100%;">
-            <source id="audioSource" {% if not offline %}src="{{ source  }}">{% endif %}</source>
-            Your browser does not support the audio format.
-        </audio>
-            {% endif %}
-        <br /><a href="{{ source }}">{{ source }}</a>
 
+
+    <div class="row">
+        <div class="col-sm-12">
+            {{ macro.audio_player(media) }}
         </div>
     </div>
+
 
     {% if offline %}OFFLINE{% else %}
     {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
     {% endif %}
     <div class="row">
-        {% if false %}
-        <div class="col-lg-6">
-            <ul style="list-style: none">
-                <li>Audio Files
-                    <ul id="xlist">
-                        {#
-                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.oga">Death_Becomes_Fur.oga</a></li>
-                        <li><a href="#" data-value="http://media.w3.org/2010/07/bunny/04-Death_Becomes_Fur.mp4">Death_Becomes_Fur.mp4</a></li>
-                        <li><a href="#" data-value="http://media.w3.org/2010/11/rrs006.oga">rrs006.oga</a></li>
-                        <li><a href="#" data-value="http://media.w3.org/2010/05/sound/sound_90.mp3">sound_90.mp3</a></li>
-                        #}
-
-                        {% for sentence in media.transcript %}
-                            {% for a in sentence.alternatives %}
-                                {% set start = a.words[0].startTime|trim('s')|round(0, 'floor') %}
-                                {% set end = a.words[a.words|length - 1].startTime|trim('s')|round(0, 'ceil') %}
-                                {% set duration = max(2, (end - start + 1)) %}
-                                {% set audio = path('media_stream', media.rp({start:start, duration: duration, _format: 'mp3'})) %}
-                                <li><a href="#" data-value="{{ start }}">{{ start }}: {{ a.transcript }}</a> ({{ duration }}s) </li>
-                            {% endfor %}
-                        {% endfor %}
-
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        {% endif %}
 
         <div class="col-lg-4">
+
             {{ block('markerForm') }}
-            {{ block('listMarkers') }}
+            <div class="markerList">
+                {{ block('listMarkers') }}
+            </div>
         </div>
 
             <div class="col-lg-8">
                 {{ block('switchMediaForm') }}
             <h3>Transcript {{ media.filename }}</h3>
 
-            <div id="transcript">
+            <div class="transcript markerList" data-media-id="media_{{ media.id }}">
 
                 {{ macro.mediaWords(media) }}
 

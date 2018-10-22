@@ -378,4 +378,14 @@ class Media
         return $this;
     }
 
+    public function getMarkersByWordIndex()
+    {
+        // cache it if it doesn't already exist?  Or use a collection with a proper index?
+        $markers = [];
+        foreach ($this->getMarkers() as $marker) {
+            $markers[$marker->getFirstWordIndex()] = $marker;
+        }
+        return $markers;
+    }
+
 }

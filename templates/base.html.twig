@@ -8,10 +8,23 @@
     </li>
 
 {% endblock %}
+
+{% block fixed_header %}
+
+{% endblock %}
 {% block body %}
+    <div class="fix"
     <ul class="list-inline">
     {{ block('breadcrumbs') }}
     </ul>
 
-    {{ block('content') }}
+    <div class="content">
+        {{ block('content') }}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+
 {% endblock %}

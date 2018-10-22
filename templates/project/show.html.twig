@@ -9,7 +9,13 @@
 {% block content  %}
 
     {% import "media/show.html.twig" as macro %}
-<div class="example-wrapper">
+
+    <div id="navbar" class="audio_transcriber">
+        transcription blcok
+        {{ macro.audio_player(false) }}
+    </div>
+
+    <div id="content" class="main example-wrapper">
     <h1>Project {{ project.code }}</h1>
 
     <div class="row">
@@ -18,43 +24,53 @@
         </div>
         <div class="col-md-7">
 
-            {% for m in project.media %}
+            {{ block('transcripts') }}
 
-                <tr>
-                    <td><a href="{{ path('media_show', m.rp) }}">{{ m.filename }}</a></td>
-                    <td class="right">{{ m.words.count }}</td>
-                </tr>
-            {% endfor %}
 
 
         </div>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>File</th>
-            <th>Words</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for m in project.media %}
-            <tr>
-                <td><a href="{{ path('easyadmin', {entity: 'Media', action: 'edit', id: m.id}) }}">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <a href="{{ path('media_show', m.rp) }}">{{ m.filename }}</a></td>
-                <td class="right">{{ m.words.count }}</td>
-                <td>{{ macro.mediaWords(m) }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
 </div>
 {% endblock %}
 
-block javascripts %}
+    {% block transcripts %}
+        {% import "media/show.html.twig" as macro %}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>File</th>
+        <th>Words</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for m in project.media %}
+        <tr>
+            <td><a href="{{ path('easyadmin', {entity: 'Media', action: 'edit', id: m.id}) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="{{ path('media_show', m.rp) }}">{{ m.filename }}</a></td>
+            <td class="right">{{ m.words.count }}</td>
+            <td>
+                {{ macro.audio_player(m) }}<br />
+
+                {{ macro.mediaWords(m) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block listMarkers %}
+    <ul>
+        {% for marker in media.markers %}
+            <li style="color:{{ marker.color }}">{{ marker.firstWordIndex }}-{{ marker.lastWordIndex }}: {{ marker.title }} <i>{{ marker.note }}</i></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block javascripts %}
 {{ parent() }}
 <script src="/js/markers.js"></script>
 {% endblock  %}
