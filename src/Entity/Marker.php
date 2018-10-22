@@ -51,6 +51,7 @@ class Marker
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Word", mappedBy="marker")
+     * @ORM\JoinColumn(name="marker_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $words;
 
@@ -256,4 +257,11 @@ class Marker
 
         return $this;
     }
+
+    public function rp($addl=[])
+    {
+        return array_merge($addl, ['id' => $this->getId()]);
+    }
+
+
 }

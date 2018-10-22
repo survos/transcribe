@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Marker{% endblock %}
+
+{% block body %}
+    <h1>Marker</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ marker.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ marker.title }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ marker.note }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ marker.color }}</td>
+            </tr>
+            <tr>
+                <th>Idx</th>
+                <td>{{ marker.idx }}</td>
+            </tr>
+            <tr>
+                <th>First_word_index</th>
+                <td>{{ marker.firstWordIndex }}</td>
+            </tr>
+            <tr>
+                <th>Last_word_index</th>
+                <td>{{ marker.lastWordIndex }}</td>
+            </tr>
+            <tr>
+                <th>Irrelevant</th>
+                <td>{{ marker.irrelevant ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Hidden</th>
+                <td>{{ marker.hidden ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>StartTime</th>
+                <td>{{ marker.startTime }}</td>
+            </tr>
+            <tr>
+                <th>EndTime</th>
+                <td>{{ marker.endTime }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('marker_index') }}">back to list</a>
+
+    <a href="{{ path('marker_edit', {'id': marker.id}) }}">edit</a>
+
+    {{ include('marker/_delete_form.html.twig') }}
+{% endblock %}

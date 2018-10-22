@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Marker{% endblock %}
+
+{% block body %}
+    <h1>Create new Marker</h1>
+
+    {{ include('marker/_form.html.twig') }}
+
+    <a href="{{ path('marker_index') }}">back to list</a>
+{% endblock %}

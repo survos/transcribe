@@ -1,20 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}Marker index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Marker index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Note</th>
+                <th>Color</th>
+                <th>Idx</th>
+                <th>First_word_index</th>
+                <th>Last_word_index</th>
+                <th>Irrelevant</th>
+                <th>Hidden</th>
+                <th>StartTime</th>
+                <th>EndTime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for marker in markers %}
+            <tr>
+                <td>{{ marker.id }}</td>
+                <td>{{ marker.title }}</td>
+                <td>{{ marker.note }}</td>
+                <td>{{ marker.color }}</td>
+                <td>{{ marker.idx }}</td>
+                <td>{{ marker.firstWordIndex }}</td>
+                <td>{{ marker.lastWordIndex }}</td>
+                <td>{{ marker.irrelevant ? 'Yes' : 'No' }}</td>
+                <td>{{ marker.hidden ? 'Yes' : 'No' }}</td>
+                <td>{{ marker.startTime }}</td>
+                <td>{{ marker.endTime }}</td>
+                <td>
+                    <a href="{{ path('marker_show', {'id': marker.id}) }}">show</a>
+                    <a href="{{ path('marker_edit', {'id': marker.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/MarkerController.php'|file_link(0) }}">src/Controller/MarkerController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/marker/index.html.twig'|file_link(0) }}">templates/marker/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('marker_new') }}">Create new</a>
 {% endblock %}
