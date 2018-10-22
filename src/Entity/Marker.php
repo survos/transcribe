@@ -59,6 +59,26 @@ class Marker
      */
     private $last_word_index;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $irrelevant;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $hidden;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $startTime;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $endTime;
+
     public function __construct()
     {
         $this->words = new ArrayCollection();
@@ -187,5 +207,53 @@ class Marker
     public function __toString()
     {
         return $this->getTitle();
+    }
+
+    public function getIrrelevant(): ?bool
+    {
+        return $this->irrelevant;
+    }
+
+    public function setIrrelevant(?bool $irrelevant): self
+    {
+        $this->irrelevant = $irrelevant;
+
+        return $this;
+    }
+
+    public function getHidden(): ?bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(?bool $hidden): self
+    {
+        $this->hidden = $hidden;
+
+        return $this;
+    }
+
+    public function getStartTime(): ?int
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(int $startTime): self
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?int
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(int $endTime): self
+    {
+        $this->endTime = $endTime;
+
+        return $this;
     }
 }

@@ -161,12 +161,22 @@ class MediaTranscribeController extends AbstractController
                     'start' => $marker->getFirstWordIndex(),
                     'end' => $marker->getLastWordIndex()
                 ])
+                ->orderBy('w.id', 'ASC')
                 ->getQuery()
                 ->getResult();
             /** @var Word $word */
             foreach ($words as $word) {
                 $word->setMarker($marker);
             }
+
+            /** @var Word $firstWord */
+            /** @var Word $lastWord*/
+            $firstWord = $words[0];
+            $lastWord = end($words);
+            $marker
+                ->setStartTime(round($firstWord->getStartTime() * 10))
+                ->setEndTime(round($lastWord->getEndTime() * 10))
+                ;
 
             // calculate the title from the marker note (transcription)
             if (!$marker->getTitle()) {

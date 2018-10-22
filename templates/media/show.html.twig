@@ -16,7 +16,7 @@
 {# this could really be a menuitem, too #}
 {% block switchMediaForm %}
     {# todo: make this inline and auto-jump #}
-    {{ form_start(switchForm) }}
+    {{ form_start(switchForm, { 'attr': {'class': 'form-inline'} }) }}
     {{ form_widget(switchForm) }}
 
     <input type="submit" class="btn btn-xs" value="Switch" />
@@ -33,9 +33,12 @@
                     {% if word.marker %}
                         {% if word.marker.firstWordIndex == word.id %}
                             {% set marker = word.marker %}
-                        <span style="color: {{ word.marker.color }}">
+                            {% if not marker.hidden %}
+                        <span {% if marker.irrelevant %}class="irrelevant"{% else %}style="color: {{ word.marker.color }}" {% endif %}>
+
                             {{ word.marker.note }}
                         </span>
+                                {% endif %}
                             {% else %}
                                 {#
                             <strike>{{ word.word }}</strike>
@@ -54,14 +57,20 @@
 
 
 {% block breadcrumbs %}
-<a href="{{ path('project_show', media.project.rp) }}">{{ media.project.code }}</a> /
-<a href="{{ path('media_show', media.rp) }}">{{ media.filename }}</a>
+    {{ parent() }}
+    <li>
+        <a href="{{ path('project_show', media.project.rp) }}">{{ media.project.code }}</a> /
+        <a href="{{ path('media_show', media.rp) }}">{{ media.filename }}</a>
+
+    </li>
 {% endblock %}
 
 {% block listMarkers %}
 <ul>
     {% for marker in media.markers %}
+        {% if not marker.irrelevant and not marker.hidden %}
         <li style="color:{{ marker.color }}">{{ marker.note }}</li>
+        {% endif %}
     {% endfor %}
 </ul>
 {% endblock %}
@@ -69,7 +78,9 @@
 {% macro audio_player(media) %}
     {% if media %}
         {% set source = media.publicUrl('flac') %}
+        {% if app.request.get('debug') %}
         <a href="{{ source }}">{{ source }}</a><br />
+            {% endif %}
     {% endif %}
     <div class="col-sm-12">
         {% if offline %}
@@ -86,12 +97,13 @@
 
 {% block content %}
 
+    {#
     <div class="row">
         <div class="col-sm-12">
             {{ block('breadcrumbs') }}
         </div>
     </div>
-
+    #}
 
 
     <div class="row">
@@ -102,7 +114,9 @@
 
 
     {% if offline %}OFFLINE{% else %}
+        {% if app.request.get('debug') %}
     {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
+            {% endif %}
     {% endif %}
     <div class="row">
 

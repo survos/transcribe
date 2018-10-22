@@ -29,3 +29,8 @@ html{
 .newMarker {
     text-decoration: underline overline;
 }
+
+.irrelevant {
+    text-decoration: line-through;
+    opacity: 0.6;
+}

@@ -15,10 +15,12 @@ class ProjectController extends AbstractController
 
     private $em;
     private $projectRepository;
+    private $markerRepository;
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
         $this->projectRepository = $em->getRepository(Project::class);
+        $this->markerRepository = $em->getRepository(Marker::class);
     }
 
     /**
@@ -36,10 +38,15 @@ class ProjectController extends AbstractController
      */
     public function show(Request $request, Project $project)
     {
-;
+        $markers = $this->markerRepository->createQueryBuilder('marker')
+            ->where('marker.media IN (:media)')
+            ->setParameter('media', $project->getMedia())
+            ->getQuery()
+            ->getResult();
 
         return $this->render('project/show.html.twig', [
             'project' => $project,
+            'markers' => $markers
         ]);
     }
 
