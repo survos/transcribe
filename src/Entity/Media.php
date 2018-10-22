@@ -95,6 +95,16 @@ class Media
      */
     private $words;
 
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $speaker;
+
+    /**
+     * @ORM\Column(type="string", length=80, nullable=true)
+     */
+    private $display;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -340,6 +350,30 @@ class Media
                 $word->setMedia(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSpeaker(): ?string
+    {
+        return $this->speaker;
+    }
+
+    public function setSpeaker(?string $speaker): self
+    {
+        $this->speaker = $speaker;
+
+        return $this;
+    }
+
+    public function getDisplay(): ?string
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(?string $display): self
+    {
+        $this->display = $display;
 
         return $this;
     }
