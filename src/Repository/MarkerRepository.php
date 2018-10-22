@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Marker;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,22 +20,21 @@ class MarkerRepository extends ServiceEntityRepository
         parent::__construct($registry, Marker::class);
     }
 
-//    /**
-//     * @return Marker[] Returns an array of Marker objects
-//     */
-    /*
-    public function findByExampleField($value)
+
+    /**
+     * @return Marker[] Returns an array of Marker objects
+     */
+    public function findByProject(Project $project)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
+        return $this
+            ->createQueryBuilder('marker')
+            ->where('marker.media IN (:media)')
+            ->setParameter('media', $project->getMedia())
+            ->orderBy('marker.idx', 'ASC')
             ->getQuery()
-            ->getResult()
+            ->getResult();
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Marker

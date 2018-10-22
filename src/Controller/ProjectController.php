@@ -38,11 +38,7 @@ class ProjectController extends AbstractController
      */
     public function show(Request $request, Project $project)
     {
-        $markers = $this->markerRepository->createQueryBuilder('marker')
-            ->where('marker.media IN (:media)')
-            ->setParameter('media', $project->getMedia())
-            ->getQuery()
-            ->getResult();
+        $markers = $this->markerRepository->findByProject($project);
 
         return $this->render('project/show.html.twig', [
             'project' => $project,

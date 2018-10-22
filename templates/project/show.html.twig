@@ -23,6 +23,7 @@
     <div class="row">
         <div class="col-md-5">
 
+            {{ macro.listMarkers(markers) }}
         </div>
         <div class="col-md-7">
 
@@ -42,7 +43,9 @@
 <table class="table table-bordered">
     <thead>
     <tr>
+        <th></th>
         <th>File</th>
+        <th>#</th>
         <th>Words</th>
     </tr>
     </thead>
@@ -51,11 +54,11 @@
         <tr>
             <td><a href="{{ path('easyadmin', {entity: 'Media', action: 'edit', id: m.id}) }}">
                     <i class="fa fa-pencil"></i>
-                </a>
+                </a></td>
+            <td>
                 <a href="{{ path('media_show', m.rp) }}">{{ m.filename }}</a></td>
             <td class="right">{{ m.words.count }}</td>
             <td>
-                {{ macro.audio_player(m) }}<br />
 
                 {{ macro.mediaWords(m) }}</td>
         </tr>
@@ -66,5 +69,4 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="/js/markers.js"></script>
 {% endblock  %}
