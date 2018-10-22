@@ -85,7 +85,7 @@ class ProjectController extends AbstractController
         return $this->render('media/show.html.twig', [
             'media' => $media,
             'form' => $form->createView(),
-            'switchForm' => $switchForm->createView(),
+            // 'switchForm' => $switchForm->createView(),
             'object' => getenv('OFFLINE') ? null : null // $object
         ]);
     }
