@@ -258,6 +258,11 @@ class Marker
         return $this;
     }
 
+    public function getDuration()
+    {
+        return ($this->getEndTime() - $this->getStartTime()) / 10;
+    }
+
     public function rp($addl=[])
     {
         return array_merge($addl, ['id' => $this->getId()]);

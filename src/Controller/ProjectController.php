@@ -45,7 +45,8 @@ class ProjectController extends AbstractController
 
         return $this->render('project/show.html.twig', [
             'project' => $project,
-            'markers' => $markers
+            'markers' => $markers,
+            'markerSummary' => $this->markerRepository->findMarkerDrationByColor($project)
         ]);
     }
 

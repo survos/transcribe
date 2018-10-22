@@ -33,8 +33,19 @@ class MarkerRepository extends ServiceEntityRepository
             ->orderBy('marker.idx', 'ASC')
             ->getQuery()
             ->getResult();
-        ;
     }
+
+    public function findMarkerDrationByColor(Project $project)
+    {
+        foreach ($this->findByProject($project) as $marker) {
+            if (!isset($colors[$marker->getColor()])) {
+                $colors[$marker->getColor()] = 0;
+            }
+            $colors[$marker->getColor()] += $marker->getDuration();
+        }
+        return $colors;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Marker

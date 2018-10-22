@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Marker;
+use App\Form\MarkerFormType;
 use App\Form\MarkerType;
 use App\Repository\MarkerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,7 +61,7 @@ class MarkerController extends AbstractController
      */
     public function edit(Request $request, Marker $marker): Response
     {
-        $form = $this->createForm(MarkerType::class, $marker);
+        $form = $this->createForm(MarkerFormType::class, $marker);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

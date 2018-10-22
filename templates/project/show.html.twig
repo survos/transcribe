@@ -25,6 +25,14 @@
         <div class="col-md-5">
 
             {{ macro.listMarkers(markers) }}
+
+            <hr />
+            Duration by Color:
+            <ul>
+                {% for color, duration in markerSummary %}
+                    <li><span style="color: {{ color }};">{{ duration }}</span></li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="col-md-7">
 
@@ -66,6 +74,8 @@
     {% endfor %}
     </tbody>
 </table>
+
+
 {% endblock %}
 
 {% block javascripts %}
