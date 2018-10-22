@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0322f0b5be67ca536ffb35b887925ce",
+    "content-hash": "b71f85acc76f85dee33b91d7121bf8fc",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -2966,19 +2966,15 @@
         },
         {
             "name": "survos/landing-bundle",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/survos/LandingBundle.git",
-                "reference": "2483fab57e9259a91f97624856d1a6a88c62aab0"
-            },
+            "version": "9999999-dev",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/survos/LandingBundle/zipball/2483fab57e9259a91f97624856d1a6a88c62aab0",
-                "reference": "2483fab57e9259a91f97624856d1a6a88c62aab0",
-                "shasum": ""
+                "type": "path",
+                "url": "../Survos/LandingBundle",
+                "reference": "6210ae290038eb55a95a18f079f605d251e8970a",
+                "shasum": null
             },
             "require": {
+                "easycorp/easyadmin-bundle": "^1.17",
                 "knplabs/knp-menu-bundle": "^2.0",
                 "symfony/workflow": "^4.1",
                 "twig/twig": "^2.5"
@@ -2994,7 +2990,6 @@
                     "Survos\\LandingBundle\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3004,8 +2999,7 @@
                     "email": "tacman@gmail.com"
                 }
             ],
-            "description": "Add a landing and login page to a Symfony4 application",
-            "time": "2018-10-15T21:08:14+00:00"
+            "description": "Add a landing and login page to a Symfony4 application"
         },
         {
             "name": "survos/workflow-extension-bundle",
@@ -3132,12 +3126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "77698a7dba361c68a6b7098735f766f9789dba97"
+                "reference": "57fb2c82a9ec6fa48f412988dfbfd3164d76f483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/77698a7dba361c68a6b7098735f766f9789dba97",
-                "reference": "77698a7dba361c68a6b7098735f766f9789dba97",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/57fb2c82a9ec6fa48f412988dfbfd3164d76f483",
+                "reference": "57fb2c82a9ec6fa48f412988dfbfd3164d76f483",
                 "shasum": ""
             },
             "require": {
@@ -3201,7 +3195,7 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2018-10-16T12:29:39+00:00"
+            "time": "2018-10-19T08:25:57+00:00"
         },
         {
             "name": "symfony/config",
@@ -3930,12 +3924,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/form.git",
-                "reference": "8743fafd3b161140be71d4ac64b873bb9dead810"
+                "reference": "5f428ecf282c63c103c32fc827bac212594ba7d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/form/zipball/8743fafd3b161140be71d4ac64b873bb9dead810",
-                "reference": "8743fafd3b161140be71d4ac64b873bb9dead810",
+                "url": "https://api.github.com/repos/symfony/form/zipball/5f428ecf282c63c103c32fc827bac212594ba7d7",
+                "reference": "5f428ecf282c63c103c32fc827bac212594ba7d7",
                 "shasum": ""
             },
             "require": {
@@ -4004,7 +3998,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-17T07:30:39+00:00"
+            "time": "2018-10-19T10:21:50+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -4012,12 +4006,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "8e34fc58dbc6c4741ee6f03c1a9a2b5323c3143d"
+                "reference": "6c9c3085f8ca7b51553e7d33a194bd6711be5057"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/8e34fc58dbc6c4741ee6f03c1a9a2b5323c3143d",
-                "reference": "8e34fc58dbc6c4741ee6f03c1a9a2b5323c3143d",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/6c9c3085f8ca7b51553e7d33a194bd6711be5057",
+                "reference": "6c9c3085f8ca7b51553e7d33a194bd6711be5057",
                 "shasum": ""
             },
             "require": {
@@ -4122,7 +4116,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2018-10-17T09:43:15+00:00"
+            "time": "2018-10-17T18:52:05+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -5856,12 +5850,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/web-profiler-bundle.git",
-                "reference": "64a47f0bd15ccf7b6f22393ef02c438b95c23ead"
+                "reference": "c3df9e9ff79e27386bdcc14cd9c3a3adb19b8e06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/64a47f0bd15ccf7b6f22393ef02c438b95c23ead",
-                "reference": "64a47f0bd15ccf7b6f22393ef02c438b95c23ead",
+                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/c3df9e9ff79e27386bdcc14cd9c3a3adb19b8e06",
+                "reference": "c3df9e9ff79e27386bdcc14cd9c3a3adb19b8e06",
                 "shasum": ""
             },
             "require": {
@@ -5913,7 +5907,7 @@
             ],
             "description": "Symfony WebProfilerBundle",
             "homepage": "https://symfony.com",
-            "time": "2018-10-16T12:29:39+00:00"
+            "time": "2018-10-20T12:56:47+00:00"
         },
         {
             "name": "symfony/workflow",
@@ -6673,7 +6667,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "survos/landing-bundle": 20,
         "survos/workflow-extension-bundle": 20
     },
     "prefer-stable": true,

@@ -1,13 +1,54 @@
 {% extends '@SurvosLanding/public_base.html.twig' %}
 
+{% import _self as macro %}
+
 {% block title %}Media {{ media.filename }}!{% endblock %}
 
 {% block markerForm %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
 
+
 <input type="submit" class="btn" value="Create" />
 {{ form_end(form) }}
+{% endblock %}
+
+{# this could really be a menuitem, too #}
+{% block switchMediaForm %}
+    {# todo: make this inline and auto-jump #}
+    {{ form_start(switchForm) }}
+    {{ form_widget(switchForm) }}
+
+    <input type="submit" class="btn btn-xs" value="Switch" />
+    {{ form_end(switchForm) }}
+
+{% endblock %}
+
+    {% macro mediaWords(media) %}
+        {% for words in media.words|batch(150) %}
+            <p>
+                {% for word in words %}
+                    {# if the word in in a marker, display the entire marker instead, in the right color #}
+                    {% if word.marker %}
+                        {% if word.marker.firstWordIdx == word.idx %}
+                            {% set marker = word.marker %}
+                            <i>{{ marker.idx }} {{ marker.note }}</i>
+                        {% endif %}
+                    {% else %}
+                        <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
+                    {% endif %}
+                {% endfor %}
+            </p>
+
+
+        {% endfor %}
+
+    {% endmacro %}
+
+
+{% block breadcrumbs %}
+<a href="{{ path('project_show', media.project.rp) }}">{{ media.project.code }}</a> /
+<a href="{{ path('media_show', media.rp) }}">{{ media.filename }}</a>
 {% endblock %}
 
 {% block listMarkers %}
@@ -17,28 +58,34 @@
     {% endfor %}
 </ul>
 {% endblock %}
-{% block body %}
+
+{% block content %}
 
     <div class="row">
         <div class="col-sm-12">
-
+            {{ block('breadcrumbs') }}
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
         {% set source = media.publicUrl('flac') %}
+        <div class="col-sm-12">
+            {% if offline %}
+            OFFLINE
+            {% else %}
         <audio id="audio" controls="controls" style="width: 100%;">
-            <source id="audioSource" src="{{ source  }}"></source>
+            <source id="audioSource" {% if not offline %}src="{{ source  }}">{% endif %}</source>
             Your browser does not support the audio format.
         </audio>
+            {% endif %}
         <br /><a href="{{ source }}">{{ source }}</a>
 
         </div>
     </div>
 
+    {% if offline %}OFFLINE{% else %}
     {{ object ? "%s: (%2.1fmb)"|format(object.gcsUri, object.info.size / (1024*1024))  : 'object does not exist' }}
-
+    {% endif %}
     <div class="row">
         {% if false %}
         <div class="col-lg-6">
@@ -74,27 +121,13 @@
         </div>
 
             <div class="col-lg-8">
+                {{ block('switchMediaForm') }}
             <h3>Transcript {{ media.filename }}</h3>
 
             <div id="transcript">
 
-            {% for words in media.words|batch(150) %}
-                <p>
-                    {% for word in words %}
-                        {# if the word in in a marker, display the entire marker instead, in the right color #}
-                        {% if word.marker %}
-                           {% if word.marker.firstWordIdx == word.idx %}
-                                {% set marker = word.marker %}
-                                <i>{{ marker.idx }} {{ marker.note }}</i>
-                            {% endif %}
-                            {% else %}
-                                <span id="w_{{ word.idx }}" class="word" data-word-index={{ word.idx }} data-start="{{ word.startTime }}" data-word="{{ word.word }}" data-end="{{ word.endTime }}">{{ word.word }}</span>
-                        {% endif %}
-                    {% endfor %}
-                </p>
+                {{ macro.mediaWords(media) }}
 
-
-            {% endfor %}
             </div>
 
 
@@ -165,83 +198,9 @@
 
 {% block javascripts %}
 {{ parent() }}
+    {% if not offline %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
-    <script>
-
-    $(function() {
-
-        var element = $("#transcript");
-
-        element.attr('unselectable', 'on').css('user-select', 'none').on('selectstart dragstart', false);
-
-        {#
-        $('#myForm').ajaxForm(function() {
-            alert("Thank you for your comment!");
-        });
-        #}
-
-        $('.word').click( function (e) {
-            word_index = $(this).data('word-index');
-            console.log(e, $(this))
-
-            if (e.shiftKey) {
-                $(this).css("color", "red");
-                stopTime = $(this).data('end');
-                $('#marker_form_lastWordIndex').val(word_index);
-                $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
-
-                // get the phrase and add to the form
-                let title = '';
-                for (let i = startWordIndex; i <= word_index; i++) {
-
-                    title = title + $('#w_' + i).data('word') + ' ';
-                }
-                $('#marker_form_title').val(title);
-
-
-
-                $('#audio').bind('timeupdate', function () {
-                    console.log(stopTime);
-                    if (this.currentTime > stopTime+1.0) this.pause();
-                });
-                audio.play();
-
-            } else {
-                $(this).css("color", "green");
-                startWord = $(this);
-                time = $(this).data('start');
-                startWordIndex = word_index;
-                $('#marker_form_firstWordIndex').val(word_index);
-                $('#marker_form_title').val(startWord.data('word'));
-                console.log(time)
-                audio.currentTime = time;
-                audio.pause();
-            }
-        });
-
-
-        {# this is good for the .flac list
-    console.log("jquery loaded");
-    xlist.onclick = function(e) {
-        console.log("list.onClick");
-        e.preventDefault();
-
-        var elm = e.target;
-        // the player
-        var audio = document.getElementById('audio');
-
-        var source = document.getElementById('audioSource');
-//         source.src = elm.getAttribute('data-value');
-        time = elm.getAttribute('data-value');
-        console.log(time);
-
-        audio.currentTime = time;
-
-        // audio.load(); //call this to just preload the audio without playing
-        audio.play(); //call this to play the song right away
-    };
-        #}
-    });
-</script>
+    {% endif %}
+    <script src="/js/markers.js"></script>
 
 {% endblock  %}
