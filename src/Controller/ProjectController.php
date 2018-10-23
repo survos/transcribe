@@ -6,6 +6,7 @@ use App\Entity\Marker;
 use App\Entity\Project;
 use App\Entity\Word;
 use App\Form\MarkerFormType;
+use Done\Subtitles\Subtitles;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,6 +104,30 @@ class ProjectController extends AbstractController
             // 'switchForm' => $switchForm->createView(),
             'object' => getenv('OFFLINE') ? null : null // $object
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/{id}/subtitles.{_format}", name="project_subtitles")
+     */
+    public function subtitles(Request $request, Project $project, $_format='srt')
+    {
+        $subtitles = new Subtitles();
+        foreach ($this->markerRepository->findByProject($project) as $marker)
+        {
+            $subtitles->add($marker->getStartTime() / 10, $marker->getEndTime() / 10, $marker->getNote());
+        }
+
+        switch ($_format) {
+            // case 'html': return new Response($subtitles->content());
+            case 'json': return new JsonResponse($subtitles->getInternalFormat());
+            case 'srt':
+            case 'vtt':
+                return new Response($subtitles->content($_format), 200, ['Content-Type' => 'text/plain']);
+
+        }
+        // $subtitles->save('subtitles.vtt');
+
     }
 
 

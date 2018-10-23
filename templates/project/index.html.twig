@@ -20,9 +20,7 @@
                 <td><a href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.basePath }}</td>
                 <td>{{ p.media.count}}</td>
-                {#
-                <td><a href="{{ path('project_select_markers', p.rp) }}">Markers</a></td>
-                #}
+                <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a></td>
             </tr>
         {% endfor %}
         </tbody>

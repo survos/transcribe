@@ -137,6 +137,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v2.2.1"
     },
+    "mantas-done/subtitles": {
+        "version": "0.3.4"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },
