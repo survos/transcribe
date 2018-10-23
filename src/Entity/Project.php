@@ -33,9 +33,15 @@ class Project
      */
     private $media;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Timeline", mappedBy="project", orphanRemoval=true)
+     */
+    private $timelines;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
+        $this->timelines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,37 @@ class Project
     public function rp($addl=[])
     {
         return array_merge($addl, ['id' => $this->getId()]);
+    }
+
+    /**
+     * @return Collection|Timeline[]
+     */
+    public function getTimelines(): Collection
+    {
+        return $this->timelines;
+    }
+
+    public function addTimeline(Timeline $timeline): self
+    {
+        if (!$this->timelines->contains($timeline)) {
+            $this->timelines[] = $timeline;
+            $timeline->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeline(Timeline $timeline): self
+    {
+        if ($this->timelines->contains($timeline)) {
+            $this->timelines->removeElement($timeline);
+            // set the owning side to null (unless already changed)
+            if ($timeline->getProject() === $this) {
+                $timeline->setProject(null);
+            }
+        }
+
+        return $this;
     }
 
 

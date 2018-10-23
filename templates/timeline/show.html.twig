@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Timeline{% endblock %}
+
+{% block body %}
+    <h1>Timeline</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ timeline.id }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ timeline.code }}</td>
+            </tr>
+            <tr>
+                <th>Gap_time</th>
+                <td>{{ timeline.gapTime }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('timeline_index') }}">back to list</a>
+
+    <a href="{{ path('timeline_edit', {'id': timeline.id}) }}">edit</a>
+
+    {{ include('timeline/_delete_form.html.twig') }}
+{% endblock %}

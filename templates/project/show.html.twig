@@ -13,8 +13,6 @@
     {% import "media/show.html.twig" as macro %}
 
     <div id="navbar" class="audio_transcriber">
-
-        Soundbite player
         {{ macro.audio_player(false) }}
     </div>
 
@@ -60,6 +58,7 @@
     </thead>
     <tbody>
     {% for m in project.media %}
+        {% if m.transcriptRequested %}
         <tr>
             <td><a href="{{ path('easyadmin', {entity: 'Media', action: 'edit', id: m.id}) }}">
                     <i class="fa fa-pencil"></i>
@@ -71,6 +70,7 @@
 
                 {{ macro.mediaWords(m) }}</td>
         </tr>
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>
@@ -81,11 +81,10 @@
 {% block javascripts %}
 {{ parent() }}
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="/js/project.js"></script>
 
 <script>
     $( function() {
-        $('#order').text("start");
-        console.log("Sortable!");
         $( ".sortable" ).sortable({
             update: function( event, ui ) {
                 var data = $(this).sortable('serialize');

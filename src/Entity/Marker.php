@@ -80,9 +80,15 @@ class Marker
      */
     private $endTime;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Timeline", mappedBy="markers")
+     */
+    private $timelines;
+
     public function __construct()
     {
         $this->words = new ArrayCollection();
+        $this->timelines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -266,6 +272,34 @@ class Marker
     public function rp($addl=[])
     {
         return array_merge($addl, ['id' => $this->getId()]);
+    }
+
+    /**
+     * @return Collection|Timeline[]
+     */
+    public function getTimelines(): Collection
+    {
+        return $this->timelines;
+    }
+
+    public function addTimeline(Timeline $timeline): self
+    {
+        if (!$this->timelines->contains($timeline)) {
+            $this->timelines[] = $timeline;
+            $timeline->addMarker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeline(Timeline $timeline): self
+    {
+        if ($this->timelines->contains($timeline)) {
+            $this->timelines->removeElement($timeline);
+            $timeline->removeMarker($this);
+        }
+
+        return $this;
     }
 
 

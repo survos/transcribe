@@ -28,9 +28,16 @@
     <ol class="sortable">
         {% for m in markers %}
             {% if not m.hidden and not m.irrelevant %}
+                <li id="marker_{{ m.id }}"
+                    style="color: {{ m.color }}">
 
-
-                <li id="marker_{{ m.id }}" style="color: {{ m.color }}">
+                    <a class="clip pull-right"
+                       data-id="{{ m.id }}"
+                       data-start="{{ m.startTime / 10 }}"
+                       data-stop="{{ m.endTime / 10 }}"
+                       data-url="{{ m.media.publicUrl }}"
+                       href="#"><i class="fa fa-play"></i> </a>
+                    <span class="badge pull-right">{{ m.duration|round }}</span>
                     <span class="hover">
                         <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
                     </span>
@@ -97,8 +104,10 @@
         {% if offline %}
             OFFLINE
         {% else %}
-            <audio id="audio" controls="controls" style="width: 100%;">
+            <audio id="audio" controls="controls" style="width: 100%;" {% if media and not offline %}src="{{ source  }}">{% endif %}>
+                {#
                 <source id="audioSource" {% if media and not offline %}src="{{ source  }}">{% endif %}</source>
+                #}
                 Your browser does not support the audio format.
             </audio>
         {% endif %}

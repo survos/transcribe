@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Timeline{% endblock %}
+
+{% block body %}
+    <h1>Edit Timeline</h1>
+
+    {{ include('timeline/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('timeline_index') }}">back to list</a>
+
+    {{ include('timeline/_delete_form.html.twig') }}
+{% endblock %}

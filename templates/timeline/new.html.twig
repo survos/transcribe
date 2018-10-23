@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Timeline{% endblock %}
+
+{% block body %}
+    <h1>Create new Timeline</h1>
+
+    {{ include('timeline/_form.html.twig') }}
+
+    <a href="{{ path('timeline_index') }}">back to list</a>
+{% endblock %}
