@@ -65,7 +65,7 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('media_edit', ['id' => $medium->getId()]);
+            return $this->redirectToRoute('project_show', $medium->getProject()->rp());
         }
 
         return $this->render('media/edit.html.twig', [
@@ -80,9 +80,13 @@ class MediaController extends AbstractController
     public function delete(Request $request, Media $medium): Response
     {
         if ($this->isCsrfTokenValid('delete'.$medium->getId(), $request->request->get('_token'))) {
+            $redirect = $this->redirectToRoute('project_show', $medium->getProject()->rp());
+
             $em = $this->getDoctrine()->getManager();
             $em->remove($medium);
             $em->flush();
+
+            return $redirect;
         }
 
         return $this->redirectToRoute('media_index');
