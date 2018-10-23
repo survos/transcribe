@@ -52,7 +52,8 @@
     <tr>
         <th></th>
         <th>File</th>
-        <th>#</th>
+        <th>#words</th>
+        <th>#markers</th>
         <th>Words</th>
     </tr>
     </thead>
@@ -60,15 +61,16 @@
     {% for m in project.media %}
         {% if m.transcriptRequested %}
         <tr>
-            <td><a href="{{ path('easyadmin', {entity: 'Media', action: 'edit', id: m.id}) }}">
+            <td><a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: m.id}) }}">
                     <i class="fa fa-pencil"></i>
                 </a></td>
             <td>
-                <a href="{{ path('media_show', m.rp) }}">{{ m.filename }}</a></td>
+                <a title="{{ m.filename }}" href="{{ path('media_show', m.rp) }}">{{ m.display|default(m.filename) }}</a></td>
             <td class="right">{{ m.words.count }}</td>
+            <td class="right">{{ m.markers.count }}</td>
             <td>
-
-                {{ macro.mediaWords(m) }}</td>
+                {{ macro.mediaWords(m) }}
+            </td>
         </tr>
         {% endif %}
     {% endfor %}

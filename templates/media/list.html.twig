@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Media List{% endblock %}
+
+{% block body %}
+
+
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>filename</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for m in media %}
+            <tr>
+                <td><a href="{{ path('media_show', {id: m.id}) }}">{{ m.id }}</a>
+
+                </td>
+                <td><a href="{{ path('media_show', {id: m.id}) }}">{{ m.filename }}</a></td>
+                <td><a href="{{ path('media_show', {id: m.id}) }}">{{ m.display }}</a></td>
+                <td>{{ m.transcriptRequested ? 'T'}}</td>
+                <td>{{ m.sentenceCount }}</td>
+                <td>{{ (m.fileSize / (1024 * 1024))|number_format(2) }}M</td>
+                <td><a href="{{ m.publicUrl }}">{{ m.audioFileName }}</a></td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

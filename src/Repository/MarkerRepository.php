@@ -37,6 +37,7 @@ class MarkerRepository extends ServiceEntityRepository
 
     public function findMarkerDrationByColor(Project $project)
     {
+        $colors = [];
         foreach ($this->findByProject($project) as $marker) {
             if (!isset($colors[$marker->getColor()])) {
                 $colors[$marker->getColor()] = 0;

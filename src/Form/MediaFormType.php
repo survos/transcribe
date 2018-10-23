@@ -14,8 +14,6 @@ class MediaFormType extends AbstractType
         $builder
             ->add('filename')
             ->add('path')
-            ->add('flacExists')
-            ->add('transcriptJson')
             ->add('transcriptRequested')
             ->add('word_count')
             ->add('file_size')
@@ -24,7 +22,9 @@ class MediaFormType extends AbstractType
             ->add('display')
             ->add('marking')
             ->add('lastTransitionTime')
-            ->add('project')
+            ->add('project', null, [
+                'disabled' => true
+            ])
         ;
     }
 
