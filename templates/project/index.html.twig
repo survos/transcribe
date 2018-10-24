@@ -21,6 +21,7 @@
                 <td><a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.media.count}}</td>
                 <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a></td>
+                <td><a href="{{ path('project_markers', p.rp) }}">.json</a></td>
             </tr>
         {% endfor %}
         </tbody>
