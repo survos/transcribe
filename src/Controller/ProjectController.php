@@ -7,12 +7,16 @@ use App\Entity\Project;
 use App\Entity\Word;
 use App\Form\MarkerFormType;
 use Done\Subtitles\Subtitles;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class ProjectController extends AbstractController
 {
@@ -130,5 +134,49 @@ class ProjectController extends AbstractController
 
     }
 
+    /**
+     * @param Request $request
+     * @Route("/{code}/markers.{_format}", name="project_markers")
+     * @Entity("project", expr="repository.findOneBy({"code": code)")
+     */
+    public function markers(Request $request, Project $project, $_format='html')
+    {
+        $markers = $this->markerRepository->findByProject($project);
+        /* drat, this should work!!
+        $encoders = array( new JsonEncode());
+        $normalizers = array(new ObjectNormalizer());
+
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $data = $serializer->normalize($markers, null, array('groups' => array('project')));
+        dump($data); die();
+
+        $json = $serializer->serialize($markers, 'json', ['groups'=>['project']]);
+        dump($json); die();
+        */
+
+        $x = [];
+        foreach ($markers as $marker) {
+            $x[] = (object)[
+                'startTime' => $marker->getStartTime(),
+                'endTime' => $marker->getEndTime(),
+                'color' => $marker->getColor(),
+                'title' => $marker->getTitle(),
+                'note' => $marker->getNote()
+            ];
+        }
+        return new JsonResponse($x);
+
+        switch ($_format) {
+            // case 'html': return new Response($subtitles->content());
+            case 'json': return new JsonResponse($subtitles->getInternalFormat());
+            case 'srt':
+            case 'vtt':
+                return new Response($subtitles->content($_format), 200, ['Content-Type' => 'text/plain']);
+
+        }
+        // $subtitles->save('subtitles.vtt');
+
+    }
 
 }

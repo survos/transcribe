@@ -1,0 +1,17 @@
+App\Entity\Marker:
+  attributes:
+    title:
+      groups: ['project']
+    note:
+      groups: ['project']
+    color:
+      groups: ['project']
+    stopTime:
+      groups: ['project']
+    startTime:
+      groups: ['project']
+
+App\Entity\Project:
+  attributes:
+    code:
+      groups: ['project']
