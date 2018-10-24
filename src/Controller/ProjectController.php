@@ -137,7 +137,7 @@ class ProjectController extends AbstractController
     /**
      * @param Request $request
      * @Route("/{code}/markers.{_format}", name="project_markers")
-     * @Entity("project", expr="repository.findOneBy({"code": code)")
+     * @ Entity("project", expr="repository.findOneBy({"code": code)")
      */
     public function markers(Request $request, Project $project, $_format='html')
     {
