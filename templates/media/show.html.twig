@@ -26,8 +26,10 @@
 
 {% macro listMarkers(markers) %}
     <ol class="sortable">
+        {% set total = 0 %}
         {% for m in markers %}
             {% if not m.hidden and not m.irrelevant %}
+                {% set total = total + m.duration %}
                 <li id="marker_{{ m.id }}"
                     style="color: {{ m.color }}">
 
@@ -37,7 +39,7 @@
                        data-stop="{{ m.endTime / 10 }}"
                        data-url="{{ m.media.publicUrl }}"
                        href="#"><i class="fa fa-play"></i> </a>
-                    <span class="badge pull-right">{{ m.duration|round }}</span>
+                    <span class="badge pull-right">+{{ m.duration|round }}={{ total|round }}</span>
                     <span class="hover">
                         <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
                     </span>

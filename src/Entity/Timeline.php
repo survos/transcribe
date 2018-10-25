@@ -39,6 +39,11 @@ class Timeline
      */
     private $gap_time;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $max_duration;
+
     public function __construct()
     {
         $this->markers = new ArrayCollection();
@@ -107,6 +112,18 @@ class Timeline
     public function setGapTime(?int $gap_time): self
     {
         $this->gap_time = $gap_time;
+
+        return $this;
+    }
+
+    public function getMaxDuration(): ?int
+    {
+        return $this->max_duration;
+    }
+
+    public function setMaxDuration(?int $max_duration): self
+    {
+        $this->max_duration = $max_duration;
 
         return $this;
     }

@@ -105,6 +105,21 @@ class Media
      */
     private $display;
 
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true, unique=true)
+     */
+    private $code;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $streams_json;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $stream_count;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -138,6 +153,10 @@ class Media
     public function setPath(string $path): self
     {
         $this->path = $path;
+        if (empty($this->code)) {
+            $code =  pathinfo($path, PATHINFO_FILENAME);
+            $this->setCode($code);
+        }
 
         return $this;
     }
@@ -386,6 +405,42 @@ class Media
             $markers[$marker->getFirstWordIndex()] = $marker;
         }
         return $markers;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getStreamsJson(): ?string
+    {
+        return $this->streams_json;
+    }
+
+    public function setStreamsJson(?string $streams_json): self
+    {
+        $this->streams_json = $streams_json;
+
+        return $this;
+    }
+
+    public function getStreamCount(): ?int
+    {
+        return $this->stream_count;
+    }
+
+    public function setStreamCount(?int $stream_count): self
+    {
+        $this->stream_count = $stream_count;
+
+        return $this;
     }
 
 }

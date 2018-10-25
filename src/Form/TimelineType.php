@@ -13,9 +13,8 @@ class TimelineType extends AbstractType
     {
         $builder
             ->add('code')
+            ->add('maxDuration')
             ->add('gap_time')
-            ->add('project')
-            ->add('markers')
         ;
     }
 

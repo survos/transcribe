@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Marker;
 use App\Entity\Project;
+use App\Entity\Timeline;
 use App\Entity\Word;
 use App\Form\MarkerFormType;
+use App\Form\TimelineType;
 use Done\Subtitles\Subtitles;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Constraints\Time;
 
 class ProjectController extends AbstractController
 {
@@ -42,21 +45,29 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/project/{id}", name="project_show")
+     * @Route("/project/{code}", name="project_show")
      */
     public function show(Request $request, Project $project)
     {
         $markers = $this->markerRepository->findByProject($project);
 
+        $timeline = (new Timeline())
+            ->setCode($project->getCode() . '_rough_cut')
+            ->setMaxDuration(180)
+            ->setGapTime(1)
+            ->setProject($project);
+        $form = $this->createForm(TimelineType::class, $timeline);
+
         return $this->render('project/show.html.twig', [
             'project' => $project,
             'markers' => $markers,
+            'timelineForm' => $form->createView(),
             'markerSummary' => $this->markerRepository->findMarkerDrationByColor($project)
         ]);
     }
 
     /**
-     * @Route("/{id}/reorder", name="marker_reorder", methods="GET|POST")
+     * @Route("/{code}/reorder", name="marker_reorder", methods="GET|POST")
      */
     public function reorder(Request $request, Project $project): Response
     {
@@ -71,7 +82,7 @@ class ProjectController extends AbstractController
 
 
     /**
-     * @Route("/select-markers/{id}", name="project_select_markers")
+     * @Route("/select-markers/{code}", name="project_select_markers")
      */
     public function selectMarkers(Request $request, Project $media)
     {
@@ -112,7 +123,7 @@ class ProjectController extends AbstractController
 
     /**
      * @param Request $request
-     * @Route("/{id}/subtitles.{_format}", name="project_subtitles")
+     * @Route("/{code}/subtitles.{_format}", name="project_subtitles")
      */
     public function subtitles(Request $request, Project $project, $_format='srt')
     {
@@ -136,8 +147,79 @@ class ProjectController extends AbstractController
 
     /**
      * @param Request $request
+     * @Route("/{code}/markers.{_format}", name="project_edl")
+     */
+    public function edl(Request $request, Project $project, $_format='html')
+    {
+        // really this should come from the timeline, but we're wasting all sorts of time!
+        $markers = $this->markerRepository->findByProject($project);
+
+        $x = [];
+        $txt = "TITLE: Timeline 1
+FCM: NON-DROP FRAME
+";
+
+
+        $frameRate = 29.97; // check!
+        $start = 60 * 60;
+        foreach ($markers as $idx=>$marker) {
+
+            $end = $start + $marker->getDuration();
+
+            $txt .= sprintf("\n%03d  AX       V     C        %s %s %s %s\n * FROM_CLIP NAME: %s", $idx+1,
+                $this->framesToTC($marker->getStartTime() / 10 * $frameRate, $frameRate),
+                $this->framesToTC($marker->getEndTime() / 10 * $frameRate, $frameRate),
+                $this->framesToTC($start * $frameRate, $frameRate),
+                $this->framesToTC($end * $frameRate, $frameRate)     ,
+            $marker->getMedia()->getFilename()
+                );
+            $start = $end; // fraction?
+        }
+
+        file_put_contents($project->getCode() . '.edl', $txt);
+
+        return new Response($txt, 200, ['Content-Type' => 'text/plain']);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/{code}/fcpxml.{_format}", name="project_xml")
+     */
+    public function fcpxml(Request $request, Project $project, $_format='html')
+    {
+        // really this should come from the timeline, but we're wasting all sorts of time!
+        $markers = $this->markerRepository->findByProject($project);
+
+        // only import the media we're using
+        foreach ($markers as $marker) {
+            $media = $marker->getMedia();
+            $mediaList[$media->getCode()] = $media;
+        }
+
+        $xml = $this->renderView("fcpxml.twig", [
+            'markers' => $markers,
+            'mediaList' => $mediaList
+        ]);
+
+        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        return new Response($xml, 200, ['Content-Type' => 'text/xml']);
+    }
+
+
+    private function framesToTC($frames, $framerate) {
+        $hours = floor( $frames / ( $framerate * 60 * 60 ) );
+        $framesleft = $frames - ($hours * $framerate * 60 * 60);
+        $minutes = floor( $framesleft / ( $framerate * 60 ) );
+        $framesleft -= ( $minutes * $framerate * 60 );
+        $seconds = floor( $framesleft / ( $framerate ) );
+        $framesleft -= ( $seconds * $framerate );
+        $tc = sprintf("%02d:%02d:%02d:%02d", $hours, $minutes, $seconds, $framesleft );
+        return $tc;
+    }
+
+    /**
+     * @param Request $request
      * @Route("/{code}/markers.{_format}", name="project_markers")
-     * @ Entity("project", expr="repository.findOneBy({"code": code)")
      */
     public function markers(Request $request, Project $project, $_format='html')
     {
@@ -162,7 +244,9 @@ class ProjectController extends AbstractController
                 'endTime' => $marker->getEndTime(),
                 'color' => $marker->getColor(),
                 'title' => $marker->getTitle(),
-                'note' => $marker->getNote()
+                'note' => $marker->getNote(),
+                'idx' => (int)$marker->getIdx(),
+                'media' => $marker->getMedia()->getFilename() // better be unique for now!
             ];
         }
         return new JsonResponse($x);

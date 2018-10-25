@@ -137,7 +137,7 @@ class TranscribeCommand extends Command
             }
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
-            $cacheFile = $filename . 'json';
+            $cacheFile = $filename . '.json';
             if (file_exists($cacheFile)) {
                 $io->note("Using cache file: $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
@@ -147,7 +147,6 @@ class TranscribeCommand extends Command
                     $io->note("Transcribing $flacFilename");
                     if ($jsonResult = $this->transcribe_auto_punctuation($object, $media))
                     {
-                        $cacheFile = $filename . 'json';
                         file_put_contents($cacheFile, $jsonResult);
                     }
                 }

@@ -31,12 +31,15 @@
                     <li><span style="color: {{ color }};">{{ duration }}</span></li>
                 {% endfor %}
             </ul>
+
+            <br />Create Timline
+            {{ form(timelineForm) }}
+
+            <a href="{{ path('project_xml', project.rp)}}">Export XML</a>
         </div>
         <div class="col-md-7">
 
             {{ block('transcripts') }}
-
-
 
         </div>
     </div>

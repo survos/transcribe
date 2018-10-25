@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.8">
+    <resources>
+        <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
+        <format width="1280" name="FFVideoFormat720p2997" height="720" id="r1" frameDuration="1001/30000s"/>
+        {% for code, media in mediaList %}
+        <asset id="{{ media.code }}" format="r1" src="file://localhost/{{ media.path|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" audioChannels="1" name="{{ media.code }}"
+               duration="{{ media.duration * 10 }}/10s"  audioSources="1" hasVideo="1"/>
+        {% endfor %}
+    </resources>
+    <library>
+        <event name="Event Name">
+            <project name="Project Name Import Test">
+                <sequence format="r0" tcFormat="NDF" duration="37037/6000s" tcStart="18018/5s">
+                    <spine>
+                        {% set offset = 0 %}
+                        {% for marker in markers %}
+                            <asset-clip tcFormat="NDF" start="{{ marker.startTime }}/10s" name="{{ marker.title }}" format="r1" duration="{{ marker.duration  * 10 }}/10s" enabled="1"
+                                        ref="{{ marker.media.code }}" offset="{{ offset * 10 }}/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            </asset-clip>
+                            {% set offset = offset + marker.duration %}
+                        {% endfor %}
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

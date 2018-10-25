@@ -47,15 +47,44 @@ class ImportMediaCommand extends Command
         ;
     }
 
-    private function info($filename)
+    private function streams($filename)
     {
 
         $ffprobe = FFMpeg\FFProbe::create();
-        $fileInfo = $ffprobe
-            ->format($filename) // extracts file informations
+        $streams = $ffprobe
+            ->streams($filename)// extracts file informations
             ->all();
 
+        return $streams;
+    }
+
+        private function info($filename)
+    {
+
+        $ffprobe = FFMpeg\FFProbe::create();
+        $streams = $ffprobe
+            ->streams($filename)// extracts file informations
+            ->all()
+        ;
+
+
+
+        $fileInfo = $ffprobe
+            ->format($filename)// extracts file informations
+            ->all();
+
+        /*
+        if (strstr($filename, 'helly')) {
+            dump($fileInfo);
+            // $this->morganFileInfo($filename);
+        }
+        */
         return $fileInfo;
+
+    }
+
+    private function morganFileInfo($filename)
+    {
 
         try {
 
@@ -140,6 +169,8 @@ class ImportMediaCommand extends Command
 
             $info = $this->info($file->getRealPath());
 
+            $streams = $this->streams($file->getRealPath());
+
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
                 $media = (new Media())
@@ -148,12 +179,20 @@ class ImportMediaCommand extends Command
                 $this->em->persist($media);
             }
             $media
+                ->setStreamsJson(json_encode($streams))
+                ->setStreamCount($info['nb_streams'])
                 ->setFileSize($file->getSize())
                 ->setProject($project)
                 ->setDuration(round($info['duration']))
                 ;
 
-            if (file_exists($file->getRealPath() . 'json')) {
+            $jsonFilename = $file->getRealPath() . '.json';
+            if (file_exists($oldJson = $file->getRealPath() . 'json')) {
+                rename($oldJson, $jsonFilename);
+            }
+
+            // really the JSON belongs on gs, with the flac, and arguably the video
+            if (file_exists($jsonFilename)) {
                 $media->setTranscriptRequested(true);
             }
 
