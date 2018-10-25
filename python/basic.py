@@ -11,7 +11,7 @@ import urllib, json
 
 def AddMarkers(clip, displayShift):
 
-    url = "http://localhost:8000/1/markers"
+    url = "http://localhost:8000/kesh/markers"
     response = urllib.urlopen(url)
     data = json.loads(response.read())
 
@@ -19,13 +19,45 @@ def AddMarkers(clip, displayShift):
         print marker
         frame = (marker['startTime'] / 10) * 30
         duration = (marker['endTime'] - marker['startTime']) / 10 * 30;
-        print(frame, 'Cyan', marker['title'], marker['note'], duration)
-        markerAdded = clip.AddMarker(frame, marker['note'].title(), marker['title'], marker['note'], duration)
+        title = str(marker['idx']) + ': ' + marker['title']
+        markerAdded = clip.AddMarker(frame, marker['color'].title(), title, marker['note'], duration)
+
         print marker['title']
         if markerAdded:
             print(displayShift + "  " + "Marked added to " + file_name)
         else:
             print(displayShift + "  " + "Marker was not added :-( to " + file_name)
+
+        # lets add this clip to the timeline, too, with in and out markers set
+        # first, let's get the current clip info
+        properties = clip.GetClipProperty()
+        print properties
+
+        meta = clip.GetMetadata()
+        print meta
+
+        x = clip.SetClipProperty('Take', 'Take Test')
+        x = clip.SetClipProperty('In', '00:00:04:00')
+        clip.SetClipProperty('Out', '00:00:08:00')
+        properties = clip.GetClipProperty()
+        print properties['In']
+
+        if project.GetTimelineCount() == 0:
+            timeline = mediaPool.CreateTimelineFromClips('markers', clip)
+        else:
+            timeline = project.GetTimelineByIndex(1)
+            project.SetCurrentTimeline(timeline)
+            mediaPool.AppendToTimeline(clip)
+
+        items = timeline.GetItemsInTrack('video', 1)
+        for itemIndex in items:
+            item = items[itemIndex]
+            print item.GetName()
+            # print item.GetClipProperty()
+            print item.GetDuration()
+
+        # pprint.pprint(clip, )
+        # return
     # return
 
 
@@ -58,7 +90,7 @@ def DisplayFolderInfo(folder, displayShift):
                 # print key.rjust(10), value
 
 #             return
-            AddMarkers(clip, displayShift)
+            # AddMarkers(clip, displayShift)
 
 
             markers = clip.GetMarkers()
@@ -66,9 +98,6 @@ def DisplayFolderInfo(folder, displayShift):
                 # clip.RemoveMarker(value)
                 pprint.pprint(value)
 
-            for marker in markers:
-                dir(marker)
-                pprint.pprint(marker)
 
             # break
         # print clip.GetMediaId()
@@ -110,7 +139,7 @@ projectManager = resolve.GetProjectManager()
 mediaStorage = resolve.GetMediaStorage()
 
 # get these from the database, or via twig
-projectName = 'aaa';
+projectName = 'aac';
 
 # create the project if it doesn't exist
 project = projectManager.LoadProject(projectName)
@@ -120,8 +149,9 @@ if project is None:
 if project is None:
     raise ValueError('Unable to load / create ' + projectName)
 
+
 clips = mediaStorage.AddItemsToMediaPool([
-    "Z:\\JUFJ\Kesh\kesh-2e.MOV"
+    "C:\\JUFJ\Kesh\kesh-2e.MOV"
 ])
 
 # go through all the items in the media pool, not just the new ones
@@ -149,11 +179,19 @@ for clipIndex in clips:
 
     AddMarkers(clip, '')
 
+timeline = mediaPool.CreateEmptyTimeline('markers')
+print(timeline)
+
+for markerIndex in markers:
+    print "Adding Marker to timeline"
+    marker = markers[markerIndex]
+    # mediaPool.AppendToTimeline(marker)
+    dir(marker)
+    pprint.pprint(marker)
 
 project = projectManager.GetCurrentProject()
 
-# Get currently open project
-project = projectManager.GetCurrentProject()
+
 
 
 

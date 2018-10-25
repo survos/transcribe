@@ -6,8 +6,8 @@ easy_admin:
     design:
         menu:
             - {route: 'survos_landing', label: 'Home' }
-            - {entity: Project}
             - {entity: Media}
+            - {entity: Project}
             - {entity: Marker }
             - {entity: Word }
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
@@ -32,7 +32,10 @@ easy_admin:
                 title: '%%entity_label%% listing'
                 fields:
                     - 'id'
+                    - code
                     - 'filename'
+                    - path
+                    - streamCount
                     - {property: 'transcriptRequested', label: 'Transcribe?'}
                     - {property: 'flacExists', label: 'Flac?'}
                     - project
