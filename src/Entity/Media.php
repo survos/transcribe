@@ -120,6 +120,11 @@ class Media
      */
     private $stream_count;
 
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $type;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -414,6 +419,8 @@ class Media
 
     public function setCode(?string $code): self
     {
+        $code = str_replace('(', '_', $code);
+        $code = str_replace(')', '', $code);
         $this->code = $code;
 
         return $this;
@@ -439,6 +446,18 @@ class Media
     public function setStreamCount(?int $stream_count): self
     {
         $this->stream_count = $stream_count;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

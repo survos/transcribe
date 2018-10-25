@@ -24,15 +24,37 @@ class MarkerRepository extends ServiceEntityRepository
     /**
      * @return Marker[] Returns an array of Marker objects
      */
-    public function findByProject(Project $project)
+    public function findByProject(Project $project, $maxDuration = 0)
     {
-        return $this
+        $markers =  $this
             ->createQueryBuilder('marker')
             ->where('marker.media IN (:media)')
+            ->andWhere('marker.irrelevant <> true')
+            ->andWhere('marker.hidden <> true')
             ->setParameter('media', $project->getMedia())
             ->orderBy('marker.idx', 'ASC')
             ->getQuery()
             ->getResult();
+
+        // there's likely a better way!
+        $duration = 0;
+
+        if ($maxDuration) {
+            $filteredMarkers = [];
+            foreach ($markers as $marker) {
+                if ($duration <= $maxDuration) {
+                    $filteredMarkers[] = $marker;
+                    $duration = $duration + $marker->getDuration();
+                }
+            }
+            return $filteredMarkers;
+        } else {
+            return $markers;
+        }
+
+        return $markers;
+
+
     }
 
     public function findMarkerDrationByColor(Project $project)

@@ -73,6 +73,8 @@ class Timeline
 
     public function setCode(string $code): self
     {
+        $code = str_replace('(', '_', $code);
+        $code = str_replace(')', '', $code);
         $this->code = $code;
 
         return $this;

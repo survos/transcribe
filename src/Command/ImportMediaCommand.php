@@ -159,15 +159,17 @@ class ImportMediaCommand extends Command
 
         foreach ($finder as $file) {
             $ext = strtolower($file->getExtension());
-            if (!in_array($ext, ['mov', 'mp4'])) # meed a better isMovie function
+            if (!in_array($ext, ['mov', 'mp4', 'jpg'])) # meed a better isMovie function
             {
                 continue; // skip
             }
 
-
             $filename = $file->getRelativePathname();
 
             $info = $this->info($file->getRealPath());
+
+            $isImage = $info['format_name'] == 'image2';
+
 
             $streams = $this->streams($file->getRealPath());
 
@@ -176,9 +178,18 @@ class ImportMediaCommand extends Command
                 $media = (new Media())
                     ->setPath($file->getRealPath())
                     ->setFilename($filename);
+
+                if ($isImage) {
+                    $code =  'photo_' . pathinfo($media->getPath(), PATHINFO_FILENAME);
+                    $media
+                        ->setCode($code); // hack!
+                }
+
                 $this->em->persist($media);
             }
+
             $media
+                ->setType($isImage ? 'photo' : 'video')
                 ->setStreamsJson(json_encode($streams))
                 ->setStreamCount($info['nb_streams'])
                 ->setFileSize($file->getSize())

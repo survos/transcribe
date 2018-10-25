@@ -27,11 +27,17 @@
 {% macro listMarkers(markers) %}
     <ol class="sortable">
         {% set total = 0 %}
+        {% set speaker = '' %}
         {% for m in markers %}
             {% if not m.hidden and not m.irrelevant %}
                 {% set total = total + m.duration %}
                 <li id="marker_{{ m.id }}"
                     style="color: {{ m.color }}">
+
+                    {% if m.media.speaker != speaker %}
+                        {% set speaker = m.media.speaker %}
+                        <u>{{ speaker }}</u>:
+                        {% endif %}
 
                     <a class="clip pull-right"
                        data-id="{{ m.id }}"

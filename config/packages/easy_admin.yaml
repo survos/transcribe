@@ -13,6 +13,27 @@ easy_admin:
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
 
     entities:
+        Media:
+            class: App\Entity\Media
+            label: 'Media'
+            list:
+                title: '%%entity_label%% listing'
+                fields:
+                - 'id'
+                - type
+                - code
+                - 'filename'
+                - path
+                - streamCount
+                - {property: 'transcriptRequested', label: 'Transcribe?'}
+                - {property: 'flacExists', label: 'Flac?'}
+                - project
+                - words
+                - 'duration'
+                - sentenceCount
+                - {property: 'fileSize', type: 'float', format: '%3.1f'}
+                - 'transcribeSize'
+                actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']
 
         Marker:
             class: App\Entity\Marker
@@ -25,23 +46,3 @@ easy_admin:
             label: 'Bin'
 
 
-        Media:
-            class: App\Entity\Media
-            label: 'Media'
-            list:
-                title: '%%entity_label%% listing'
-                fields:
-                    - 'id'
-                    - code
-                    - 'filename'
-                    - path
-                    - streamCount
-                    - {property: 'transcriptRequested', label: 'Transcribe?'}
-                    - {property: 'flacExists', label: 'Flac?'}
-                    - project
-                    - words
-                    - 'duration'
-                    - sentenceCount
-                    - {property: 'fileSize', type: 'float', format: '%3.1f'}
-                    - 'transcribeSize'
-                actions: ['show', { name: 'media_show', type: 'route' }, 'delete', 'edit']

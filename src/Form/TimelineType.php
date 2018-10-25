@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Timeline;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,6 +16,9 @@ class TimelineType extends AbstractType
             ->add('code')
             ->add('maxDuration')
             ->add('gap_time')
+            ->add('submit', SubmitType::class, [
+                'label' => 'Create Timeline XML'
+            ])
         ;
     }
 

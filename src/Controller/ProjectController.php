@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Marker;
+use App\Entity\Media;
 use App\Entity\Project;
 use App\Entity\Timeline;
 use App\Entity\Word;
@@ -57,6 +58,10 @@ class ProjectController extends AbstractController
             ->setGapTime(1)
             ->setProject($project);
         $form = $this->createForm(TimelineType::class, $timeline);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('project_xml', $project->rp(['max'=> $timeline->getMaxDuration()]));
+        }
 
         return $this->render('project/show.html.twig', [
             'project' => $project,
@@ -181,27 +186,40 @@ FCM: NON-DROP FRAME
         return new Response($txt, 200, ['Content-Type' => 'text/plain']);
     }
 
+    private function createXml(Project $project, Timeline $timeline)
+    {
+        // really this should come from the timeline, but we're wasting all sorts of time!
+        $markers = $this->markerRepository->findByProject($project, $maxDuration = $timeline->getMaxDuration());
+
+        // only import the media we're using
+        $mediaList = [];
+        foreach ($markers as $marker) {
+            $media = $marker->getMedia();
+            $mediaList[$media->getCode()] = $media;
+        }
+
+
+
+        $xml = $this->renderView("fcpxml.twig", [
+            'markers' => $markers,
+            'photos' => $project->getMedia()->filter(function (Media $media) {
+                return $media->getType() === 'photo';
+            }),
+            'mediaList' => $mediaList
+        ]);
+
+        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+
+        return $xml;
+
+    }
     /**
      * @param Request $request
      * @Route("/{code}/fcpxml.{_format}", name="project_xml")
      */
     public function fcpxml(Request $request, Project $project, $_format='html')
     {
-        // really this should come from the timeline, but we're wasting all sorts of time!
-        $markers = $this->markerRepository->findByProject($project);
-
-        // only import the media we're using
-        foreach ($markers as $marker) {
-            $media = $marker->getMedia();
-            $mediaList[$media->getCode()] = $media;
-        }
-
-        $xml = $this->renderView("fcpxml.twig", [
-            'markers' => $markers,
-            'mediaList' => $mediaList
-        ]);
-
-        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
         return new Response($xml, 200, ['Content-Type' => 'text/xml']);
     }
 
