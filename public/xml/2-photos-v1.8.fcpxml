@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.8">
+    <resources>
+        <format name="FFVideoFormat1080p2997" width="1920" frameDuration="1001/30000s" height="1080" id="r0"/>
+        <format name="FFVideoFormat720p2997" width="1280" frameDuration="1001/30000s" height="720" id="r1"/>
+        <format name="FFVideoFormatRateUndefined" width="6000" height="4000" id="r4"/>
+        <format name="FFVideoFormatRateUndefined" width="5312" height="2988" id="r6"/>
+        <asset src="file://localhost/C:/JUFJ/MAS/mas-1.MOV" start="0/1s" audioSources="1" name="mas-1.MOV" hasVideo="1" format="r1" duration="7007/250s" hasAudio="1" audioChannels="2" id="r2"/>
+        <asset src="file://localhost/C:/JUFJ/MAS/mas-2.MOV" start="0/1s" audioSources="1" name="mas-2.MOV" hasVideo="1" format="r1" duration="1680679/1000s" hasAudio="1" audioChannels="2" id="r3"/>
+        <asset src="file://localhost/C:/JUFJ/Claire/clair.JPG" start="0/1s" name="clair.JPG" hasVideo="1" format="r4" duration="0/1s" id="r5"/>
+        <asset src="file://localhost/C:/JUFJ/Claire/2018-10-23([3-3]).jpg" start="0/1s" name="2018-10-23([3-3]).jpg" hasVideo="1" format="r6" duration="0/1s" id="r7"/>
+    </resources>
+    <library>
+        <event name="Timeline 1 (Resolve)">
+            <project name="Timeline 1 (Resolve)">
+                <sequence tcFormat="NDF" format="r0" duration="169169/10000s" tcStart="18018/5s">
+                    <spine>
+                        <asset-clip tcFormat="NDF" start="91091/15000s" name="mas-1.MOV" format="r1" duration="119119/30000s" enabled="1" ref="r2" offset="18018/5s">
+                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            <video start="0/1s" name="clair.JPG" duration="13013/3000s" enabled="1" lane="1" ref="r5" offset="11011/1250s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            </video>
+                        </asset-clip>
+
+                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                        <asset-clip tcFormat="NDF" start="91091/100s" name="mas-2.MOV" format="r1" duration="301301/30000s" enabled="1" ref="r3" offset="108269161/30000s">
+                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            <video start="0/1s" name="2018-10-23([3-3]).jpg" duration="149149/30000s" enabled="1" lane="1" ref="r7" offset="27524497/30000s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            </video>
+                        </asset-clip>
+                        <gap start="3600/1s" name="Gap" duration="3003/2000s" offset="18095077/5000s"/>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
