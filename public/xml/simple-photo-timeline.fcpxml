@@ -18,11 +18,13 @@
                 <sequence tcFormat="NDF" format="r0" duration="77077/5000s" tcStart="18018/5s">
                 
                     <spine>
-                        <asset-clip tcFormat="NDF" start="91091/15000s" name="mas-1.MOV" format="r1" duration="119119/30000s" enabled="1" ref="mas1" offset="18018/5s">
+                        <asset-clip tcFormat="NDF" start="91091/15000s" name="mas-1.MOV" format="r1"
+                        duration="119119/30000s" enabled="1" ref="mas1" offset="18018/5s">
                             <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
 
 
-                            <video start="0/1s" name="clair.JPG" duration="13013/3000s" enabled="1" lane="1" ref="clairephoto" offset="11011/1250s">
+                            <video start="0/1s" name="clair.JPG" duration="13013/3000s" enabled="1" lane="1" ref="clairephoto"
+                            offset="11011/1250s">
                                 <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                             </video>
                         </asset-clip>
