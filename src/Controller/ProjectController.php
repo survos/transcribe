@@ -205,10 +205,11 @@ FCM: NON-DROP FRAME
             'photos' => $project->getMedia()->filter(function (Media $media) {
                 return $media->getType() === 'photo';
             }),
+            'timeline' => $timeline,
             'mediaList' => $mediaList
         ]);
 
-        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        // file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
 
         return $xml;
 

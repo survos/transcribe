@@ -20,11 +20,16 @@
     </resources>
     <library>
         <event name="Event Name">
-            <project name="Project Name Import Test">
-                <sequence format="r0" tcFormat="NDF" duration="37037/6000s" tcStart="18018/5s">
+            <project name="{{ timeline.maxDuration * 10}}/10s">
+
+
+                <sequence format="r0" tcFormat="NDF" duration="37037/6000s" tcStart="{{ 60 * 60 * 10 }}/10s">
                     <spine>
                         {% set offset = 0 %}
 
+
+
+                        {#
 
                         {% for photo in photos %}
                             {% set duration = 5 %}
@@ -33,13 +38,27 @@
                             {% set offset = offset + duration %}
                         </video>
                         {% endfor %}
+                        #}
 
                         {% for marker in markers %}
                             <asset-clip tcFormat="NDF" start="{{ marker.startTime }}/10s" name="{{ marker.title }}" format="r1" duration="{{ marker.duration  * 10 }}/10s" enabled="1"
                                         ref="{{ marker.media.code }}" offset="{{ offset * 10 }}/10s">
                                 <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                {# photo starts halfway through clip (for testing) #}
+                                {% set photoDuration = (marker.duration /2)|round  %}
+                                <video start="0/1s" name="clair.JPG" duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #} ref="clairephoto" offset="{{ (offset + photoDuration) * 10|round }}/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
                             </asset-clip>
                             {% set offset = offset + marker.duration %}
+
+                            {# some breathing space between clips#}
+                            <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
                         {% endfor %}
                     </spine>
                 </sequence>
