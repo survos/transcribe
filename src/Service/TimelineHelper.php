@@ -79,7 +79,7 @@ class TimelineHelper
             // now go through the markers and add the clips
             $clip = (new Clip())
                 ->setName($marker->getTitle())
-                ->setStart($marker->getStartTime() / 10)
+                ->setStart($marker->getStartTime())
                 ->setDuration($marker->getDuration())
                 ->setTrackOffset($offset)
                 ->setAsset($assets[$marker->getMedia()->getCode()]);

@@ -272,7 +272,7 @@ class Marker
 
     public function getDuration()
     {
-        return ($this->getEndTime() - $this->getStartTime()) / 10;
+        return ($this->getEndTime() - $this->getStartTime());
     }
 
     public function rp($addl=[])
