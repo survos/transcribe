@@ -65,9 +65,11 @@ class TimelineHelper
             foreach ($mediaList as $mediaCode => $media) {
                 $asset = (new TimelineAsset())
                     ->setHasAudio(!$media->isPhoto())
-                    ->setSrc($media->getPath())
-                    ->setDuration($media->getDuration() / 10)
+                    // ->setSrc($media->getPath())
+                    // ->setDuration($media->getDuration() / 10)
+                    ->setSrc($media->getProject()->getBasePath() . '/' . $media->getFilename())
                     ->setName($media->getBaseName())
+                    ->setDuration($media->getDuration())
                     ->setCode($media->getCode())
                 ;
                 $timeline->addTimelineAsset($asset);
