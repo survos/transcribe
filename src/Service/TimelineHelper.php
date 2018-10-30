@@ -66,6 +66,7 @@ class TimelineHelper
                 $asset = (new TimelineAsset())
                     ->setHasAudio(!$media->isPhoto())
                     ->setSrc($media->getPath())
+                    ->setDuration($media->getDuration() / 10)
                     ->setName($media->getBaseName())
                     ->setCode($media->getCode())
                 ;

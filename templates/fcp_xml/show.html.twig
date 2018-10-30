@@ -62,7 +62,9 @@
                         </td>
                         <td>{{ asset.start }}</td>
                         <td>{{ asset.clips.count }}</td>
+                        {#
                         <td>{{ app.request.get('debug') ? dump(asset) }}</td>
+                        #}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -91,7 +93,9 @@
                         <td>{{ clip.trackOffset|number_format(1) }}</td>
                         <td>{{ clip.duration|number_format(1) }}</td>
                         <td>{{ clip.lane }}</td>
+                        {#
                         <td>{{ app.request.get('debug', false) ? dump(clip) }}</td>
+                        #}
                     </tr>
                 {% endfor %}
                 </tbody>

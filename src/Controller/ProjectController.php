@@ -216,7 +216,7 @@ FCM: NON-DROP FRAME
             'mediaList' => $mediaList
         ]);
 
-        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        // file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
 
         return $xml;
 
