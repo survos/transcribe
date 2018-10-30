@@ -140,7 +140,6 @@ class Clip
 
 
         foreach ($splineItem->attributes() as $var=>$val) {
-            dump($var);
             $skip = false;
             switch ($var) {
                 case 'ref':

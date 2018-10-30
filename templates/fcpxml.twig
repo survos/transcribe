@@ -23,6 +23,7 @@
             <project name="{{ project.code }}_{{ random(999) }}">
 
                 {% set sequenceBase = 36036 %} {# 01:00:00 #}
+                {% set sequenceBase = 3 %} {# 01:00:00 #}
                 <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
                         {% set offset = sequenceBase %}
@@ -48,11 +49,11 @@
 
                                 {# photo starts halfway through clip (for testing) #}
                                 {% set photoDuration = (marker.duration /2)|round  %}
-                                {% set photoStartTime = offset + photoDuration %}
+                                {% set photoStartTime =  photoDuration %}
                                 <!--Photo {{ photo.code }} starts at {{ photoStartTime }} for {{ photoDuration }}-->
                                 <video start="0/1s" name="{{ photo.code }}"
                                        duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #}
-                                       ref="{{ photo.code }}" offset="{{ photoDuration * 10|round }}/10s">
+                                       ref="{{ photo.code }}" offset="{{ photoDuration |round }}/10s">
                                     <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                 </video>
 

@@ -271,15 +271,8 @@ class Timeline
         }
     }
 
-    public function setFromXml(\SimpleXMLElement $xml, Project $project): self
+    public function setFromXml(\SimpleXMLElement $xml): self
     {
-        foreach ($xml->xpath('//spline') as $child) {
-            dump($child);
-        }
-
-        foreach ($xml->{'spline'} as $child) {
-            dump($child);
-        }
         foreach ($xml->resources->children() as $resource) {
             switch ($resource->getName()) {
                 case 'format':
@@ -310,7 +303,6 @@ class Timeline
                         $this->addClip($photo);
                         $photo->setFromXml($photoItem, $this);
                     }
-                    dump($splineItem, $splineItem{'@attributes'});
                     break;
                 case 'gap':
                     break;
