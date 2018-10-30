@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}XML: {{ fn }}{% endblock %}
+
+{% block content %}
+
+<div >
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Formats</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>HxW</th>
+                    <th>Duration</th>
+                    <th>#Clips</th>
+                    <th>#Assets</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for format in timeline.timelineFormats %}
+                    <tr>
+                        <td>{{ format.code }}</td>
+                        <td>{{ format.name }}</td>
+                        <td>{{ format.height }}x{{ format.width }}</td>
+                        <td>{{ format.frameDurationString }}</td>
+                        <td>{{ format.clips.count }}</td>
+                        <td>{{ format.timelineAssets.count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>Assets</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>src</th>
+                    <th>format</th>
+                    <th>tags</th>
+                    <th>start</th>
+                    <th>#Clips</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for asset in timeline.timelineAssets %}
+                    <tr>
+                        <td>{{ asset.code }}</td>
+                        <td>{{ asset.name }}</td>
+                        <td>{{ asset.src }}</td>
+                        <td>{{ asset.format }}</td>
+                        <td>
+                            {% if asset.hasAudio %}<i class="fa fa-headphones"> {{ asset.audioChannels }}</i>{% endif %}
+                            {% if asset.hasVideo%}<i class="fa fa-video-camera"></i>{% endif %}
+                        </td>
+                        <td>{{ asset.start }}</td>
+                        <td>{{ asset.clips.count }}</td>
+                        <td>{{ app.request.get('debug') ? dump(asset) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>Clips</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>type</th>
+                    <th>name</th>
+                    <th>format</th>
+                    <th>src</th>
+                    <th>offset</th>
+                    <th>duration</th>
+                    <th>lane</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for clip in timeline.clips  %}
+                    <tr>
+                        <td>{{ clip.type }}</td>
+                        <td>{{ clip.name }}</td>
+                        <td>{{ clip.format }}</td>
+                        <td>{{ clip.asset }}</td>
+                        <td>{{ clip.trackOffset }}</td>
+                        <td>{{ clip.duration }}</td>
+                        <td>{{ clip.lane }}</td>
+                        <td>{{ app.request.get('debug', false) ? dump(clip) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+        <div class="col-md-8">
+            <pre>
+                {{ rawXml }}
+            </pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

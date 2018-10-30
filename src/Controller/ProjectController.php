@@ -198,8 +198,6 @@ FCM: NON-DROP FRAME
             $mediaList[$media->getCode()] = $media;
         }
 
-
-
         $xml = $this->renderView("fcpxml.twig", [
             'markers' => $markers,
             'photos' => $project->getMedia()->filter(function (Media $media) {
@@ -208,8 +206,6 @@ FCM: NON-DROP FRAME
             'timeline' => $timeline,
             'mediaList' => $mediaList
         ]);
-
-        // file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
 
         return $xml;
 
@@ -221,6 +217,10 @@ FCM: NON-DROP FRAME
     public function fcpxml(Request $request, Project $project, $_format='html')
     {
         $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
+
+        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+
+
         return new Response($xml, 200, ['Content-Type' => 'text/xml']);
     }
 

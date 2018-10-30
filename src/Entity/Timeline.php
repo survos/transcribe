@@ -44,9 +44,27 @@ class Timeline
      */
     private $max_duration;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TimelineFormat", mappedBy="timeline", orphanRemoval=true)
+     */
+    private $timelineFormats;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Clip", mappedBy="timeline", orphanRemoval=true)
+     */
+    private $clips;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TimelineAsset", mappedBy="timeline", orphanRemoval=true)
+     */
+    private $timelineAssets;
+
     public function __construct()
     {
         $this->markers = new ArrayCollection();
+        $this->timelineFormats = new ArrayCollection();
+        $this->clips = new ArrayCollection();
+        $this->timelineAssets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,5 +147,182 @@ class Timeline
 
         return $this;
     }
+
+    /**
+     * @return Collection|TimelineFormat[]
+     */
+    public function getTimelineFormats(): Collection
+    {
+        return $this->timelineFormats;
+    }
+
+    public function addTimelineFormat(TimelineFormat $timelineFormat): self
+    {
+        if (!$this->timelineFormats->contains($timelineFormat)) {
+            $this->timelineFormats[] = $timelineFormat;
+            $timelineFormat->setTimeline($this);
+        }
+
+        return $this;
+    }
+
+    public function getAssetByCode($code): ?TimelineAsset
+    {
+        foreach ($this->getTimelineAssets() as $asset) {
+            if ($asset->getCode() == $code) {
+                return $asset;
+            }
+        }
+        return null;
+    }
+
+    public function getFormatByCode($code): ?TimelineFormat
+    {
+        foreach ($this->getTimelineFormats() as $format) {
+            if ($format->getCode() == $code) {
+                return $format;
+            }
+        }
+        return null;
+    }
+
+    public function removeTimelineFormat(TimelineFormat $timelineFormat): self
+    {
+        if ($this->timelineFormats->contains($timelineFormat)) {
+            $this->timelineFormats->removeElement($timelineFormat);
+            // set the owning side to null (unless already changed)
+            if ($timelineFormat->getTimeline() === $this) {
+                $timelineFormat->setTimeline(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Clip[]
+     */
+    public function getClips(): Collection
+    {
+        return $this->clips;
+    }
+
+    public function addClip(Clip $clip): self
+    {
+        if (!$this->clips->contains($clip)) {
+            $this->clips[] = $clip;
+            $clip->setTimeline($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClip(Clip $clip): self
+    {
+        if ($this->clips->contains($clip)) {
+            $this->clips->removeElement($clip);
+            // set the owning side to null (unless already changed)
+            if ($clip->getTimeline() === $this) {
+                $clip->setTimeline(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TimelineAsset[]
+     */
+    public function getTimelineAssets(): Collection
+    {
+        return $this->timelineAssets;
+    }
+
+    public function addTimelineAsset(TimelineAsset $timelineAsset): self
+    {
+        if (!$this->timelineAssets->contains($timelineAsset)) {
+            $this->timelineAssets[] = $timelineAsset;
+            $timelineAsset->setTimeline($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimelineAsset(TimelineAsset $timelineAsset): self
+    {
+        if ($this->timelineAssets->contains($timelineAsset)) {
+            $this->timelineAssets->removeElement($timelineAsset);
+            // set the owning side to null (unless already changed)
+            if ($timelineAsset->getTimeline() === $this) {
+                $timelineAsset->setTimeline(null);
+            }
+        }
+
+        return $this;
+    }
+
+    static public function fractionalSecondsToTime($s)
+    {
+        // format X/ys, e.g. 40245/5000s, for accurate frame count.
+        // drop the s, split the string
+        if (preg_match('|(\d+)/(\d+)s|', $s, $m)) {
+            list($dummy, $num, $denom) = $m;
+            return $num/$denom;
+        }
+    }
+
+    public function setFromXml(\SimpleXMLElement $xml, Project $project): self
+    {
+        foreach ($xml->xpath('//spline') as $child) {
+            dump($child);
+        }
+
+        foreach ($xml->{'spline'} as $child) {
+            dump($child);
+        }
+        foreach ($xml->resources->children() as $resource) {
+            switch ($resource->getName()) {
+                case 'format':
+                    $format = (new TimelineFormat());
+                    $this
+                        ->addTimelineFormat($format);
+                    $format
+                        ->setFromXml($resource, $this);
+                    break;
+                case 'asset':
+                    $asset = (new TimelineAsset())
+                        ->setFromXml($resource, $this);
+                    $this->addTimelineAsset($asset);
+
+            }
+        }
+
+        $spline = $xml->library->event->project->sequence->spine;
+        foreach ($spline->children() as $splineItem) {
+            $clip = new Clip();
+            $this->addClip($clip);
+
+            $clip->setFromXml($splineItem, $this);
+            switch ($type = $splineItem->getName()) {
+                case 'asset-clip':
+                    foreach ($splineItem->video as $photoItem) {
+                        $photo = new Clip();
+                        $this->addClip($photo);
+                        $photo->setFromXml($photoItem, $this);
+                    }
+                    dump($splineItem, $splineItem{'@attributes'});
+                    break;
+                case 'gap':
+                    break;
+                default:
+                    throw new \Exception("Unhandled type: $type");
+            }
+        }
+
+        return $this;
+    }
+
+
+
 
 }

@@ -47,7 +47,7 @@
 
                                 {# photo starts halfway through clip (for testing) #}
                                 {% set photoDuration = (marker.duration /2)|round  %}
-                                <video start="0/1s" name="clair.JPG" duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #} ref="clairephoto" offset="{{ (offset + photoDuration) * 10|round }}/10s">
+                                <video start="0/1s" name="clair.JPG" duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #} ref="clairephoto" offset="{{ (photoDuration) * 10|round }}/10s">
                                     <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                 </video>
 
