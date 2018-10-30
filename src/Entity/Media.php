@@ -125,12 +125,18 @@ class Media
      */
     private $type;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BRoll", mappedBy="media", orphanRemoval=true)
+     */
+    private $bRolls;
+
     public function __construct()
     {
         $this->flacExists = false;
         $this->transcriptRequested = false;
         $this->markers = new ArrayCollection();
         $this->words = new ArrayCollection();
+        $this->bRolls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -460,6 +466,42 @@ class Media
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|BRoll[]
+     */
+    public function getBRolls(): Collection
+    {
+        return $this->bRolls;
+    }
+
+    public function addBRoll(BRoll $bRoll): self
+    {
+        if (!$this->bRolls->contains($bRoll)) {
+            $this->bRolls[] = $bRoll;
+            $bRoll->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBRoll(BRoll $bRoll): self
+    {
+        if ($this->bRolls->contains($bRoll)) {
+            $this->bRolls->removeElement($bRoll);
+            // set the owning side to null (unless already changed)
+            if ($bRoll->getMedia() === $this) {
+                $bRoll->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isPhoto(): bool
+    {
+        return $this->getType() == 'photo';
     }
 
 }

@@ -119,7 +119,7 @@ class TimelineFormat
         return $this;
     }
 
-    public function getFrameDurationString(): ?string
+    public function  getFrameDurationString(): ?string
     {
         return $this->frame_duration_string;
     }

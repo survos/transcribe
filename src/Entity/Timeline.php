@@ -59,12 +59,18 @@ class Timeline
      */
     private $timelineAssets;
 
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $totalDuration;
+
     public function __construct()
     {
         $this->markers = new ArrayCollection();
         $this->timelineFormats = new ArrayCollection();
         $this->clips = new ArrayCollection();
         $this->timelineAssets = new ArrayCollection();
+        $this->max_duration = 180;
     }
 
     public function getId(): ?int
@@ -96,6 +102,15 @@ class Timeline
         $this->code = $code;
 
         return $this;
+    }
+
+    public function calcDuration()
+    {
+        $duration = 0;
+        foreach ($this->getClips() as $clip) {
+            $duration += $clip->getDuration();
+        }
+        return $duration;
     }
 
     /**
@@ -273,6 +288,7 @@ class Timeline
 
     public function setFromXml(\SimpleXMLElement $xml): self
     {
+
         foreach ($xml->resources->children() as $resource) {
             switch ($resource->getName()) {
                 case 'format':
@@ -286,11 +302,17 @@ class Timeline
                     $asset = (new TimelineAsset())
                         ->setFromXml($resource, $this);
                     $this->addTimelineAsset($asset);
-
             }
         }
+        // dump($this->getTimelineAssets()); die();
+
+
 
         $spline = $xml->library->event->project->sequence->spine;
+
+        $this
+            ->setTotalDuration(Timeline::fractionalSecondsToTime($xml->library->event->project->sequence['duration']));
+
         foreach ($spline->children() as $splineItem) {
             $clip = new Clip();
             $this->addClip($clip);
@@ -310,6 +332,18 @@ class Timeline
                     throw new \Exception("Unhandled type: $type");
             }
         }
+
+        return $this;
+    }
+
+    public function getTotalDuration()
+    {
+        return $this->totalDuration;
+    }
+
+    public function setTotalDuration($totalDuration): self
+    {
+        $this->totalDuration = $totalDuration;
 
         return $this;
     }

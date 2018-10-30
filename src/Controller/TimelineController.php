@@ -74,6 +74,8 @@ class TimelineController extends AbstractController
         ]);
     }
 
+
+
     /**
      * @Route("/{id}", name="timeline_delete", methods="DELETE")
      */

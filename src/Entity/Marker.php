@@ -85,10 +85,16 @@ class Marker
      */
     private $timelines;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BRoll", mappedBy="marker", orphanRemoval=true)
+     */
+    private $bRolls;
+
     public function __construct()
     {
         $this->words = new ArrayCollection();
         $this->timelines = new ArrayCollection();
+        $this->bRolls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -297,6 +303,37 @@ class Marker
         if ($this->timelines->contains($timeline)) {
             $this->timelines->removeElement($timeline);
             $timeline->removeMarker($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BRoll[]
+     */
+    public function getBRolls(): Collection
+    {
+        return $this->bRolls;
+    }
+
+    public function addBRoll(BRoll $bRoll): self
+    {
+        if (!$this->bRolls->contains($bRoll)) {
+            $this->bRolls[] = $bRoll;
+            $bRoll->setMarker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBRoll(BRoll $bRoll): self
+    {
+        if ($this->bRolls->contains($bRoll)) {
+            $this->bRolls->removeElement($bRoll);
+            // set the owning side to null (unless already changed)
+            if ($bRoll->getMarker() === $this) {
+                $bRoll->setMarker(null);
+            }
         }
 
         return $this;

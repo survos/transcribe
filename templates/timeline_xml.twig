@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.8">
+    <resources>
+        <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
+        <format width="1280" name="FFVideoFormat720p2997" height="720" id="r1" frameDuration="1001/30000s"/>
+
+        <format name="FFVideoFormatRateUndefined" width="6000" height="4000" id="photo_format"/>
+
+        {% for code, photo in photos %}
+        <asset src="file://localhost/{{ photo.path|replace({'\\': '/'}) }}" start="0/1s" name="{{ photo.code }}" hasVideo="1" format="photo_format" duration="0/1s" id="{{ photo.code }}"/>
+        {% endfor %}
+
+        {% for code, media in mediaList %}
+        <asset id="{{ media.code }}" format="r1" src="file://localhost/{{ media.path|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" audioChannels="1" name="{{ media.code }}"
+               duration="{{ media.duration * 10 }}/10s"  audioSources="1" hasVideo="1"/>
+        {% endfor %}
+
+
+    </resources>
+    <library>
+        <event name="Event Name">
+            <project name="{{ project.code }}_{{ random(999) }}">
+
+                {% set sequenceBase = 36036 %} {# 01:00:00 #}
+                {% set sequenceBase = 3 %} {# 01:00:00 #}
+                <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
+                    <spine>
+                        {% set offset = sequenceBase %}
+                        {#
+
+                        {% for photo in photos %}
+                            {% set duration = 5 %}
+                        <video start="0/1s" name="{{ photo.code }}" duration="{{ duration * 10 }}/10s" enabled="1" ref="{{ photo.code }}" offset="{{ offset * 10 }}/10s">
+                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            {% set offset = offset + duration %}
+                        </video>
+                        {% endfor %}
+                        #}
+
+                        {% for marker in markers %}
+                            <!--Soundbite {{ marker.title  }} starts at {{ offset }} for {{ marker.duration }}-->
+                            <asset-clip tcFormat="NDF" start="{{ marker.startTime }}/10s" name="{{ marker.title }}" format="r1"
+                                        duration="{{ marker.duration  * 10 }}/10s" enabled="1"
+                                        ref="{{ marker.media.code }}" offset="{{ offset  }}/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                {% set photo = photos[loop.index] %}
+
+                                {# photo starts halfway through clip (for testing) #}
+                                {% set photoDuration = (marker.duration /2)|round  %}
+                                {% set photoStartTime =  photoDuration %}
+                                <!--Photo {{ photo.code }} starts at {{ photoStartTime }} for {{ photoDuration }}-->
+                                <video start="0/1s" name="{{ photo.code }}"
+                                       duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #}
+                                       ref="{{ photo.code }}" offset="{{ photoDuration |round }}/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            {% set offset = offset + (marker.duration * 10) %}
+
+                            {# some breathing space between clips
+                            <gap start="3600/1s" name="Gap" duration="10/10s" offset="{{ offset * 10}}/10s">
+                            #}
+
+                        {% endfor %}
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

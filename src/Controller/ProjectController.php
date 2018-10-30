@@ -9,6 +9,7 @@ use App\Entity\Timeline;
 use App\Entity\Word;
 use App\Form\MarkerFormType;
 use App\Form\TimelineType;
+use App\Service\TimelineHelper;
 use Done\Subtitles\Subtitles;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,11 +29,14 @@ class ProjectController extends AbstractController
     private $em;
     private $projectRepository;
     private $markerRepository;
-    public function __construct(EntityManagerInterface $em)
+    private $timelineHelperService;
+
+    public function __construct(EntityManagerInterface $em, TimelineHelper $helper)
     {
         $this->em = $em;
         $this->projectRepository = $em->getRepository(Project::class);
         $this->markerRepository = $em->getRepository(Marker::class);
+        $this->timelineHelperService = $helper;
     }
 
     /**
@@ -188,6 +192,7 @@ FCM: NON-DROP FRAME
 
     private function createXml(Project $project, Timeline $timeline)
     {
+
         // really this should come from the timeline, but we're wasting all sorts of time!
         $markers = $this->markerRepository->findByProject($project, $maxDuration = $timeline->getMaxDuration());
 
@@ -216,15 +221,21 @@ FCM: NON-DROP FRAME
         return $xml;
 
     }
+
     /**
      * @param Request $request
      * @Route("/{code}/fcpxml.{_format}", name="project_xml")
      */
     public function fcpxml(Request $request, Project $project, $_format='html')
     {
-        $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
 
-        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        // $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
+        $timeline = $this->timelineHelperService->updateTimelineFromProject($project);
+        $xml = $this->renderView('timeline_xml.twig', [
+            'timeline' => $timeline
+        ]);
+
+        // file_put_contents('/tmp/' . $project->getCode() . '-import.fcpxml', $xml);
 
 
         return new Response($xml, 200, ['Content-Type' => 'text/xml']);

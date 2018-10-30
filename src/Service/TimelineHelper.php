@@ -9,9 +9,13 @@
 namespace App\Service;
 
 
+use App\Entity\BRoll;
+use App\Entity\Clip;
 use App\Entity\Marker;
+use App\Entity\Media;
 use App\Entity\Project;
 use App\Entity\Timeline;
+use App\Entity\TimelineAsset;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TimelineHelper
@@ -23,30 +27,65 @@ class TimelineHelper
         $this->markerRepo = $entityManager->getRepository(Marker::class);
     }
 
-    public function updateTimelineFromProject(Project $project, Timeline $timeline=null): self
+    public function updateTimelineFromProject(Project $project, Timeline $timeline=null): Timeline
     {
         if (empty($timeline)) {
             $timeline = new Timeline();
         }
+        $timeline
+            ->setProject($project);
 
-        // really this should come from the timeline, but we're wasting all sorts of time!
+        // assets are media used, we want only the media in the markers we're using
+        // for testing, one photo per media
+        $photos = $project->getMedia()->filter(function (Media $media) {
+            return $media->getType() === 'photo';
+        });
+
         $markers = $this->markerRepo->findByProject($project, $maxDuration = $timeline->getMaxDuration());
 
-        // only import the media we're using
         $mediaList = [];
-        foreach ($markers as $marker) {
+        foreach ($markers as $idx=>$marker) {
             $media = $marker->getMedia();
             $mediaList[$media->getCode()] = $media;
+            if ($idx < $photos->count()) {
+
+                $brollMedia = $photos->getValues()[$idx];
+                $broll = (new BRoll())
+                    ->setMedia($brollMedia);
+                $mediaList[$brollMedia->getCode()] = $brollMedia;
+                $marker->addBRoll($broll);
+            }
         }
 
-        $xml = $this->renderView("fcpxml.twig", [
-            'markers' => $markers,
-            'photos' => $project->getMedia()->filter(function (Media $media) {
-                return $media->getType() === 'photo';
-            }),
-            'timeline' => $timeline,
-            'mediaList' => $mediaList
-        ]);
+
+
+            $assets = [];
+            // only import the media we're using
+            /** @var Media $media */
+            foreach ($mediaList as $mediaCode => $media) {
+                $asset = (new TimelineAsset())
+                    ->setHasAudio(!$media->isPhoto())
+                    ->setSrc($media->getPath())
+                    ->setName($media->getBaseName())
+                    ->setCode($media->getCode())
+                ;
+                $timeline->addTimelineAsset($asset);
+                $assets[$asset->getCode()] = $asset;
+            }
+
+        $offset = 36033; // hack for 1 hour
+        foreach ($markers as $idx=>$marker) {
+            // now go through the markers and add the clips
+            $clip = (new Clip())
+                ->setName($marker->getTitle())
+                ->setDuration($marker->getDuration())
+                ->setTrackOffset($offset)
+                ->setAsset($assets[$marker->getMedia()->getCode()]);
+            $timeline
+                ->addClip($clip);
+            $offset += round(($marker->getDuration() * 10)); // ??
+        }
+
 
         return $timeline;
 
