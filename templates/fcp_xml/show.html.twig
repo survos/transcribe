@@ -8,6 +8,7 @@
 
     <div class="row">
         <div class="col-md-4">
+            <h2>Timeline Object</h2>
             <h3>Formats</h3>
             <table class="table">
                 <thead>
@@ -50,6 +51,7 @@
                 <tbody>
                 {% for asset in timeline.timelineAssets %}
                     <tr>
+                        <td>{{ loop.index }}</td>
                         <td>{{ asset.code }}</td>
                         <td>{{ asset.name }}</td>
                         <td>{{ asset.src }}</td>
@@ -66,7 +68,7 @@
                 </tbody>
             </table>
 
-            <h3>Clips</h3>
+            <h3>Clips (Duration: {{ timeline.totalDuration }})</h3>
             <table class="table">
                 <thead>
                 <tr>
@@ -86,8 +88,8 @@
                         <td>{{ clip.name }}</td>
                         <td>{{ clip.format }}</td>
                         <td>{{ clip.asset }}</td>
-                        <td>{{ clip.trackOffset }}</td>
-                        <td>{{ clip.duration }}</td>
+                        <td>{{ clip.trackOffset|number_format(1) }}</td>
+                        <td>{{ clip.duration|number_format(1) }}</td>
                         <td>{{ clip.lane }}</td>
                         <td>{{ app.request.get('debug', false) ? dump(clip) }}</td>
                     </tr>
@@ -100,8 +102,9 @@
 
         </div>
         <div class="col-md-8">
-            <pre>
-                {{ rawXml }}
+            {# link to xml #}
+            <a target="_blank" href="{{ link }}">{{ link }}</a><br />
+            <pre>{{ rawXml }}
             </pre>
         </div>
     </div>

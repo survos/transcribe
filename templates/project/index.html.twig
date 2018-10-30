@@ -24,7 +24,10 @@
                 <td>{{ p.media.count}}</td>
                 <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a></td>
                 <td><a href="{{ path('project_markers', p.rp) }}">.json</a></td>
-                <td><a href="{{ path('project_xml', p.rp) }}">.fcpxml</a></td>
+                <td><a href="{{ path('project_xml', p.rp) }}">.fcpxml</a>
+                    <a href="{{ path('fcp_xml_show', p.rp)}}">XML Debug</a>
+
+                </td>
                 <td><a href="{{ path('project_edl', p.rp) }}">.edl</a></td>
             </tr>
         {% endfor %}
