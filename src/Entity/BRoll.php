@@ -29,9 +29,14 @@ class BRoll
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Media", inversedBy="bRolls")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $media;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Clip", inversedBy="bRolls")
+     */
+    private $clip;
 
     public function getId(): ?int
     {
@@ -70,6 +75,18 @@ class BRoll
     public function setMedia(?Media $media): self
     {
         $this->media = $media;
+
+        return $this;
+    }
+
+    public function getClip(): ?Clip
+    {
+        return $this->clip;
+    }
+
+    public function setClip(?Clip $clip): self
+    {
+        $this->clip = $clip;
 
         return $this;
     }

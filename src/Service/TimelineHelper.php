@@ -59,6 +59,8 @@ class TimelineHelper
 
 
 
+
+
             $assets = [];
             // only import the media we're using
             /** @var Media $media */
@@ -87,6 +89,10 @@ class TimelineHelper
                 ->setAsset($assets[$marker->getMedia()->getCode()]);
             $timeline
                 ->addClip($clip);
+
+            foreach ($marker->getBRolls() as $BRoll) {
+                $clip->addBRoll($BRoll);
+            }
             $offset += round(($marker->getDuration() * 10)); // ??
         }
 

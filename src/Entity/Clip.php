@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,6 +65,16 @@ class Clip
      * @ORM\Column(type="string", length=6, nullable=true)
      */
     private $lane;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BRoll", mappedBy="clip")
+     */
+    private $bRolls;
+
+    public function __construct()
+    {
+        $this->bRolls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -242,6 +254,37 @@ class Clip
     public function setLane(?string $lane): self
     {
         $this->lane = $lane;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BRoll[]
+     */
+    public function getBRolls(): Collection
+    {
+        return $this->bRolls;
+    }
+
+    public function addBRoll(BRoll $bRoll): self
+    {
+        if (!$this->bRolls->contains($bRoll)) {
+            $this->bRolls[] = $bRoll;
+            $bRoll->setClip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBRoll(BRoll $bRoll): self
+    {
+        if ($this->bRolls->contains($bRoll)) {
+            $this->bRolls->removeElement($bRoll);
+            // set the owning side to null (unless already changed)
+            if ($bRoll->getClip() === $this) {
+                $bRoll->setClip(null);
+            }
+        }
 
         return $this;
     }

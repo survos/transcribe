@@ -45,6 +45,18 @@
                                         ref="{{ clip.asset.code }}" offset="{{ clip.trackOffset }}/10s">
                                 <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
 
+                                {% for photo in clip.brolls %}
+                                    {% set photoDuration = clip.duration / 2 %}
+                                    {% set trackOffset = clip.duration %}
+                                    {% set media = photo.media %}
+                                    <!--photo {{ media.baseName }} starts at {{ trackOffset }} for {{ photoDuration }}-->
+                                    <video start="0/1s" name="{{ photo.code }}"
+                                           duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1"
+                                           ref="{{ photo.media.code }}" offset="{{ photoDuration |round }}/10s">
+                                        <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                    </video>
+                                {% endfor %}
+
 
                                 {# photo starts halfway through clip (for testing)
                                 {% set photo = photos[loop.index] %}
