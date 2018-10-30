@@ -2,10 +2,12 @@
 <!DOCTYPE fcpxml>
 <fcpxml version="1.8">
     <resources>
+
         <format name="FFVideoFormat1080p2997" width="1920" frameDuration="1001/30000s" height="1080" id="r0"/>
         <format name="FFVideoFormat720p2997" width="1280" frameDuration="1001/30000s" height="720" id="r1"/>
         <format name="FFVideoFormatRateUndefined" width="6000" height="4000" id="r4"/>
         <format name="FFVideoFormatRateUndefined" width="5312" height="2988" id="r6"/>
+
         <asset src="file://localhost/C:/JUFJ/MAS/mas-1.MOV" start="0/1s" audioSources="1" name="mas-1.MOV" hasVideo="1" format="r1" duration="7007/250s" hasAudio="1" audioChannels="2" id="r2"/>
         <asset src="file://localhost/C:/JUFJ/MAS/mas-2.MOV" start="0/1s" audioSources="1" name="mas-2.MOV" hasVideo="1" format="r1" duration="1680679/1000s" hasAudio="1" audioChannels="2" id="r3"/>
         <asset src="file://localhost/C:/JUFJ/Claire/clair.JPG" start="0/1s" name="clair.JPG" hasVideo="1" format="r4" duration="0/1s" id="r5"/>

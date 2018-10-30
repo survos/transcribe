@@ -223,6 +223,10 @@ FCM: NON-DROP FRAME
     public function fcpxml(Request $request, Project $project, $_format='html')
     {
         $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
+
+        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+
+
         return new Response($xml, 200, ['Content-Type' => 'text/xml']);
     }
 
