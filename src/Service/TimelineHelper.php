@@ -65,8 +65,9 @@ class TimelineHelper
             foreach ($mediaList as $mediaCode => $media) {
                 $asset = (new TimelineAsset())
                     ->setHasAudio(!$media->isPhoto())
-                    ->setSrc($media->getPath())
+                    ->setSrc($media->getProject()->getBasePath() . '/' . $media->getFilename())
                     ->setName($media->getBaseName())
+                    ->setDuration($media->getDuration())
                     ->setCode($media->getCode())
                 ;
                 $timeline->addTimelineAsset($asset);
@@ -78,6 +79,7 @@ class TimelineHelper
             // now go through the markers and add the clips
             $clip = (new Clip())
                 ->setName($marker->getTitle())
+                ->setStart($marker->getStartTime())
                 ->setDuration($marker->getDuration())
                 ->setTrackOffset($offset)
                 ->setAsset($assets[$marker->getMedia()->getCode()]);
