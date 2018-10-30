@@ -20,15 +20,12 @@
     </resources>
     <library>
         <event name="Event Name">
-            <project name="{{ timeline.maxDuration * 10}}/10s">
+            <project name="{{ project.code }}_{{ random(999) }}">
 
-
-                <sequence format="r0" tcFormat="NDF" duration="37037/6000s" tcStart="{{ 60 * 60 * 10 }}/10s">
+                {% set sequenceBase = 36036 %} {# 01:00:00 #}
+                <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
-                        {% set offset = 0 %}
-
-
-
+                        {% set offset = sequenceBase %}
                         {#
 
                         {% for photo in photos %}
@@ -41,23 +38,32 @@
                         #}
 
                         {% for marker in markers %}
-                            <asset-clip tcFormat="NDF" start="{{ marker.startTime }}/10s" name="{{ marker.title }}" format="r1" duration="{{ marker.duration  * 10 }}/10s" enabled="1"
-                                        ref="{{ marker.media.code }}" offset="{{ offset * 10 }}/10s">
+                            <!--Soundbite {{ marker.title  }} starts at {{ offset }} for {{ marker.duration }}-->
+                            <asset-clip tcFormat="NDF" start="{{ marker.startTime }}/10s" name="{{ marker.title }}" format="r1"
+                                        duration="{{ marker.duration  * 10 }}/10s" enabled="1"
+                                        ref="{{ marker.media.code }}" offset="{{ offset  }}/10s">
                                 <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                {% set photo = photos[loop.index] %}
 
                                 {# photo starts halfway through clip (for testing) #}
                                 {% set photoDuration = (marker.duration /2)|round  %}
-                                <video start="0/1s" name="clair.JPG" duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #} ref="clairephoto" offset="{{ (offset + photoDuration) * 10|round }}/10s">
+                                {% set photoStartTime = offset + photoDuration %}
+                                <!--Photo {{ photo.code }} starts at {{ photoStartTime }} for {{ photoDuration }}-->
+                                <video start="0/1s" name="{{ photo.code }}"
+                                       duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1" {# v2 track #}
+                                       ref="{{ photo.code }}" offset="{{ photoDuration * 10|round }}/10s">
                                     <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                 </video>
 
 
 
                             </asset-clip>
-                            {% set offset = offset + marker.duration %}
+                            {% set offset = offset + (marker.duration * 10) %}
 
-                            {# some breathing space between clips#}
-                            <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+                            {# some breathing space between clips
+                            <gap start="3600/1s" name="Gap" duration="10/10s" offset="{{ offset * 10}}/10s">
+                            #}
 
                         {% endfor %}
                     </spine>

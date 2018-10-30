@@ -198,18 +198,20 @@ FCM: NON-DROP FRAME
             $mediaList[$media->getCode()] = $media;
         }
 
-
+        $photos = $project->getMedia()->filter(function (Media $media) {
+            return $media->getType() === 'photo';
+        });
 
         $xml = $this->renderView("fcpxml.twig", [
             'markers' => $markers,
-            'photos' => $project->getMedia()->filter(function (Media $media) {
-                return $media->getType() === 'photo';
-            }),
+            'photos' => $photos,
+            // 'photo' => $photos[0],
             'timeline' => $timeline,
+            'project' => $project,
             'mediaList' => $mediaList
         ]);
 
-        // file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
+        file_put_contents('../' . $project->getCode() . '-import.fcpxml', $xml);
 
         return $xml;
 
