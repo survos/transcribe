@@ -25,6 +25,8 @@ easy_admin:
                 - 'filename'
                 - path
                 - streamCount
+                - height
+                - width
                 - {property: 'transcriptRequested', label: 'Transcribe?'}
                 - {property: 'flacExists', label: 'Flac?'}
                 - project

@@ -130,6 +130,26 @@ class Media
      */
     private $bRolls;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $video_stream = [];
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $audio_streams = [];
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $height;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $width;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -461,6 +481,15 @@ class Media
         return $this;
     }
 
+    public function getStreamsInfo()
+    {
+        $x = '';
+        foreach ($this->getStreams() as $stream) {
+            $x .= json_encode($stream);
+        }
+        return $x;
+    }
+
     public function getType(): ?string
     {
         return $this->type;
@@ -515,6 +544,54 @@ class Media
             dump($stream);
         }
         die();
+    }
+
+    public function getVideoStream(): ?array
+    {
+        return $this->video_stream;
+    }
+
+    public function setVideoStream(?array $video_stream): self
+    {
+        $this->video_stream = $video_stream;
+
+        return $this;
+    }
+
+    public function getAudioStreams(): ?array
+    {
+        return $this->audio_streams;
+    }
+
+    public function setAudioStreams(?array $audio_streams): self
+    {
+        $this->audio_streams = $audio_streams;
+
+        return $this;
+    }
+
+    public function getHeight(): ?int
+    {
+        return $this->height;
+    }
+
+    public function setHeight(?int $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    public function getWidth(): ?int
+    {
+        return $this->width;
+    }
+
+    public function setWidth(?int $width): self
+    {
+        $this->width = $width;
+
+        return $this;
     }
 
 }

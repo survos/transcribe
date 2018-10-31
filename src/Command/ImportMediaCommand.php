@@ -29,6 +29,8 @@ class ImportMediaCommand extends Command
     private $projectRepository;
     private $em;
 
+    private $io;
+
     public function __construct(EntityManagerInterface $em,
                                 MediaRepository $mediaRepository, ProjectRepository $projectRepository, $name = null)
     {
@@ -48,13 +50,19 @@ class ImportMediaCommand extends Command
         ;
     }
 
-    private function streams($filename)
+    private function streams($filename): ?FFMpeg\FFProbe\DataMapping\StreamCollection
     {
 
         $ffprobe = FFMpeg\FFProbe::create();
-        $streams = $ffprobe
-            ->streams($filename)// extracts file informations
-            ->all();
+        try {
+            $streams = $ffprobe
+                ->streams($filename)// extracts file informations
+                // ->all()
+            ;
+        } catch (\Exception $e) {
+            $this->io->warning("Can't probe " . $filename);
+            $streams = null;
+        }
 
         return $streams;
     }
@@ -63,14 +71,22 @@ class ImportMediaCommand extends Command
     {
 
         $ffprobe = FFMpeg\FFProbe::create();
+        /*
         $streams = $ffprobe
             ->streams($filename)// extracts file informations
             ->all()
         ;
+        */
 
-        $fileInfo = $ffprobe
-            ->format($filename)// extracts file informations
-            ->all();
+        try {
+
+            $fileInfo = $ffprobe
+                ->format($filename)// extracts file informations
+                ->all();
+        } catch (\Exception $e) {
+            $this->io->error("Can't get fileInfo for $filename");
+            return [];
+        }
 
         /*
         if (strstr($filename, 'helly')) {
@@ -115,6 +131,7 @@ class ImportMediaCommand extends Command
     {
 
         $io = new SymfonyStyle($input, $output);
+        $this->io = $io;
 
         $projectCode = $input->getArgument('projectCode');
         if (!$project = $this->projectRepository->findOneBy(['code' => $projectCode]))
@@ -190,11 +207,31 @@ class ImportMediaCommand extends Command
             // $isImage = $info['format_name'] == 'image2';
 
 
-            if (empty($media->getStreamsJson())) {
-                $streams = $this->streams($file->getRealPath());
-                dump($streams);
-                $media
-                    ->setStreamsJson(json_encode($streams));
+            if (empty($media->getStreamsJson() ))
+            {
+                $streamData = [];
+                if ($streams = $this->streams($file->getRealPath())) {
+                    if ($videos = $streams->videos())
+                    {
+                        $video = $videos->first();
+
+                        $media
+                            ->setVideoStream($video->all())
+                            ->setHeight($video->get('height'))
+                            ->setWidth($video->get('width'))
+                            ;
+                    }
+
+                }
+
+                if ($streams) {
+                    foreach ($streams as $stream) {
+                        $streamData[] = $stream->all();
+                    }
+                    dump($streamData);
+                    $media
+                        ->setStreamsJson(json_encode($streamData));
+                }
             }
 
             $media
