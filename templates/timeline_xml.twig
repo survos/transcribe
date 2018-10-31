@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fcpxml>
-<fcpxml version="1.8">
+<fcpxml version="1.5">
     <resources>
         <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
         <format width="1280" name="FFVideoFormat720p2997" height="720" id="r1" frameDuration="1001/30000s"/>
@@ -38,14 +38,31 @@
                         {% endfor %}
                         #}
 
+                        {# pattern for FCP XML version 1.5
+                        <clip offset="18018/5s" tcFormat="NDF" name="clair-11.MOV" format="r1" start="3003/10s" duration="247247/5000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s">
+                                <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="9896887/30000s" name="2018-10-23([2-2]).jpg" ref="r7" start="0/1s" duration="119119/6000s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                        #}
                         {% for clip in timeline.clips %}
+                            {% set format = 'r1' %} {# hack! This is probably the timeline format, not the clip format #}
                             <!--Clip {{ clip.name  }} starts at {{ clip.trackOffset }} for {{ clip.duration }}-->
-                            <asset-clip tcFormat="NDF" start="{{ clip.start }}/10s" name="{{ clip.name }}" format="r1"
-                                        duration="{{ clip.duration  * 10 }}/10s" enabled="1"
-                                        ref="{{ clip.asset.code }}" offset="{{ clip.trackOffset }}/10s">
-                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            <clip offset="{{ clip.trackOffset }}/10s" tcFormat="NDF" name="{{ clip.name }}"  format="{{ format }}" start="{{ clip.start }}/10s"  duration="{{ clip.duration  * 10 }}/10s"  enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
 
+                                {# the offset is relative to the clip, above. #}
+                                <video offset="0/1s" ref="r2" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" >
+                                    <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" srcCh="1, 2"/>
+                                </video>
+
+                                {# the photos #}
                                 {% for photo in clip.brolls %}
+
                                     {% set photoStartAfter = clip.duration / 2 %} {# how many deci-seconds until the photo starts? #}
                                     {% set photoDuration = clip.duration / 2 %} {# how many deci-seconds does the photo display? #}
                                     {% set trackOffset = clip.duration %}
@@ -58,24 +75,12 @@
                                            offset="{{ (clip.start + photoStartAfter*10)|round }}/10s">
                                         <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                     </video>
+
                                 {% endfor %}
-
-
-                                {# photo starts halfway through clip (for testing)
-                                {% set photo = photos[loop.index] %}
-                                {% set photoDuration = (marker.duration /2)|round  %}
-                                {% set photoStartTime =  photoDuration %}
-                                <!--Photo {{ photo.code }} starts at {{ photoStartTime }} for {{ photoDuration }}-->
-                                <video start="0/1s" name="{{ photo.code }}"
-                                       duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1"
-                                       ref="{{ photo.code }}" offset="{{ photoDuration |round }}/10s">
-                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
-                                </video>
-                                #}
+                            </clip>
 
 
 
-                            </asset-clip>
 
                             {# some breathing space between clips
                             <gap start="3600/1s" name="Gap" duration="10/10s" offset="{{ offset * 10}}/10s">
