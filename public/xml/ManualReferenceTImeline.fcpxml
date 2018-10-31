@@ -2,38 +2,38 @@
 <!DOCTYPE fcpxml>
 <fcpxml version="1.8">
     <resources>
-        <format name="FFVideoFormat1080p2997" width="1920" frameDuration="1001/30000s" height="1080" id="r0"/>
-        <format name="FFVideoFormat720p2997" width="1280" frameDuration="1001/30000s" height="720" id="r1"/>
-        <format name="FFVideoFormatRateUndefined" width="0" frameDuration="1001/30000s" height="0" id="r4"/>
-        <format name="FFVideoFormatRateUndefined" width="2988" height="5312" id="r6"/>
-        <format name="FFVideoFormatRateUndefined" width="5312" height="2988" id="r8"/>
-        <asset src="file://localhost/C:/JUFJ/Claire/clair-11.MOV" start="0/1s" audioSources="1" name="clair-11.MOV" hasVideo="1" format="r1" duration="1680679/1000s" hasAudio="1" audioChannels="2" id="r2"/>
-        <asset src="file://localhost/C:/JUFJ/Claire/clair-14.MOV" start="0/1s" audioSources="1" name="clair-14.MOV" hasVideo="1" format="r0" duration="57057/1000s" hasAudio="1" audioChannels="2" id="r3"/>
-        <asset src="//localhost" start="36032997/10000s" audioSources="1" name="claire_963" hasVideo="1" format="r4" duration="277277/7500s" hasAudio="1" audioChannels="2" id="r5"/>
-        <asset src="file://localhost/C:/JUFJ/Claire/2018-10-23([2-2]).jpg" start="0/1s" name="2018-10-23([2-2]).jpg" hasVideo="1" format="r6" duration="0/1s" id="r7"/>
-        <asset src="file://localhost/C:/JUFJ/Claire/2018-10-23([5-5]).jpg" start="0/1s" name="2018-10-23([5-5]).jpg" hasVideo="1" format="r8" duration="0/1s" id="r9"/>
+        <format id="r0" name="FFVideoFormat1080p2997" height="1080" width="1920" frameDuration="1001/30000s"/>
+        <format id="r1" name="FFVideoFormat720p2997" height="720" width="1280" frameDuration="1001/30000s"/>
+        <format id="r4" name="FFVideoFormatRateUndefined" height="0" width="0" frameDuration="1001/30000s"/>
+        <format id="r6" name="FFVideoFormatRateUndefined" height="5312" width="2988"/>
+        <format id="r8" name="FFVideoFormatRateUndefined" height="2988" width="5312"/>
+        <asset id="r2" name="clair-11.MOV" format="r1" hasAudio="1" audioSources="1" start="0/1s" duration="1680679/1000s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/clair-11.MOV" audioChannels="2"/>
+        <asset id="r3" name="clair-14.MOV" format="r0" hasAudio="1" audioSources="1" start="0/1s" duration="57057/1000s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/clair-14.MOV" audioChannels="2"/>
+        <asset id="r5" name="claire_963" format="r4" hasAudio="1" audioSources="1" start="36032997/10000s" duration="277277/7500s" hasVideo="1" src="//localhost" audioChannels="2"/>
+        <asset id="r7" name="2018-10-23([2-2]).jpg" format="r6" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/2018-10-23([2-2]).jpg"/>
+        <asset id="r9" name="2018-10-23([5-5]).jpg" format="r8" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/2018-10-23([5-5]).jpg"/>
     </resources>
     <library>
         <event name="ManualReferenceTImeline (Resolve)">
             <project name="ManualReferenceTImeline (Resolve)">
                 <sequence tcFormat="NDF" format="r0" duration="893893/15000s" tcStart="18018/5s">
                     <spine>
-                        <asset-clip tcFormat="NDF" start="3003/10s" name="clair-11.MOV" format="r1" duration="247247/5000s" enabled="1" ref="r2" offset="18018/5s">
-                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
-                            <video start="0/1s" name="2018-10-23([2-2]).jpg" duration="119119/6000s" enabled="1" lane="1" ref="r7" offset="9898889/30000s">
-                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                        <asset-clip offset="18018/5s" tcFormat="NDF" name="clair-11.MOV" format="r1" ref="r2" start="3003/10s" duration="247247/5000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video lane="1" offset="9898889/30000s" name="2018-10-23([2-2]).jpg" ref="r7" start="0/1s" duration="119119/6000s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
                             </video>
                         </asset-clip>
-                        <asset-clip tcFormat="NDF" start="1001/200s" name="clair-14.MOV" format="r0" duration="51051/10000s" enabled="1" ref="r3" offset="18265247/5000s">
-                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
-                            <video start="0/1s" name="2018-10-23([5-5]).jpg" duration="13013/3750s" enabled="1" lane="1" ref="r9" offset="257257/30000s">
-                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                        <asset-clip offset="18265247/5000s" tcFormat="NDF" name="clair-14.MOV" format="r0" ref="r3" start="1001/200s" duration="51051/10000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video lane="1" offset="257257/30000s" name="2018-10-23([5-5]).jpg" ref="r9" start="0/1s" duration="13013/3750s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
                             </video>
                         </asset-clip>
-                        <clip tcFormat="NDF" start="36129093/10000s" name="claire_963" format="r4" duration="151151/30000s" enabled="1" offset="7316309/2000s">
-                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
-                            <video start="36032997/10000s" duration="277277/7500s" ref="r5" offset="36032997/10000s">
-                                <audio start="36032997/10000s" duration="277277/7500s" lane="-1" ref="r5" offset="36032997/10000s" srcCh="1, 2"/>
+                        <clip offset="7316309/2000s" tcFormat="NDF" name="claire_963" format="r4" start="36129093/10000s" duration="151151/30000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="36032997/10000s" ref="r5" start="36032997/10000s" duration="277277/7500s">
+                                <audio lane="-1" offset="36032997/10000s" ref="r5" start="36032997/10000s" duration="277277/7500s" srcCh="1, 2"/>
                             </video>
                         </clip>
                     </spine>
