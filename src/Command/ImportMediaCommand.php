@@ -29,8 +29,8 @@ class ImportMediaCommand extends Command
     private $projectRepository;
     private $em;
 
-    public function __construct($name = null, EntityManagerInterface $em,
-                                MediaRepository $mediaRepository, ProjectRepository $projectRepository)
+    public function __construct(EntityManagerInterface $em,
+                                MediaRepository $mediaRepository, ProjectRepository $projectRepository, $name = null)
     {
         parent::__construct($name);
         $this->mediaRepository = $mediaRepository;
@@ -44,6 +44,7 @@ class ImportMediaCommand extends Command
             ->addArgument('projectCode', InputArgument::REQUIRED, 'Project Code')
             ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'root dir for project')
             ->addOption('skip-info', null, InputOption::VALUE_NONE, 'Skip ffprobe')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Skip saving')
         ;
     }
 
@@ -183,7 +184,10 @@ class ImportMediaCommand extends Command
                     $code =  'photo_' . pathinfo($media->getPath(), PATHINFO_FILENAME);
                     $media
                         ->setCode($code); // hack!
+                } else {
+                    $code = $media->getCode();
                 }
+                $io->note(sprintf('Create %s: %s', $code, $file->getRealPath()) );
 
                 $this->em->persist($media);
             }
@@ -211,8 +215,13 @@ class ImportMediaCommand extends Command
 
         // recursively get all the files in path
 
-        $this->em->flush();
+        if (!$input->getOption('dry-run'))
+        {
+            $this->em->flush();
+            $io->success('Files imported');
+        } else {
+            $io->success('Files read but not imported');
+        }
 
-        $io->success('Files imported');
     }
 }
