@@ -107,7 +107,7 @@ class TimelineHelper
             foreach ($marker->getBRolls() as $BRoll) {
                 $clip->addBRoll($BRoll);
             }
-            $offset += round(($marker->getDuration() * 10)); // ??
+            $offset += round(($marker->getDuration())); // ??
         }
 
 
