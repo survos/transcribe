@@ -10,8 +10,8 @@
 
         {% for code, asset in timeline.timelineAssets %}
             {% if asset.hasAudio %} {# movie clip #}
-                <asset id="{{ asset.code }}" format="r1" src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" audioChannels="1" name="{{ asset.code }}"
-                       duration="{{ asset.duration * 10 }}/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="{{ asset.code }}" format="r1" src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" {# audioChannels="1" #} name="{{ asset.code }}"
+                       duration="{{ asset.duration * 10 }}/10s"  audioSources="1" {# hasVideo="1" #} />
             {% else %} {# photo #}
                 <asset src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" name="{{ asset.code }}" hasVideo="1" format="photo_format" duration="0/1s" id="{{ asset.code }}"/>
             {% endif %}
@@ -52,16 +52,20 @@
                         {% for clip in timeline.clips %}
                             {% set format = 'r1' %} {# hack! This is probably the timeline format, not the clip format #}
                             <!--Clip {{ clip.name  }} starts at {{ clip.trackOffset }} for {{ clip.duration }}-->
-                            <clip offset="{{ clip.trackOffset }}/10s" tcFormat="NDF" name="{{ clip.name }}"  format="{{ format }}" start="{{ clip.start }}/10s"  duration="{{ clip.duration  * 10 }}/10s"  enabled="1">
-                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            {% set asset = clip.asset %}
+                            <clip offset="{{ clip.trackOffset }}/10s" tcFormat="NDF" name="{{ clip.name }}"  format="{{ format }}"
+
+                                  start="0/1s" {# "{{ clip.start }}/10s"  #}
+                                  duration="{{ clip.duration  * 10 }}/10s"  enabled="1">
 
                                 {# the offset is relative to the clip, above. #}
-                                <video offset="0/1s" ref="r2" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" >
-                                    <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" srcCh="1, 2"/>
+                                <video offset="0/1s" ref="{{ asset.code }}" start="{{ clip.start }}/10s" duration="{{ clip.duration  * 10 }}/10s" >
+                                    <audio lane="-1" offset="0/1s" ref="{{ asset.code }}" start="{{ clip.start }}/10s" duration="{{ clip.duration  * 10 }}/10s" srcCh="1, 2"/>
                                 </video>
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
 
                                 {# the photos #}
-                                {% for photo in clip.brolls %}
+                                {% for photo in clip.brolls  %}
 
                                     {% set photoStartAfter = clip.duration / 2 %} {# how many deci-seconds until the photo starts? #}
                                     {% set photoDuration = clip.duration / 2 %} {# how many deci-seconds does the photo display? #}
@@ -72,7 +76,7 @@
                                            duration="{{ photoDuration * 10 }}/10s"
                                            enabled="1" lane="1"
                                            ref="{{ photo.media.code }}"
-                                           offset="{{ (clip.start + photoStartAfter*10)|round }}/10s">
+                                           offset="{{ ( photoStartAfter*10)|round }}/10s">
                                         <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                     </video>
 

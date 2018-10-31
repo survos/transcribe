@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fcpxml>
-<fcpxml version="1.5">
+<fcpxml version="1.8">
     <resources>
         <format id="r0" name="FFVideoFormat1080p2997" height="1080" width="1920" frameDuration="1001/30000s"/>
         <format id="r1" name="FFVideoFormat720p2997" height="720" width="1280" frameDuration="1001/30000s"/>
@@ -20,24 +20,18 @@
             <project name="ManualReferenceTImeline (Resolve)">
                 <sequence tcFormat="NDF" format="r0" duration="893893/15000s" tcStart="18018/5s">
                     <spine>
-                        <clip offset="18018/5s" tcFormat="NDF" name="clair-11.MOV" format="r1" start="3003/10s" duration="247247/5000s" enabled="1">
+                        <asset-clip offset="18018/5s" tcFormat="NDF" name="clair-11.MOV" format="r1" ref="r2" start="3003/10s" duration="247247/5000s" enabled="1">
                             <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
-                            <video offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s">
-                                <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s" srcCh="1, 2"/>
-                            </video>
                             <video lane="1" offset="9896887/30000s" name="2018-10-23([2-2]).jpg" ref="r7" start="0/1s" duration="119119/6000s" enabled="1">
                                 <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
                             </video>
-                        </clip>
-                        <clip offset="18265247/5000s" tcFormat="NDF" name="clair-14.MOV" format="r0" start="1001/200s" duration="51051/10000s" enabled="1">
+                        </asset-clip>
+                        <asset-clip offset="18265247/5000s" tcFormat="NDF" name="clair-14.MOV" format="r0" ref="r3" start="1001/200s" duration="51051/10000s" enabled="1">
                             <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
-                            <video offset="0/1s" ref="r3" start="0/1s" duration="57057/1000s">
-                                <audio lane="-1" offset="0/1s" ref="r3" start="0/1s" duration="57057/1000s" srcCh="1, 2"/>
-                            </video>
                             <video lane="1" offset="73073/10000s" name="buck-hallow-hike10-07-12_09pm_[2-2].JPG" ref="r9" start="0/1s" duration="7007/2500s" enabled="1">
                                 <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
                             </video>
-                        </clip>
+                        </asset-clip>
                         <clip offset="7316309/2000s" tcFormat="NDF" name="claire_963" format="r4" start="36129093/10000s" duration="151151/30000s" enabled="1">
                             <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
                             <video offset="36032997/10000s" ref="r5" start="36032997/10000s" duration="277277/7500s">
