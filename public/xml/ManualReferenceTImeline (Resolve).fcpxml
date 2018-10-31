@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.5">
+    <resources>
+        <format id="r0" name="FFVideoFormat1080p2997" height="1080" width="1920" frameDuration="1001/30000s"/>
+        <format id="r1" name="FFVideoFormat720p2997" height="720" width="1280" frameDuration="1001/30000s"/>
+        <format id="r4" name="FFVideoFormatRateUndefined" height="0" width="0" frameDuration="1001/30000s"/>
+        <format id="r6" name="FFVideoFormatRateUndefined" height="5312" width="2988"/>
+        <format id="r8" name="FFVideoFormatRateUndefined" height="4000" width="6000"/>
+        <format id="r10" name="FFVideoFormatRateUndefined" height="2988" width="5312"/>
+        <asset id="r2" name="clair-11.MOV" format="r1" hasAudio="1" audioSources="1" start="0/1s" duration="1680679/1000s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/clair-11.MOV" audioChannels="2"/>
+        <asset id="r3" name="clair-14.MOV" format="r0" hasAudio="1" audioSources="1" start="0/1s" duration="57057/1000s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/clair-14.MOV" audioChannels="2"/>
+        <asset id="r5" name="claire_963" format="r4" hasAudio="1" audioSources="1" start="36032997/10000s" duration="277277/7500s" hasVideo="1" src="//localhost" audioChannels="2"/>
+        <asset id="r7" name="2018-10-23([2-2]).jpg" format="r6" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/2018-10-23([2-2]).jpg"/>
+        <asset id="r9" name="buck-hallow-hike10-07-12_09pm_[2-2].JPG" format="r8" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/Users/tacma/OneDrive/Pictures/hike/JPG/buck-hallow-hike10-07-12_09pm_[2-2].JPG"/>
+        <asset id="r11" name="2018-10-23([5-5]).jpg" format="r10" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/JUFJ/Claire/2018-10-23([5-5]).jpg"/>
+    </resources>
+    <library>
+        <event name="ManualReferenceTImeline (Resolve)">
+            <project name="ManualReferenceTImeline (Resolve)">
+                <sequence tcFormat="NDF" format="r0" duration="893893/15000s" tcStart="18018/5s">
+                    <spine>
+                        <clip offset="18018/5s" tcFormat="NDF" name="clair-11.MOV" format="r1" start="3003/10s" duration="247247/5000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s">
+                                <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="1680679/1000s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="9896887/30000s" name="2018-10-23([2-2]).jpg" ref="r7" start="0/1s" duration="119119/6000s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                        <clip offset="18265247/5000s" tcFormat="NDF" name="clair-14.MOV" format="r0" start="1001/200s" duration="51051/10000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="0/1s" ref="r3" start="0/1s" duration="57057/1000s">
+                                <audio lane="-1" offset="0/1s" ref="r3" start="0/1s" duration="57057/1000s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="73073/10000s" name="buck-hallow-hike10-07-12_09pm_[2-2].JPG" ref="r9" start="0/1s" duration="7007/2500s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                        <clip offset="7316309/2000s" tcFormat="NDF" name="claire_963" format="r4" start="36129093/10000s" duration="151151/30000s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="36032997/10000s" ref="r5" start="36032997/10000s" duration="277277/7500s">
+                                <audio lane="-1" offset="36032997/10000s" ref="r5" start="36032997/10000s" duration="277277/7500s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="5422417/1500s" name="2018-10-23([5-5]).jpg" ref="r11" start="0/1s" duration="3003/1000s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
