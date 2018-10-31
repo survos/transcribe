@@ -7,10 +7,14 @@
 
         <format name="FFVideoFormatRateUndefined" width="6000" height="4000" id="photo_format"/>
 
+        {% for code, format in timeline.timelineFormats %}
+            <format id="{{ format.code }}"  width="{{ format.width }}" name="FFVideoFormat720p2997" height="{{ format.height }}" frameDuration="{{ format.frameDurationString }}s"/>
+        {% endfor %}
+
 
         {% for code, asset in timeline.timelineAssets %}
             {% if asset.hasAudio %} {# movie clip #}
-                <asset id="{{ asset.code }}" format="r1" src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" {# audioChannels="1" #} name="{{ asset.code }}"
+                <asset id="{{ asset.code }}" format="{{ asset.format }}" src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" hasAudio="1" {# audioChannels="1" #} name="{{ asset.code }}"
                        duration="{{ asset.duration * 10 }}/10s"  audioSources="1" {# hasVideo="1" #} />
             {% else %} {# photo #}
                 <asset src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" name="{{ asset.code }}" hasVideo="1" format="photo_format" duration="0/1s" id="{{ asset.code }}"/>
@@ -50,7 +54,7 @@
                         </clip>
                         #}
                         {% for clip in timeline.clips %}
-                            {% set format = 'r1' %} {# hack! This is probably the timeline format, not the clip format #}
+                            {% set format = clip.asset.format %} {# hack! This is probably the timeline format, not the clip format #}
                             <!--Clip {{ clip.name  }} starts at {{ clip.trackOffset }} for {{ clip.duration }}-->
                             {% set asset = clip.asset %}
                             <clip offset="{{ clip.trackOffset }}/10s" tcFormat="NDF" name="{{ clip.name }}"  format="{{ format }}"

@@ -131,9 +131,9 @@ class Media
     private $bRolls;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $video_stream = [];
+    private $video_stream;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -149,6 +149,16 @@ class Media
      * @ORM\Column(type="integer", nullable=true)
      */
     private $width;
+
+    /**
+     * @ORM\Column(type="string", length=16, nullable=true)
+     */
+    private $frame_rate;
+
+    /**
+     * @ORM\Column(type="string", length=16, nullable=true)
+     */
+    private $frame_duration;
 
     public function __construct()
     {
@@ -540,6 +550,16 @@ class Media
 
     public function createTimelineFormat(): TimelineFormat
     {
+        $tf = (new TimelineFormat())
+            ->setWidth($this->getWidth())
+            ->setHeight($this->getHeight())
+            ->setFrameDurationString($this->getFrameDuration())
+            ;
+        $id = sprintf("%dx%d@%s", $this->getHeight(), $this->getWidth(), $this->getFrameDuration());
+        $tf->setCode($id);
+
+        return $tf;
+
         foreach ($this->getStreams() as $stream) {
             dump($stream);
         }
@@ -548,12 +568,12 @@ class Media
 
     public function getVideoStream(): ?array
     {
-        return $this->video_stream;
+        return $this->video_stream ? json_decode($this->video_stream, true) : null;
     }
 
     public function setVideoStream(?array $video_stream): self
     {
-        $this->video_stream = $video_stream;
+        $this->video_stream = json_encode($video_stream);
 
         return $this;
     }
@@ -590,6 +610,30 @@ class Media
     public function setWidth(?int $width): self
     {
         $this->width = $width;
+
+        return $this;
+    }
+
+    public function getFrameRate(): ?string
+    {
+        return $this->frame_rate;
+    }
+
+    public function setFrameRate(?string $frame_rate): self
+    {
+        $this->frame_rate = $frame_rate;
+
+        return $this;
+    }
+
+    public function getFrameDuration(): ?string
+    {
+        return $this->frame_duration;
+    }
+
+    public function setFrameDuration(?string $frame_duration): self
+    {
+        $this->frame_duration = $frame_duration;
 
         return $this;
     }

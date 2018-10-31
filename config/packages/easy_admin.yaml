@@ -27,6 +27,7 @@ easy_admin:
                 - streamCount
                 - height
                 - width
+                - frameDuration
                 - {property: 'transcriptRequested', label: 'Transcribe?'}
                 - {property: 'flacExists', label: 'Flac?'}
                 - project

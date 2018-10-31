@@ -215,6 +215,11 @@ class ImportMediaCommand extends Command
                     {
                         $video = $videos->first();
 
+                        $rFrameRate = $video->get('r_frame_rate');
+                        if (list($x, $y) = explode('/', $rFrameRate)) {
+                            $media
+                                ->setFrameDuration(sprintf("%s/%s", $y, $x));
+                        }
                         $media
                             ->setVideoStream($video->all())
                             ->setHeight($video->get('height'))
