@@ -69,6 +69,15 @@ class TimelineHelper
             foreach ($mediaList as $mediaCode => $media) {
 
                 $format = $media->createTimelineFormat();
+                if (empty($formats[$format->getCode()])) {
+                    $formats[$format->getCode()] = $format;
+                    $timeline->addTimelineFormat($format);
+                } else {
+                    $format = $formats[$format->getCode()]; // don't duplicate it.
+                }
+
+
+
                 $asset = (new TimelineAsset())
                     ->setHasAudio(!$media->isPhoto())
                     // ->setSrc($media->getPath())
@@ -76,6 +85,7 @@ class TimelineHelper
                     ->setSrc($media->getProject()->getBasePath() . '/' . $media->getFilename())
                     ->setName($media->getBaseName())
                     ->setDuration($media->getDuration())
+                    ->setFormat($format)
                     ->setCode($media->getCode())
                 ;
                 $timeline->addTimelineAsset($asset);
