@@ -41,10 +41,14 @@ class MarkerRepository extends ServiceEntityRepository
 
         if ($maxDuration) {
             $filteredMarkers = [];
+            /** @var Marker $marker */
             foreach ($markers as $marker) {
                 if ($duration <= $maxDuration) {
                     $filteredMarkers[] = $marker;
-                    $duration = $duration + $marker->getDuration();
+                    $duration = $duration + ($marker->getDuration()/10);
+                }
+                if ($duration > $maxDuration) {
+                    break;
                 }
             }
             return $filteredMarkers;
@@ -52,7 +56,7 @@ class MarkerRepository extends ServiceEntityRepository
             return $markers;
         }
 
-        return $markers;
+        // return $markers;
 
 
     }

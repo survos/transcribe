@@ -230,7 +230,10 @@ FCM: NON-DROP FRAME
     {
 
         // $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
-        $timeline = $this->timelineHelperService->updateTimelineFromProject($project);
+        $timeline = (new Timeline())
+            ->setMaxDuration($request->get('max', 60));
+
+        $timeline = $this->timelineHelperService->updateTimelineFromProject($project, $timeline);
         $xml = $this->renderView('timeline_xml.twig', [
             'timeline' => $timeline
         ]);

@@ -52,7 +52,7 @@
                                     <!--photo {{ media.baseName }} starts at {{ trackOffset }} for {{ photoDuration }}-->
                                     <video start="0/1s" name="{{ photo.code }}"
                                            duration="{{ photoDuration * 10 }}/10s" enabled="1" lane="1"
-                                           ref="{{ photo.media.code }}" offset="{{ photoDuration |round }}/10s">
+                                           ref="{{ photo.media.code }}" offset="{{ (photoDuration*10)|round }}/10s">
                                         <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                     </video>
                                 {% endfor %}

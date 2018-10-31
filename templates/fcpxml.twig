@@ -24,7 +24,7 @@
 
                 {% set sequenceBase = 36036 %} {# 01:00:00 #}
                 {% set sequenceBase = 3 %} {# 01:00:00 #}
-                <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
+                <sequence format="r0" tcFormat="NDF" duration="{{ timeline.calcDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
                         {% set offset = sequenceBase %}
                         {#

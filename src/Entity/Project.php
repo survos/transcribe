@@ -138,6 +138,11 @@ class Project
         return $this;
     }
 
+    public function getByType($type)
+    {
+        return $this->getMedia()->filter(function (Media $media) use ($type) { return $media->getType() == $type; });
+    }
+
     public function removeTimeline(Timeline $timeline): self
     {
         if ($this->timelines->contains($timeline)) {

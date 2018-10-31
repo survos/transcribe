@@ -7,7 +7,7 @@
 <div >
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <h2>Timeline Object</h2>
             <h3>Formats</h3>
             <table class="table">
@@ -79,6 +79,7 @@
                     <th>format</th>
                     <th>src</th>
                     <th>offset</th>
+                    <th>start</th>
                     <th>duration</th>
                     <th>lane</th>
                 </tr>
@@ -91,6 +92,7 @@
                         <td>{{ clip.format }}</td>
                         <td>{{ clip.asset }}</td>
                         <td>{{ clip.trackOffset|number_format(1) }}</td>
+                        <td>{{ clip.start|number_format(1) }}</td>
                         <td>{{ clip.duration|number_format(1) }}</td>
                         <td>{{ clip.lane }}</td>
                         {#
@@ -105,7 +107,7 @@
 
 
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             {# link to xml #}
             <a target="_blank" href="{{ link }}">{{ link }}</a><br />
             <pre>{{ rawXml }}

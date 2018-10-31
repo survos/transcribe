@@ -164,6 +164,8 @@ class Clip
                 case 'id':
                 case 'tcFormat':
                 case 'enabled':
+                case 'audioStart': // @todo: fix and use this!
+                case 'audioDuration': // @todo: fix and use this!
                     $skip = true;
                     continue;
                     break;
