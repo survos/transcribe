@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.5">
+    <resources>
+        <format id="r0" name="FFVideoFormat1080p24" height="1080" width="1920" frameDuration="1/24s"/>
+        <format id="r1" name="FFVideoFormat1080p5994" height="1080" width="1920" frameDuration="1001/60000s"/>
+        <format id="r4" name="FFVideoFormatRateUndefined" height="4000" width="6000"/>
+        <asset id="r2" name="buck-hallow-hike10-06-9_25am_1.MOV" format="r1" hasAudio="1" audioSources="1" start="0/1s" duration="11011/1000s" hasVideo="1" src="file://localhost/C:/Users/tacma/OneDrive/Pictures/hike/MOV/buck-hallow-hike10-06-9_25am_1.MOV" audioChannels="2"/>
+        <asset id="r3" name="buck-hallow-hike10-06-9_25am.MOV" format="r1" hasAudio="1" audioSources="1" start="0/1s" duration="9009/500s" hasVideo="1" src="file://localhost/C:/Users/tacma/OneDrive/Pictures/hike/MOV/buck-hallow-hike10-06-9_25am.MOV" audioChannels="2"/>
+        <asset id="r5" name="buck-hallow-hike10-06-1_[23-23]pm.JPG" format="r4" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/Users/tacma/OneDrive/Pictures/hike/JPG/buck-hallow-hike10-06-1_[23-23]pm.JPG"/>
+        <asset id="r6" name="buck-hallow-hike10-06-1_[51-51]pm.JPG" format="r4" start="0/1s" duration="0/1s" hasVideo="1" src="file://localhost/C:/Users/tacma/OneDrive/Pictures/hike/JPG/buck-hallow-hike10-06-1_[51-51]pm.JPG"/>
+    </resources>
+    <library>
+        <event name="Timeline 1 (Resolve)">
+            <project name="Timeline 1 (Resolve)">
+                <sequence tcFormat="NDF" format="r0" duration="575/24s" tcStart="3600/1s">
+                    <spine>
+                        <clip offset="3600/1s" tcFormat="NDF" name="buck-hallow-hike10-06-9_25am_1.MOV" format="r1" start="0/1s" duration="143/24s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="0/1s" ref="r2" start="0/1s" duration="11011/1000s">
+                                <audio lane="-1" offset="0/1s" ref="r2" start="0/1s" duration="11011/1000s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="19/6s" name="buck-hallow-hike10-06-1_[23-23]pm.JPG" ref="r5" start="0/1s" duration="67/24s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                        <clip offset="86543/24s" tcFormat="NDF" name="buck-hallow-hike10-06-9_25am.MOV" format="r1" start="0/1s" duration="18/1s" enabled="1">
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            <video offset="0/1s" ref="r3" start="0/1s" duration="9009/500s">
+                                <audio lane="-1" offset="0/1s" ref="r3" start="0/1s" duration="9009/500s" srcCh="1, 2"/>
+                            </video>
+                            <video lane="1" offset="0/1s" name="buck-hallow-hike10-06-1_[51-51]pm.JPG" ref="r6" start="0/1s" duration="5/1s" enabled="1">
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
