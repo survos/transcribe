@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.8">
+    <resources>
+        <format name="FFVideoFormat1080p2997" width="1920" frameDuration="1001/30000s" height="1080" id="r0"/>
+        <format name="FFVideoFormat720p2997" width="1280" frameDuration="1001/30000s" height="720" id="r1"/>
+        <format name="FFVideoFormatRateUndefined" width="2988" height="5312" id="r3"/>
+        <asset src="file://localhost/C:/JUFJ/Claire/clair-11.MOV" start="0/1s" audioSources="1" name="clair-11.MOV" hasVideo="1" format="r1" duration="1680679/1000s" hasAudio="1" audioChannels="2" id="r2"/>
+        <asset src="file://localhost/C:/JUFJ/Claire/2018-10-23([2-2]).jpg" start="0/1s" name="2018-10-23([2-2]).jpg" hasVideo="1" format="r3" duration="0/1s" id="r4"/>
+    </resources>
+    <library>
+        <event name="ManualReferenceTImeline (Resolve)">
+            <project name="ManualReferenceTImeline (Resolve)">
+                <sequence tcFormat="NDF" format="r0" duration="1802801/30000s" tcStart="18018/5s">
+                    <spine>
+                        <asset-clip tcFormat="NDF" start="3003/10s" name="clair-11.MOV" format="r1" duration="1802801/30000s" enabled="1" ref="r2" offset="18018/5s">
+                            <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            <video start="0/1s" name="2018-10-23([2-2]).jpg" duration="1802801/30000s" enabled="1" lane="1" ref="r4" offset="3003/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                            </video>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
