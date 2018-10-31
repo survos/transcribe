@@ -59,8 +59,8 @@
                                   duration="{{ clip.duration  * 10 }}/10s"  enabled="1">
 
                                 {# the offset is relative to the clip, above. #}
-                                <video offset="0/1s" ref="{{ asset.code }}" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" >
-                                    <audio lane="-1" offset="0/1s" ref="{{ asset.code }}" start="0/1s" duration="{{ clip.duration  * 10 }}/10s" srcCh="1, 2"/>
+                                <video offset="0/1s" ref="{{ asset.code }}" start="{{ clip.start }}/10s" duration="{{ clip.duration  * 10 }}/10s" >
+                                    <audio lane="-1" offset="0/1s" ref="{{ asset.code }}" start="{{ clip.start }}/10s" duration="{{ clip.duration  * 10 }}/10s" srcCh="1, 2"/>
                                 </video>
                                 <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
 
