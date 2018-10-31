@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fcpxml>
-<fcpxml version="1.5">
+<fcpxml version="1.8">
     <resources>
         <format name="FFVideoFormat1080p2997" width="1920" frameDuration="1001/30000s" height="1080" id="r0"/>
         <format name="FFVideoFormat720p2997" width="1280" frameDuration="1001/30000s" height="720" id="r1"/>
@@ -13,15 +13,12 @@
             <project name="ManualReferenceTImeline (Resolve)">
                 <sequence tcFormat="NDF" format="r0" duration="1802801/30000s" tcStart="18018/5s">
                     <spine>
-                        <clip tcFormat="NDF" start="3003/10s" name="clair-11.MOV" format="r1" duration="1802801/30000s" enabled="1" offset="18018/5s">
+                        <asset-clip tcFormat="NDF" start="3003/10s" name="clair-11.MOV" format="r1" duration="1802801/30000s" enabled="1" ref="r2" offset="18018/5s">
                             <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
-                            <video start="0/1s" duration="1680679/1000s" ref="r2" offset="0/1s">
-                                <audio start="0/1s" duration="1680679/1000s" lane="-1" ref="r2" offset="0/1s" srcCh="1, 2"/>
-                            </video>
                             <video start="0/1s" name="2018-10-23([2-2]).jpg" duration="113113/3750s" enabled="1" lane="1" ref="r4" offset="3302299/10000s">
                                 <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                             </video>
-                        </clip>
+                        </asset-clip>
                     </spine>
                 </sequence>
             </project>
