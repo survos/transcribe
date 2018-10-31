@@ -26,10 +26,19 @@ class FcpXmlController extends AbstractController
         $root = __DIR__ . '/../../public/xml'; // hack
         $finder->files()->in($root );
 
+        foreach ($finder as $file) {
+            $xml = simplexml_load_file($file->getRealPath());
+            $data[$file->getBasename()] =
+                [
+                    'version' => $xml['version'],
+                    'file' => $file
+                ];
+        }
+
         return $this->render('fcp_xml/index.html.twig', [
             'finder' => $finder,
             'root' => $root,
-            'controller_name' => 'FcpXmlController',
+            'data' => $data
         ]);
     }
 
@@ -53,7 +62,6 @@ class FcpXmlController extends AbstractController
         {
             $project = $projectRepository->findOneBy(['code' => $projectCode]);
             $timeline = $helper->updateTimelineFromProject($project);
-            $timeline->setMaxDuration($request->get('max', 45));
             $rawXml = $this->renderView('timeline_xml.twig', [
                 'timeline' => $timeline
             ]);

@@ -319,6 +319,9 @@ class Timeline
 
             $clip->setFromXml($splineItem, $this);
             switch ($type = $splineItem->getName()) {
+                case 'clip':
+                    dump($splineItem);
+                    // break;
                 case 'asset-clip':
                     foreach ($splineItem->video as $photoItem) {
                         $photo = new Clip();

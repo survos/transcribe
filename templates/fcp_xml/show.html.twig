@@ -78,7 +78,6 @@
                     <th>name</th>
                     <th>format</th>
                     <th>src</th>
-                    <th>start</th>
                     <th>offsets</th>
                     <th>duration</th>
                     <th>lane</th>
@@ -90,9 +89,8 @@
                         <td>{{ clip.type }}</td>
                         <td>{{ clip.name }}</td>
                         <td>{{ clip.format }}</td>
-                        <td>{{ clip.asset }}</td>
-                        <td>{{ clip.trackOffset|number_format(1) }} {{ (clip.trackOffset + clip.duration)|number_format(1) }}</td>
-                        <td>{{ clip.start|number_format(1) }}</td>
+                        <td>{{ clip.asset }}@{{ clip.start|number_format(1) }}</td>
+                        <td>{{ clip.trackOffset|number_format(1) }}-{{ (clip.trackOffset + clip.duration)|number_format(1) }}</td>
                         <td>{{ clip.duration|number_format(1) }}</td>
                         <td>{{ clip.lane }}</td>
                         {#
