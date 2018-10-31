@@ -57,6 +57,8 @@ class TimelineHelper
             }
         }
 
+        $timeline->setMaxDuration($timeline->calcDuration());
+
 
 
 
