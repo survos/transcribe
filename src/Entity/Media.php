@@ -437,6 +437,11 @@ class Media
         return $this->streams_json;
     }
 
+    public function getStreams()
+    {
+        return $this->getStreamsJson() ? json_decode($this->getStreamsJson()) : [];
+    }
+
     public function setStreamsJson(?string $streams_json): self
     {
         $this->streams_json = $streams_json;
@@ -502,6 +507,14 @@ class Media
     public function isPhoto(): bool
     {
         return $this->getType() == 'photo';
+    }
+
+    public function createTimelineFormat(): TimelineFormat
+    {
+        foreach ($this->getStreams() as $stream) {
+            dump($stream);
+        }
+        die();
     }
 
 }

@@ -67,6 +67,8 @@ class TimelineHelper
             // only import the media we're using
             /** @var Media $media */
             foreach ($mediaList as $mediaCode => $media) {
+
+                $format = $media->createTimelineFormat();
                 $asset = (new TimelineAsset())
                     ->setHasAudio(!$media->isPhoto())
                     // ->setSrc($media->getPath())

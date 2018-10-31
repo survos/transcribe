@@ -68,8 +68,6 @@ class ImportMediaCommand extends Command
             ->all()
         ;
 
-
-
         $fileInfo = $ffprobe
             ->format($filename)// extracts file informations
             ->all();
@@ -166,19 +164,14 @@ class ImportMediaCommand extends Command
             }
 
             $filename = $file->getRelativePathname();
-
-            $info = $this->info($file->getRealPath());
-
-            $isImage = $info['format_name'] == 'image2';
-
-
-            $streams = $this->streams($file->getRealPath());
+            $isImage = in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'gif', 'png'] );
 
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
                 $media = (new Media())
                     ->setPath($file->getRealPath())
                     ->setFilename($filename);
+
 
                 if ($isImage) {
                     $code =  'photo_' . pathinfo($media->getPath(), PATHINFO_FILENAME);
@@ -192,9 +185,20 @@ class ImportMediaCommand extends Command
                 $this->em->persist($media);
             }
 
+            $info = $this->info($file->getRealPath());
+
+            // $isImage = $info['format_name'] == 'image2';
+
+
+            if (empty($media->getStreamsJson())) {
+                $streams = $this->streams($file->getRealPath());
+                dump($streams);
+                $media
+                    ->setStreamsJson(json_encode($streams));
+            }
+
             $media
                 ->setType($isImage ? 'photo' : 'video')
-                ->setStreamsJson(json_encode($streams))
                 ->setStreamCount($info['nb_streams'])
                 ->setFileSize($file->getSize())
                 ->setProject($project)
@@ -209,6 +213,12 @@ class ImportMediaCommand extends Command
             // really the JSON belongs on gs, with the flac, and arguably the video
             if (file_exists($jsonFilename)) {
                 $media->setTranscriptRequested(true);
+            }
+
+            if (!$input->getOption('dry-run'))
+            {
+                $this->em->flush();
+                $io->success(sprintf('File %s imported', $file->getRealPath()) );
             }
 
         }
