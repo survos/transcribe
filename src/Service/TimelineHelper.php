@@ -38,7 +38,7 @@ class TimelineHelper
         // assets are media used, we want only the media in the markers we're using
         // for testing, one photo per media
         $photos = $project->getMedia()->filter(function (Media $media) {
-            return $media->getType() === 'photo';
+            return $media->getType() === 'photo' && ($media->getHeight() < $media->getWidth());
         });
 
         $markers = $this->markerRepo->findByProject($project, $maxDuration = $timeline->getMaxDuration());

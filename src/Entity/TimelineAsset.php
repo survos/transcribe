@@ -308,6 +308,12 @@ class TimelineAsset
         return $this;
     }
 
+    public function isPhoto(): bool
+    {
+        return in_array(strtolower(pathinfo($this->getSrc(), PATHINFO_EXTENSION)), ['jpg', 'png']);
+
+    }
+
     public function __toString()
     {
         return $this->getCode();

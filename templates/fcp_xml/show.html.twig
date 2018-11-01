@@ -88,6 +88,12 @@
                     <tr>
                         <td>{{ clip.type }}</td>
                         <td>{{ clip.name }}</td>
+                        <td>
+                            {% if clip.asset and clip.asset.isPhoto %}
+                            <a href="{{ clip.asset.src }}">IMG</a>
+                            <img height="60" src="{{ clip.asset.src }}" />
+                            {% endif %}
+                        </td>
                         <td>{{ clip.format }}</td>
                         <td>{{ clip.asset }}@{{ clip.start|number_format(1) }}</td>
                         <td>{{ clip.trackOffset|number_format(1) }}-{{ (clip.trackOffset + clip.duration)|number_format(1) }}</td>
