@@ -73,7 +73,12 @@
             <td class="right">{{ m.words.count }}</td>
             <td class="right">{{ m.markers.count }}</td>
             <td>
+                {% if m.photo %}
+                    <img height="80" src="{{ path('media_passthru', {fn: m.path} ) }}" />
+                    <a href="{{ path('media_hide', m.rp) }}">Toggle</a>
+                    {% else %}
                 {{ macro.mediaWords(m) }}
+                        {% endif %}
             </td>
         </tr>
         {% endif %}

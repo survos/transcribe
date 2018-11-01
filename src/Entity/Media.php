@@ -160,6 +160,11 @@ class Media
      */
     private $frame_duration;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TimelineAsset", mappedBy="media")
+     */
+    private $timelineAssets;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -167,6 +172,7 @@ class Media
         $this->markers = new ArrayCollection();
         $this->words = new ArrayCollection();
         $this->bRolls = new ArrayCollection();
+        $this->timelineAssets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -634,6 +640,37 @@ class Media
     public function setFrameDuration(?string $frame_duration): self
     {
         $this->frame_duration = $frame_duration;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TimelineAsset[]
+     */
+    public function getTimelineAssets(): Collection
+    {
+        return $this->timelineAssets;
+    }
+
+    public function addTimelineAsset(TimelineAsset $timelineAsset): self
+    {
+        if (!$this->timelineAssets->contains($timelineAsset)) {
+            $this->timelineAssets[] = $timelineAsset;
+            $timelineAsset->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimelineAsset(TimelineAsset $timelineAsset): self
+    {
+        if ($this->timelineAssets->contains($timelineAsset)) {
+            $this->timelineAssets->removeElement($timelineAsset);
+            // set the owning side to null (unless already changed)
+            if ($timelineAsset->getMedia() === $this) {
+                $timelineAsset->setMedia(null);
+            }
+        }
 
         return $this;
     }

@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Media;
 use App\Form\MediaType;
 use App\Repository\MediaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,6 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MediaController extends AbstractController
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/", name="media_index", methods="GET")
      */
@@ -22,6 +33,7 @@ class MediaController extends AbstractController
     {
         return $this->render('media/index.html.twig', ['media' => $mediaRepository->findAll()]);
     }
+
 
     /**
      * @Route("/new", name="media_new", methods="GET|POST")
@@ -52,6 +64,31 @@ class MediaController extends AbstractController
     public function show(Media $medium): Response
     {
         return $this->render('media/show.html.twig', ['medium' => $medium]);
+    }
+
+    /**
+     * @Route("/hide/{id}", name="media_hide", methods="GET")
+     */
+    public function hide(Media $media)
+    {
+        $media->setTranscriptRequested(!$media->getTranscriptRequested());
+        $this->em->flush();
+        return $this->redirectToRoute('project_show', $media->getProject()->rp());
+
+    }
+
+    /**
+     * @Route("/passthru", name="media_passthru", methods="GET")
+     */
+    public function passthru(Request $request): Response
+    {
+        $fn = $request->get('fn');
+        $fn = str_replace('file://localhost/', '', $fn);
+        if (!file_exists($fn)) {
+            throw new NotFoundHttpException("Can't find $fn");
+        }
+        return new BinaryFileResponse($fn);
+        return $this->file($fn);
     }
 
     /**

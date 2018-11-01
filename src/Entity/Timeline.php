@@ -302,6 +302,9 @@ class Timeline
                     $asset = (new TimelineAsset())
                         ->setFromXml($resource, $this);
                     $this->addTimelineAsset($asset);
+                    break;
+                default:
+                    throw new \Exception($resource->getName() . ' not handled in setFromXml()');
             }
         }
         // dump($this->getTimelineAssets()); die();
@@ -320,7 +323,7 @@ class Timeline
             $clip->setFromXml($splineItem, $this);
             switch ($type = $splineItem->getName()) {
                 case 'clip':
-                    dump($splineItem);
+                    // dump($splineItem);
                     // break;
                 case 'asset-clip':
                     foreach ($splineItem->video as $photoItem) {

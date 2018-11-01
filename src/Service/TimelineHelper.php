@@ -38,7 +38,7 @@ class TimelineHelper
         // assets are media used, we want only the media in the markers we're using
         // for testing, one photo per media
         $photos = $project->getMedia()->filter(function (Media $media) {
-            return $media->getType() === 'photo' && ($media->getHeight() < $media->getWidth());
+            return $media->getType() === 'photo' && ($media->getHeight() < $media->getWidth() && ($media->getTranscriptRequested()));
         });
 
         $markers = $this->markerRepo->findByProject($project, $maxDuration = $timeline->getMaxDuration());
@@ -49,6 +49,7 @@ class TimelineHelper
             $mediaList[$media->getCode()] = $media;
             if ($idx < $photos->count()) {
 
+                /** @var Media $brollMedia */
                 $brollMedia = $photos->getValues()[$idx];
                 $broll = (new BRoll())
                     ->setMedia($brollMedia);
@@ -58,10 +59,6 @@ class TimelineHelper
         }
 
         $timeline->setMaxDuration($timeline->calcDuration());
-
-
-
-
 
             $assets = [];
             // only import the media we're using
@@ -76,9 +73,8 @@ class TimelineHelper
                     $format = $formats[$format->getCode()]; // don't duplicate it.
                 }
 
-
-
                 $asset = (new TimelineAsset())
+                    ->setMedia($media)
                     ->setHasAudio(!$media->isPhoto())
                     // ->setSrc($media->getPath())
                     // ->setDuration($media->getDuration() / 10)

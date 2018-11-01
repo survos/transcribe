@@ -258,6 +258,10 @@ class ImportMediaCommand extends Command
                 $media->setTranscriptRequested(true);
             }
 
+            if ($isImage) {
+                $media->setTranscriptRequested(true);
+            }
+
             if (!$input->getOption('dry-run'))
             {
                 $this->em->flush();

@@ -91,7 +91,15 @@
                         <td>
                             {% if clip.asset and clip.asset.isPhoto %}
                             <a href="{{ clip.asset.src }}">IMG</a>
-                            <img height="60" src="{{ clip.asset.src }}" />
+                            <a href="{{ path('media_passthru', {fn: clip.asset.src}) }}">Passthru</a>
+                            <img height="60" src="{{ path('media_passthru', {fn: clip.asset.src}) }}" />
+
+
+                                {# hack to disable photo #}
+                                {#
+                                {{ dump(clip.asset) }}
+                                #}
+
                             {% endif %}
                         </td>
                         <td>{{ clip.format }}</td>
@@ -114,6 +122,7 @@
 
         <div class="col-md-6">
             {# link to xml #}
+            <a target="_blank" href="{{ link }}">{{ link }}</a><br />
             <a target="_blank" href="{{ link }}">{{ link }}</a><br />
             <pre>{{ rawXml }}
             </pre>
