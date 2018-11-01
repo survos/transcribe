@@ -84,6 +84,7 @@ class TranscribeCommand extends Command
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
             ->andWhere('m.transcriptRequested = true')
+            ->andWhere("m.type = 'video'")
         ;
 
         if (!$input->getOption('force')) {
@@ -184,6 +185,9 @@ class TranscribeCommand extends Command
                 $io->note("Import words from JSON");
 
                 $result = json_decode($jsonResult, true);
+                if (empty($result)) {
+                    continue;
+                }
                 $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
                 $this->em->flush(); // hack
 

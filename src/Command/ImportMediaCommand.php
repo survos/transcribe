@@ -197,6 +197,13 @@ class ImportMediaCommand extends Command
                 } else {
                     $code = $media->getCode();
                 }
+
+                // if the code exists, throw an error
+                if ($existingMedia = $this->mediaRepository->findOneBy(['code' => $media->getCode()]))
+                {
+                    continue;
+                    throw new \Exception($media->getCode() . '/' . $media->getFilename() . ' is already used by '. $existingMedia->getFilename());
+                }
                 $io->note(sprintf('Create %s: %s', $code, $file->getRealPath()) );
 
                 $this->em->persist($media);
