@@ -36,7 +36,7 @@
 
                     {% if m.media.speaker != speaker %}
                         {% set speaker = m.media.speaker %}
-                        <u>{{ speaker }}</u>:
+                        <u><a href="{{ path('media_show', m.rp) }}">{{ speaker }}</a></u>:
                         {% endif %}
 
                     <a class="clip pull-right"

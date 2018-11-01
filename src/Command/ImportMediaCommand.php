@@ -171,7 +171,7 @@ class ImportMediaCommand extends Command
 
 
         $finder = new Finder();
-        $finder->files()->in($dir);
+        $finder->files()->in($dir); // ->contains('Shelly');
 
         foreach ($finder as $file) {
             $ext = strtolower($file->getExtension());
@@ -207,6 +207,7 @@ class ImportMediaCommand extends Command
             // $isImage = $info['format_name'] == 'image2';
 
 
+            // @todo: get the properties from the internal array.
             if (empty($media->getStreamsJson() ))
             {
                 $streamData = [];

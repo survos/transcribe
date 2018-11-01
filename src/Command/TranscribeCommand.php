@@ -11,6 +11,7 @@ use Google\ApiCore\OperationResponse;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
+use Proxies\__CG__\App\Entity\Marker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -68,7 +69,8 @@ class TranscribeCommand extends Command
         $this
             ->setDescription('Transcribe videos using Google Speech API')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
-            ->addOption('upload', null, InputOption::VALUE_NONE, 'upload flac to gs')
+            ->addOption('upload-flac', null, InputOption::VALUE_NONE, 'upload flac to gs')
+            ->addOption('upload-photos', null, InputOption::VALUE_NONE, 'upload photos to gs')
             ->addOption('mp3', null, InputOption::VALUE_NONE, 'upload mp3 to gs')
             ->addOption('transcribe', null, InputOption::VALUE_NONE, 'call text-to-speech')
         ;
@@ -111,7 +113,7 @@ class TranscribeCommand extends Command
                 $this->io->note($objectName . ' does not exist');
                 $this->createFlac($filename, $flacFilename, $io);
 
-                if ($input->getOption('upload'))
+                if ($input->getOption('upload-flac'))
                 {
                     /*
                     $options = ['gs' => ['acl' => 'public-read']];
@@ -231,6 +233,50 @@ class TranscribeCommand extends Command
 
 
         $io->success('Finished transcribing');
+    }
+
+    public function uploadPhotos(Project $project)
+    {
+        foreach ($this->mediaRepository->findBy([
+            'type' => 'photo',
+            'project' => $project
+        ]) as $media) {
+            $bucket = $this->getBucket($project->getCode());
+
+            // this is the name of the JPEG file.  At some point, we'll also export an image from the video
+            $filename = $media->getPath();
+
+            $objectName = basename($filename); // hmm, might need the directory here!
+            $object = $bucket->object($objectName);
+
+            // if object is not in cloud
+            if (!$object->exists())
+            {
+                $this->io->note($objectName . ' does not exist');
+
+                    /*
+                    $options = ['gs' => ['acl' => 'public-read']];
+                    $context = stream_context_create($options);
+                    $fileName = "gs://${my_bucket}/public_file.txt";
+                    file_put_contents($fileName, $publicFileText, 0, $context);
+                    */
+
+
+                    // $publicUrl = CloudStorageTools::getPublicUrl($fileName, false);
+
+                    $file = fopen($filename, 'r');
+                    $object = $bucket->upload($file, [
+                        'name' => $objectName
+                    ]);
+            }
+
+            if ($object->exists()) {
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                $media->setFlacExists(true);
+                $io->note(sprintf("Public Flac file exists in gs: %s ", $object->name()) );
+            }
+
+        }
     }
 
     /**

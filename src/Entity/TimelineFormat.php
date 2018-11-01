@@ -112,7 +112,7 @@ class TimelineFormat
         return $this->width;
     }
 
-    public function setWidth(int $width): self
+    public function setWidth(?int $width): self
     {
         $this->width = $width;
 
