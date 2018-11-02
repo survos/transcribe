@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project.code }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></li>
+{% endblock %}
+
+
+{% block content  %}
+
+    <form>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Markers</h3>
+
+                {% for marker in markers %}
+
+                    <li>
+                        <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
+                        {{ marker.note }}
+                        <i>{{ marker.bRolls.count }}</i>
+                        {% for photo in marker.brolls %}
+                            {{ photo.code }}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+
+            </div>
+
+            <div class="col-md-6">
+                <h3>Photos</h3>
+                {% for photo in photos %}
+                    <li>
+                        <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: photo.id}) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <input name="photo_id" type="radio" value="{{ photo.id }}">
+                        {{ photo.code }}
+                        {% if photo.bRolls.count %}
+                            <br />{{ photo.bRolls.first.marker.note }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </div>
+        </div>
+
+        <input type="submit" value="Add Photo to Soundbite" />
+    </form>
+
+{% endblock %}

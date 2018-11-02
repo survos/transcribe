@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BRoll;
 use App\Entity\Marker;
 use App\Entity\Media;
 use App\Entity\Project;
@@ -28,6 +29,7 @@ class ProjectController extends AbstractController
 
     private $em;
     private $projectRepository;
+    private $mediaRepository;
     private $markerRepository;
     private $timelineHelperService;
 
@@ -36,6 +38,7 @@ class ProjectController extends AbstractController
         $this->em = $em;
         $this->projectRepository = $em->getRepository(Project::class);
         $this->markerRepository = $em->getRepository(Marker::class);
+        $this->mediaRepository = $em->getRepository(Media::class);
         $this->timelineHelperService = $helper;
     }
 
@@ -72,6 +75,55 @@ class ProjectController extends AbstractController
             'markers' => $markers,
             'timelineForm' => $form->createView(),
             'markerSummary' => $this->markerRepository->findMarkerDrationByColor($project)
+        ]);
+    }
+
+    /**
+     * @Route("/project/photos/{code}", name="project_add_photos_to_markers")
+     */
+    public function addPhotosToClips(Request $request, Project $project)
+    {
+
+        // better would be to use a Symfony form, but this is faster to code.
+        if ($markerId = $request->get('marker_id')) {
+            /** @var Marker $marker */
+            $marker = $this->markerRepository->find($markerId);
+            $photo = $this->mediaRepository->find($request->get('photo_id'));
+            $broll = (new BRoll())
+                ->setCode($photo->getCode() . '_' . $marker->getTitle())
+                ->setMedia($photo);
+            $marker->addBRoll($broll);
+            $this->em->persist($broll);
+            $this->em->flush();
+            return $this->redirectToRoute('project_add_photos_to_markers', $project->rp());
+        }
+
+        $markers = $this->markerRepository->findByProject($project);
+
+        // go through all the markers and find the next one that needs to be done
+        $needMarker = true;
+        $nextMarkerId = null;
+        foreach ($markers as $marker) {
+            if ($marker->getBRolls()) {
+                $needMarker = true;
+            }
+            if ($needMarker) {
+                $nextMarkerId = $marker->getId();
+            }
+        }
+
+        $photos = $this->mediaRepository->findBy([
+            'project' => $project,
+            'type' => 'photo'
+        ]);
+
+
+        return $this->render('project/addPhotosToClips.html.twig', [
+            'project' => $project,
+            'markers' => $markers,
+            'nextMarkerId' => $nextMarkerId,
+            'photos' => $photos
+
         ]);
     }
 

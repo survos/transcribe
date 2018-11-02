@@ -81,6 +81,26 @@ class Project
         return $this->media;
     }
 
+    /**
+     * @return Collection|Media[]
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->media->filter(function (Media $media) {
+            return $media->isPhoto();
+        });
+    }
+
+    /**
+     * @return Collection|Media[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->media->filter(function (Media $media) {
+            return !$media->isPhoto();
+        });
+    }
+
     public function addMedium(Media $medium): self
     {
         if (!$this->media->contains($medium)) {
