@@ -328,8 +328,8 @@ class Media
 
     public function getPublicUrl($_format='flac')
     {
-        return sprintf("https://storage.googleapis.com/%s/%s.%s",
-            $this->getBucketName(), $this->getBaseName(), $_format);
+        return sprintf("https://storage.googleapis.com/%s/%s%s",
+            $this->getBucketName(), $this->getBaseName(), $_format ? ".$_format" : '');
 
     }
 

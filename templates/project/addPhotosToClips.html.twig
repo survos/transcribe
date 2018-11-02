@@ -38,6 +38,11 @@
                         </a>
                         <input name="photo_id" type="radio" value="{{ photo.id }}">
                         {{ photo.code }}
+                        {% set photoUrl = photo.publicUrl('') %}
+                        <a href="{{ photoUrl }}">
+                            <img src="{{ photoUrl }}" />
+                        </a>
+
                         {% if photo.bRolls.count %}
                             <br />{{ photo.bRolls.first.marker.note }}
                         {% endif %}

@@ -68,6 +68,7 @@ class TranscribeCommand extends Command
     {
         $this
             ->setDescription('Transcribe videos using Google Speech API')
+            ->addArgument('projectCode', InputArgument::REQUIRED, 'Project Code')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
             ->addOption('upload-flac', null, InputOption::VALUE_NONE, 'upload flac to gs')
             ->addOption('upload-photos', null, InputOption::VALUE_NONE, 'upload photos to gs')
@@ -80,6 +81,12 @@ class TranscribeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $this->io = $io;
+        $projectCode = $input->getArgument('projectCode');
+        if (!$project = $this->projectRepository->findOneBy(['code' => $projectCode]))
+        {
+            throw new \Exception("Project $projectCode not found.");
+        }
+
 
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
@@ -90,6 +97,10 @@ class TranscribeCommand extends Command
         if (!$input->getOption('force')) {
             $qb
                 ->andWhere('m.transcriptJson IS NULL');
+        }
+
+        if ($input->getOption('upload-photos')) {
+            $this->uploadPhotos($project);
         }
             ;
         /** @var Media $media */
@@ -277,7 +288,8 @@ class TranscribeCommand extends Command
             if ($object->exists()) {
                 $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
                 $media->setFlacExists(true);
-                $io->note(sprintf("Public Flac file exists in gs: %s ", $object->name()) );
+                $this->io->note(sprintf("Public file exists in gs: %s ", $object->name()) );
+                dump($object->gcsUri());
             }
 
         }
