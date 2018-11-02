@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.5">
+    <resources>
+        <format width="1920" id="r0" frameDuration="1001/30000s" name="FFVideoFormat1080p2997" height="1080"/>
+        <format width="2988" id="r1" name="FFVideoFormatRateUndefined" height="5312"/>
+        <format width="5312" id="r3" name="FFVideoFormatRateUndefined" height="2988"/>
+        <asset id="r2" hasVideo="1" format="r1" duration="0/1s" src="file://localhost/C:/JUFJ/Claire/2018-10-23([2-2]).jpg" name="2018-10-23([2-2]).jpg" start="0/1s"/>
+        <asset id="r4" hasVideo="1" format="r3" duration="0/1s" src="file://localhost/C:/JUFJ/Claire/2018-10-23([1-1]).jpg" name="2018-10-23([1-1]).jpg" start="0/1s"/>
+    </resources>
+    <library>
+        <event name="claire_61 (Resolve)">
+            <project name="claire_61 (Resolve)">
+                <sequence tcFormat="NDF" tcStart="48439391/15000s" format="r0" duration="503503/7500s">
+                    <spine>
+                        <gap offset="48439391/15000s" duration="503503/7500s" name="Gap" start="3600/1s">
+                            <video lane="1" enabled="1" offset="3600/1s" duration="367367/15000s" name="2018-10-23([2-2]).jpg" ref="r2" start="0/1s">
+                                <adjust-conform type="fit"/>
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                            <video lane="1" enabled="1" offset="18243243/5000s" duration="277277/15000s" name="2018-10-23([1-1]).jpg" ref="r4" start="0/1s">
+                                <adjust-conform type="fit"/>
+                                <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                            </video>
+                        </gap>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

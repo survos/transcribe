@@ -106,7 +106,7 @@ class Media
     private $display;
 
     /**
-     * @ORM\Column(type="string", length=32, nullable=true, unique=true)
+     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
      */
     private $code;
 
