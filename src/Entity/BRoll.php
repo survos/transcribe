@@ -38,6 +38,11 @@ class BRoll
      */
     private $clip;
 
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $start_word;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class BRoll
     public function setClip(?Clip $clip): self
     {
         $this->clip = $clip;
+
+        return $this;
+    }
+
+    public function getStartWord(): ?string
+    {
+        return $this->start_word;
+    }
+
+    public function setStartWord(?string $start_word): self
+    {
+        $this->start_word = $start_word;
 
         return $this;
     }

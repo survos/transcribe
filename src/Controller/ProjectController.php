@@ -90,6 +90,7 @@ class ProjectController extends AbstractController
             $marker = $this->markerRepository->find($markerId);
             $photo = $this->mediaRepository->find($request->get('photo_id'));
             $broll = (new BRoll())
+                ->setStartWord($request->get('start_word'))
                 ->setCode($photo->getCode() . '_' . $marker->getTitle())
                 ->setMedia($photo);
             $marker->addBRoll($broll);

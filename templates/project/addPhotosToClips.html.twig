@@ -7,6 +7,12 @@
     <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></li>
 {% endblock %}
 
+{#
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/css/add_photos.css') }}" rel="stylesheet">
+{% endblock %}
+#}
 
 {% block content  %}
 
@@ -22,7 +28,19 @@
                         {{ marker.note }}
                         <i>{{ marker.bRolls.count }}</i>
                         {% for photo in marker.brolls %}
-                            {{ photo.code }}
+                        {% set photoUrl = photo.media.publicUrl('') %}
+
+                        <div class="thumbnail">
+                            <a href="{{ photoUrl }}">
+                                <img src="{{ photoUrl }}" height="80px" />
+                            </a>
+                            <div class="caption">
+                                {{ photo.code }}
+                                <b>
+                                    {{ photo.startWord }}
+                                </b>
+                            </div>
+
                         {% endfor %}
                     </li>
                 {% endfor %}
@@ -31,27 +49,39 @@
 
             <div class="col-md-6">
                 <h3>Photos</h3>
-                {% for photo in photos %}
-                    <li>
-                        <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: photo.id}) }}">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <input name="photo_id" type="radio" value="{{ photo.id }}">
-                        {{ photo.code }}
-                        {% set photoUrl = photo.publicUrl('') %}
-                        <a href="{{ photoUrl }}">
-                            <img src="{{ photoUrl }}" />
-                        </a>
 
-                        {% if photo.bRolls.count %}
-                            <br />{{ photo.bRolls.first.marker.note }}
-                        {% endif %}
-                    </li>
+                {% for photo in photos %}
+                    {% set photoUrl = photo.publicUrl('') %}
+
+                    <div class="thumbnail">
+                        <a href="{{ photoUrl }}">
+                            <img src="{{ photoUrl }}" height="80px" />
+                        </a>
+                            <div class="caption">
+
+                                <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: photo.id}) }}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <input name="photo_id" type="radio" value="{{ photo.id }}">
+
+                                {% if photo.bRolls.count %}
+                                    <br />{{ photo.bRolls.first.marker.note }}
+                                {% endif %}
+                                <br />{{ photo.code }}
+
+                                <p>Lorem ipsum...</p>
+                            </div>
+                    </div>
+
                 {% endfor %}
+
             </div>
         </div>
 
+        <input name="start_word" placeholder="Starting word" width="64" />
         <input type="submit" value="Add Photo to Soundbite" />
     </form>
 
 {% endblock %}
+
+
