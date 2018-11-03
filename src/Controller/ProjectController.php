@@ -115,7 +115,8 @@ class ProjectController extends AbstractController
 
         $photos = $this->mediaRepository->findBy([
             'project' => $project,
-            'type' => 'photo'
+            'type' => 'photo',
+            'transcriptRequested' => true
         ]);
 
 

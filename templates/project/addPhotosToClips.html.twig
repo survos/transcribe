@@ -30,9 +30,9 @@
                         {% for photo in marker.brolls %}
                         {% set photoUrl = photo.media.publicUrl('') %}
 
-                        <div class="thumbnail">
+                        <div class="thumbnail" style="height: 80px">
                             <a href="{{ photoUrl }}">
-                                <img src="{{ photoUrl }}" height="80px" />
+                                <img src="{{ photoUrl }}" height="80" />
                             </a>
                             <div class="caption">
                                 {{ photo.code }}
@@ -54,14 +54,21 @@
                     {% set photoUrl = photo.publicUrl('') %}
 
                     <div class="thumbnail">
+
                         <a href="{{ photoUrl }}">
-                            <img src="{{ photoUrl }}" height="80px" />
+                            <img src="{{ photoUrl }}" style="max-height: 200px; max-width: 300px;" />
                         </a>
+
                             <div class="caption">
 
                                 <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: photo.id}) }}">
                                     <i class="fa fa-pencil"></i>
                                 </a>
+
+                                <a class="confirm" href="{{ path('media_hide', photo.rp) }}">
+                                    <i class="fa fa-eye-slash"></i>
+                                </a>
+
                                 <input name="photo_id" type="radio" value="{{ photo.id }}">
 
                                 {% if photo.bRolls.count %}
@@ -69,7 +76,6 @@
                                 {% endif %}
                                 <br />{{ photo.code }}
 
-                                <p>Lorem ipsum...</p>
                             </div>
                     </div>
 
@@ -84,4 +90,10 @@
 
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('.confirm').click(function(){return confirm("are you sure?");});
+    </script>
+{% endblock %}
 

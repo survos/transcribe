@@ -73,7 +73,7 @@ class MediaController extends AbstractController
     {
         $media->setTranscriptRequested(!$media->getTranscriptRequested());
         $this->em->flush();
-        return $this->redirectToRoute('project_show', $media->getProject()->rp());
+        return $this->redirectToRoute('project_add_photos_to_markers', $media->getProject()->rp());
 
     }
 
