@@ -4,7 +4,8 @@
 
 {% block breadcrumbs %}
 {{ parent() }}
-    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></li>
+    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }} Transcript</a></li>
+    <li><a href="{{ path('project_add_photos_to_markers', project.rp) }}">{{ project.code }} Photos</a></li>
 {% endblock %}
 
 
@@ -92,9 +93,8 @@
 
 {% block javascripts %}
 {{ parent() }}
-    {# need this to work when offline!!
+    {# need this to work when offline!! #}
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    #}
     <script src="/js/project.js"></script>
 
 <script>

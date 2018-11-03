@@ -105,11 +105,13 @@ class ProjectController extends AbstractController
         $needMarker = true;
         $nextMarkerId = null;
         foreach ($markers as $marker) {
-            if ($marker->getBRolls()) {
+            if ($marker->getBRolls()->count()) {
                 $needMarker = true;
-            }
-            if ($needMarker) {
-                $nextMarkerId = $marker->getId();
+            } else {
+                if ($needMarker ) {
+                    $nextMarkerId = $marker->getId();
+                    $needMarker = false; // we have one
+                }
             }
         }
 
@@ -137,7 +139,7 @@ class ProjectController extends AbstractController
         $ids = $request->get('marker');
         foreach ($ids as $idx=>$id) {
             $marker = $this->em->getRepository(Marker::class)->find($id);
-            $marker->setIdx($idx);
+            $marker->setIdx($idx+1);
         }
         $this->em->flush();
         return $this->redirectToRoute('project_show', $project->rp());

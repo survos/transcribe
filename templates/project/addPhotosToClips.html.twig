@@ -4,7 +4,8 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></li>
+    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }} Transcript</a></li>
+    <li><a href="{{ path('project_add_photos_to_markers', project.rp) }}">{{ project.code }} Photos</a></li>
 {% endblock %}
 
 {#
@@ -24,24 +25,36 @@
                 {% for marker in markers %}
 
                     <li>
+
                         <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                         {{ marker.note }}
-                        <i>{{ marker.bRolls.count }}</i>
+
+                        {% if marker.bRolls.count %}
+
                         {% for photo in marker.brolls %}
                         {% set photoUrl = photo.media.publicUrl('') %}
 
-                        <div class="thumbnail" style="height: 80px">
+                        <div class="thumbnail" >
                             <a href="{{ photoUrl }}">
-                                <img src="{{ photoUrl }}" height="80" />
+                                <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
                             </a>
                             <div class="caption">
-                                {{ photo.code }}
+                                {{ marker.note }}
                                 <b>
                                     {{ photo.startWord }}
                                 </b>
                             </div>
+                        </div>
 
                         {% endfor %}
+
+                        {% else %}
+                            {% set photoUrl =  'https://dummyimage.com/600x400/000/fff&text=' ~ marker.media.speaker|default(marker.media.code) %}
+                            <div class="thumbnail" >
+                                 <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
+                            </div>
+                            {% endif %}
+
                     </li>
                 {% endfor %}
 
