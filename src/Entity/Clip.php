@@ -24,7 +24,7 @@ class Clip
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=48)
+     * @ORM\Column(type="string", length=64)
      */
     private $name;
 

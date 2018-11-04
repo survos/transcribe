@@ -24,7 +24,7 @@ class TimelineAsset
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=48)
+     * @ORM\Column(type="string", length=64)
      */
     private $name;
 

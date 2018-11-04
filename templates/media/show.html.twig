@@ -226,6 +226,7 @@
     </div>
     {% endif %}
 
+    {#
     {% if app.request.get('debug') %}
         <pre>
             {{ media.transcriptJson }}
@@ -233,6 +234,7 @@
 
         {{ dump(media.videoStream) }}
     {% endif %}
+    #}
 
 {% endblock %}
 
