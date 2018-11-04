@@ -47,6 +47,7 @@ class ImportMediaCommand extends Command
             ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'root dir for project')
             ->addOption('skip-info', null, InputOption::VALUE_NONE, 'Skip ffprobe')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Skip saving')
+            ->addOption('delete-photos', null, InputOption::VALUE_NONE, 'Delete existing photos')
         ;
     }
 
@@ -149,6 +150,14 @@ class ImportMediaCommand extends Command
             }
         }
 
+        if ($input->getOption('delete-photos')) {
+            foreach ($project->getPhotos() as $photo) {
+                $project->removeMedium($photo);
+            }
+            $this->em->flush();
+        }
+
+
         // update the dir in the project, may have changed with --dir
         if (!empty($dir) || $dir = $input->getOption('dir'))
         {
@@ -201,7 +210,7 @@ class ImportMediaCommand extends Command
                 // if the code exists, throw an error
                 if ($existingMedia = $this->mediaRepository->findOneBy(['code' => $media->getCode()]))
                 {
-                    continue;
+                    // continue;
                     throw new \Exception($media->getCode() . '/' . $media->getFilename() . ' is already used by '. $existingMedia->getFilename());
                 }
                 $io->note(sprintf('Create %s: %s', $code, $file->getRealPath()) );
