@@ -90,7 +90,9 @@
                         <td>{{ clip.name }}</td>
                         <td>
                             {% if clip.asset and clip.asset.isPhoto %}
-                            <a href="{{ clip.asset.src }}">IMG</a>
+                                {% if clip.asset.media %}
+                            <a href="{{ clip.asset.media.publicUrl }}">IMG</a>
+                                    {% endif %}
                             <a href="{{ path('media_passthru', {fn: clip.asset.src}) }}">Passthru</a>
                             <img height="60" src="{{ path('media_passthru', {fn: clip.asset.src}) }}" />
 

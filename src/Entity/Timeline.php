@@ -286,62 +286,6 @@ class Timeline
         }
     }
 
-    public function setFromXml(\SimpleXMLElement $xml): self
-    {
-
-        foreach ($xml->resources->children() as $resource) {
-            switch ($resource->getName()) {
-                case 'format':
-                    $format = (new TimelineFormat());
-                    $this
-                        ->addTimelineFormat($format);
-                    $format
-                        ->setFromXml($resource, $this);
-                    break;
-                case 'asset':
-                    $asset = (new TimelineAsset())
-                        ->setFromXml($resource, $this);
-                    $this->addTimelineAsset($asset);
-                    break;
-                default:
-                    throw new \Exception($resource->getName() . ' not handled in setFromXml()');
-            }
-        }
-        // dump($this->getTimelineAssets()); die();
-
-
-
-        $spline = $xml->library->event->project->sequence->spine;
-
-        $this
-            ->setTotalDuration(Timeline::fractionalSecondsToTime($xml->library->event->project->sequence['duration']));
-
-        foreach ($spline->children() as $splineItem) {
-            $clip = new Clip();
-            $this->addClip($clip);
-
-            $clip->setFromXml($splineItem, $this);
-            switch ($type = $splineItem->getName()) {
-                case 'clip':
-                    // dump($splineItem);
-                    // break;
-                case 'asset-clip':
-                    foreach ($splineItem->video as $photoItem) {
-                        $photo = new Clip();
-                        $this->addClip($photo);
-                        $photo->setFromXml($photoItem, $this);
-                    }
-                    break;
-                case 'gap':
-                    break;
-                default:
-                    throw new \Exception("Unhandled type: $type");
-            }
-        }
-
-        return $this;
-    }
-
     public function getTotalDuration()
     {
         return $this->totalDuration;

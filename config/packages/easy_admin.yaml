@@ -9,10 +9,14 @@ easy_admin:
             - {entity: Media}
             - {entity: Project}
             - {entity: Marker }
+            - {entity: Broll }
             - {entity: Word }
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
 
     entities:
+        Broll:
+            class: App\Entity\BRoll
+
         Media:
             class: App\Entity\Media
             label: 'Media'

@@ -25,10 +25,6 @@
                 {% for marker in markers %}
 
                     <li>
-
-                        <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
-                        {{ marker.note }}
-
                         {% if marker.bRolls.count %}
 
                         {% for photo in marker.brolls %}
@@ -39,24 +35,28 @@
                                 <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
                             </a>
                             <div class="caption">
-                                {{ marker.note }}
-                                <b>
-                                    {{ photo.startWord }}
-                                </b>
+                                <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
+                                {{ photo.highlightedNote|raw }}
                             </div>
+                            <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
+
                         </div>
 
                         {% endfor %}
 
                         {% else %}
                             {% set photoUrl =  'https://dummyimage.com/600x400/000/fff&text=' ~ marker.media.speaker|default(marker.media.code) %}
-                            <div class="thumbnail" >
                                  <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
+                                <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
+                                {{ marker.note }}
+                            <div class="thumbnail" >
                             </div>
                             {% endif %}
 
                     </li>
                 {% endfor %}
+
+                <a class="confirm" href="{{ path('project_clear_broll', project.rp) }}">Clear Broll</a>
 
             </div>
 

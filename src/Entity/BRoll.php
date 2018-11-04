@@ -107,4 +107,11 @@ class BRoll
 
         return $this;
     }
+
+    public function HighlightedNote($before='<b>', $after='</b>')
+    {
+        return str_replace($this->getStartWord(), $before . $this->getStartWord(), $this->getMarker()->getNote()) . $after;
+    }
+
+
 }

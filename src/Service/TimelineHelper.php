@@ -16,6 +16,7 @@ use App\Entity\Media;
 use App\Entity\Project;
 use App\Entity\Timeline;
 use App\Entity\TimelineAsset;
+use App\Entity\TimelineFormat;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TimelineHelper
@@ -25,6 +26,7 @@ class TimelineHelper
     {
         $this->em = $entityManager;
         $this->markerRepo = $entityManager->getRepository(Marker::class);
+        $this->mediaRepo = $entityManager->getRepository(Media::class);
     }
 
     public function updateTimelineFromProject(Project $project, Timeline $timeline=null): Timeline
@@ -111,6 +113,66 @@ class TimelineHelper
 
 
     }
+
+    public function updateTimelineFromXml(\SimpleXMLElement $xml, Timeline $timeline): Timeline
+    {
+
+        foreach ($xml->resources->children() as $resource) {
+            switch ($resource->getName()) {
+                case 'format':
+                    $format = (new TimelineFormat());
+                    $timeline
+                        ->addTimelineFormat($format);
+                    $format
+                        ->setFromXml($resource, $timeline);
+                    break;
+                case 'asset':
+                    $asset = (new TimelineAsset())
+                        ->setFromXml($resource, $timeline);
+
+                    // attach the media from the id/code? Or the marker?  Ugh
+                    // $media = $this->m
+                    $timeline->addTimelineAsset($asset);
+                    break;
+                default:
+                    throw new \Exception($resource->getName() . ' not handled in setFromXml()');
+            }
+        }
+        // dump($this->getTimelineAssets()); die();
+
+
+
+        $spline = $xml->library->event->project->sequence->spine;
+
+        $timeline
+            ->setTotalDuration(Timeline::fractionalSecondsToTime($xml->library->event->project->sequence['duration']));
+
+        foreach ($spline->children() as $splineItem) {
+            $clip = new Clip();
+            $timeline->addClip($clip);
+
+            $clip->setFromXml($splineItem, $timeline);
+            switch ($type = $splineItem->getName()) {
+                case 'clip':
+                    // dump($splineItem);
+                    // break;
+                case 'asset-clip':
+                    foreach ($splineItem->video as $photoItem) {
+                        $photo = new Clip();
+                        $timeline->addClip($photo);
+                        $photo->setFromXml($photoItem, $timeline);
+                    }
+                    break;
+                case 'gap':
+                    break;
+                default:
+                    throw new \Exception("Unhandled type: $type");
+            }
+        }
+
+        return $timeline;
+    }
+
 
 
 }

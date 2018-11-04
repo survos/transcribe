@@ -73,15 +73,13 @@ class FcpXmlController extends AbstractController
         $rawXml = tidy_repair_string($rawXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
 
         // use a new timeline for the import!
-        $importedTimeline = (new Timeline())->setFromXml($xml);
-
-
+        $timeline = new Timeline();
+        $importedTimeline = $helper->updateTimelineFromXml($xml, $timeline);
 
 
 
         // dump($timeline->getTimelineFormats()); die();
         // die();
-
 
         return $this->render('fcp_xml/show.html.twig', [
             'timeline' => $importedTimeline,

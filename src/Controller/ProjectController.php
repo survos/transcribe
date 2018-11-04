@@ -39,6 +39,7 @@ class ProjectController extends AbstractController
         $this->projectRepository = $em->getRepository(Project::class);
         $this->markerRepository = $em->getRepository(Marker::class);
         $this->mediaRepository = $em->getRepository(Media::class);
+        $this->brollRepository = $em->getRepository(BRoll::class);
         $this->timelineHelperService = $helper;
     }
 
@@ -76,6 +77,27 @@ class ProjectController extends AbstractController
             'timelineForm' => $form->createView(),
             'markerSummary' => $this->markerRepository->findMarkerDrationByColor($project)
         ]);
+    }
+
+    /**
+     * @Route("/project/clear-broll/{code}", name="project_clear_broll")
+     */
+    public function clearBroll(Request $request, Project $project)
+    {
+        if ($brollId = $request->get('broll_id')) {
+            $broll = $this->brollRepository->find($brollId);
+            $this->em->remove($broll);
+
+        } else {
+            foreach ($project->getMedia() as $photo)
+            {
+                foreach ($photo->getBRolls() as $BRoll) {
+                    $photo->removeBRoll($BRoll);
+                }
+            }
+        }
+        $this->em->flush();
+        return $this->redirectToRoute('project_add_photos_to_markers', $project->rp());
     }
 
     /**
