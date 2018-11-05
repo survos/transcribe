@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-simplexml": "*",
         "ext-iconv": "*",
-        "ext-tidy": "*",
         "easycorp/easyadmin-bundle": "^1.17",
         "google/cloud-speech": "^0.17.1",
         "google/cloud-storage": "^1.9",
