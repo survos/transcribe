@@ -290,6 +290,11 @@ class Media
         // return $this->getFilename() . '.wav';
     }
 
+    public function getThumbFilePath()
+    {
+        return $this->getPath() . '.jpg';
+    }
+
     public function getAudioFileName()
     {
         return $this->getFilename() . '.flac';

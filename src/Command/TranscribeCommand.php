@@ -71,6 +71,7 @@ class TranscribeCommand extends Command
             ->addArgument('projectCode', InputArgument::REQUIRED, 'Project Code')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
             ->addOption('upload-flac', null, InputOption::VALUE_NONE, 'upload flac to gs')
+            ->addOption('upload-thumb', null, InputOption::VALUE_NONE, 'upload thumbnail to gs')
             ->addOption('upload-photos', null, InputOption::VALUE_NONE, 'upload photos to gs')
             ->addOption('mp3', null, InputOption::VALUE_NONE, 'upload mp3 to gs')
             ->addOption('transcribe', null, InputOption::VALUE_NONE, 'call text-to-speech')
@@ -114,8 +115,41 @@ class TranscribeCommand extends Command
             $bucket = $this->getBucket($projectCode);
 
             $filename = $media->getPath();
-            $flacFilename = $media->getAudioFilePath();
 
+        // first, create and upload thumbnail
+            $thumbFilename = $media->getThumbFilePath();
+
+            $objectName = basename($thumbFilename); // hmm, might need the directory here!
+            $object = $bucket->object($objectName);
+
+            // if object is not in cloud
+            if (!$object->exists()) {
+                $this->io->note($objectName . ' does not exist');
+                $this->createThumb($filename, $thumbFilename, $io);
+
+                if ($input->getOption('upload-thumb'))
+                    $file = fopen($thumbFilename, 'r');
+                $object = $bucket->upload($file, [
+                    'name' => $objectName
+                ]);
+            }
+            if ($object->exists()) {
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                // $media->setFlacExists(true);
+                $io->note(sprintf("Public Thumb file exists in gs: %s ", $object->name()) );
+            }
+
+            $flacFilename = $media->getAudioFilePath();
+        $objectName = basename($flacFilename); // hmm, might need the directory here!
+        $object = $bucket->object($objectName);
+
+        if ($object->exists()) {
+            $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+            $media->setFlacExists(true);
+            $io->note(sprintf("Public Flac file exists in gs: %s ", $object->name()) );
+        }
+
+            $flacFilename = $media->getAudioFilePath();
 
             $objectName = basename($flacFilename); // hmm, might need the directory here!
             $object = $bucket->object($objectName);
@@ -390,6 +424,16 @@ class TranscribeCommand extends Command
         }
     }
 
+    protected function createThumb($filename, $jpgFilename, $io): void
+    {
+        if (!file_exists($jpgFilename)) {
+            $io->note("Creating flac for $filename");
+            // $command = "ffmpeg -i $filename -c:a wav  -ac 1 $flacFilename";
+            $command = "ffmpeg -i $filename  -vframes 1  $jpgFilename";
+            $this->io->note($command);
+            exec($command);
+        }
+    }
 
     /**
      * Create a Cloud Storage Bucket.
