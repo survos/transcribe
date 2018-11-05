@@ -103,6 +103,11 @@ class TranscribeCommand extends Command
         if ($input->getOption('upload-photos')) {
             $this->uploadPhotos($project);
         }
+
+        if ($input->getOption('upload-thumb')) {
+            $this->uploadThumbnails($project);
+        }
+
             ;
         /** @var Media $media */
 
@@ -116,28 +121,6 @@ class TranscribeCommand extends Command
 
             $filename = $media->getPath();
 
-        // first, create and upload thumbnail
-            $thumbFilename = $media->getThumbFilePath();
-
-            $objectName = basename($thumbFilename); // hmm, might need the directory here!
-            $object = $bucket->object($objectName);
-
-            // if object is not in cloud
-            if (!$object->exists()) {
-                $this->io->note($objectName . ' does not exist');
-                $this->createThumb($filename, $thumbFilename, $io);
-
-                if ($input->getOption('upload-thumb'))
-                    $file = fopen($thumbFilename, 'r');
-                $object = $bucket->upload($file, [
-                    'name' => $objectName
-                ]);
-            }
-            if ($object->exists()) {
-                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
-                // $media->setFlacExists(true);
-                $io->note(sprintf("Public Thumb file exists in gs: %s ", $object->name()) );
-            }
 
             $flacFilename = $media->getAudioFilePath();
         $objectName = basename($flacFilename); // hmm, might need the directory here!
@@ -284,6 +267,44 @@ class TranscribeCommand extends Command
         $io->success('Finished transcribing');
     }
 
+    public function uploadThumbnails(Project $project)
+    {
+        foreach ($this->mediaRepository->findBy([
+            'type' => 'video',
+            'project' => $project
+        ]) as $media) {
+            $bucket = $this->getBucket($project->getCode());
+
+            // this is the name of the JPEG file.  At some point, we'll also export an image from the video
+            $filename = $media->getPath();
+
+            $objectName = basename($filename); // hmm, might need the directory here!
+            $object = $bucket->object($objectName);
+            // first, create and upload thumbnail
+            $thumbFilename = $media->getThumbFilePath();
+
+            $objectName = basename($thumbFilename); // hmm, might need the directory here!
+            $object = $bucket->object($objectName);
+
+            // if object is not in cloud
+            if (!$object->exists()) {
+                $this->io->note($objectName . ' does not exist');
+                $this->createThumb($filename, $thumbFilename);
+
+                $file = fopen($thumbFilename, 'r');
+                $object = $bucket->upload($file, [
+                    'name' => $objectName
+                ]);
+            }
+
+            if ($object->exists()) {
+                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                // $media->setFlacExists(true);
+                $this->io->note(sprintf("Public Thumb file exists in gs: %s ", $object->name()));
+            }
+        }
+    }
+
     public function uploadPhotos(Project $project)
     {
         foreach ($this->mediaRepository->findBy([
@@ -424,12 +445,12 @@ class TranscribeCommand extends Command
         }
     }
 
-    protected function createThumb($filename, $jpgFilename, $io): void
+    protected function createThumb($filename, $jpgFilename): void
     {
         if (!file_exists($jpgFilename)) {
-            $io->note("Creating flac for $filename");
+            $this->io->note("Creating flac for $filename");
             // $command = "ffmpeg -i $filename -c:a wav  -ac 1 $flacFilename";
-            $command = "ffmpeg -i $filename  -vframes 1  $jpgFilename";
+            $command = sprintf('ffmpeg -i "%s" -vframes 1  "%s"', $filename, $jpgFilename);
             $this->io->note($command);
             exec($command);
         }

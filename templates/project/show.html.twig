@@ -71,7 +71,13 @@
                     <i class="fa fa-pencil"></i>
                 </a></td>
             <td>
-                <a title="{{ m.filename }}" href="{{ path('media_show', m.rp) }}">{{ m.display|default(m.filename) }}</a></td>
+                {% set photoUrl =  m.publicUrl('jpg') %}
+                <a href="{{ photoUrl }}">
+                    <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
+                </a>
+                <a title="{{ m.filename }}" href="{{ path('media_show', m.rp) }}">{{ m.display|default(m.filename) }}</a>
+
+            </td>
             <td class="right">{{ m.words.count }}</td>
             <td class="right">{{ m.markers.count }}</td>
             <td>
