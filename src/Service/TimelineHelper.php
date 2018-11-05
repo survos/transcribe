@@ -105,7 +105,7 @@ class TimelineHelper
             foreach ($marker->getBRolls() as $BRoll) {
                 $clip->addBRoll($BRoll);
             }
-            $offset += round(($marker->getDuration())); // ??
+            $offset += $BRoll->calculateStartWordTime(); // round(($marker->getDuration())); // ??
         }
 
 
@@ -130,7 +130,7 @@ class TimelineHelper
                     $asset = (new TimelineAsset())
                         ->setFromXml($resource, $timeline);
 
-                    // attach the media from the id/code? Or the marker?  Ugh
+                    // attach the media from the id/code? Or the marker?  Ughf
                     // $media = $this->m
                     $timeline->addTimelineAsset($asset);
                     break;

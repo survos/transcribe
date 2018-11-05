@@ -30,16 +30,16 @@
                         {% for photo in marker.brolls %}
                         {% set photoUrl = photo.media.publicUrl('') %}
 
-                        <div class="thumbnail" >
                             <a href="{{ photoUrl }}">
                                 <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
                             </a>
                             <div class="caption">
+                                <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
                                 <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                                 {{ photo.highlightedNote|raw }}
                             </div>
-                            <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
 
+                            <div class="thumbnail" >
                         </div>
 
                         {% endfor %}
