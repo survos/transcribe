@@ -71,13 +71,17 @@
                                 {# the photos #}
                                 {% for photo in clip.brolls  %}
 
-                                    {% set photoStartAfter = clip.duration / 2 %} {# how many deci-seconds until the photo starts? #}
-                                    {% set photoDuration = (photo.calculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
+                                    {#
+                                                                        {% set photoStartAfter = photo.calculateStartWordTime %}
+                                    {% set photoDuration = (clip.duration - photo.calculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
+                                    #}
+                                    {% set photoStartAfter = (photo.calculateStartWordTime ) %} {# how many deci-seconds does the photo display? #}
+                                    {% set photoDuration = ( clip.duration - photo.calculateStartWordTime) + 20 %}
 
 
                                     {% set trackOffset = clip.duration %}
                                     {% set media = photo.media %}
-                                    <!--photo {{ media.baseName }} starts on {{ photo.startWord }} at {{ trackOffset }} for {{ photoDuration }}-->
+                                    <!--photo {{ media.baseName }} starts on '{{ photo.startWord }}' at {{ photoStartAfter }} for {{ photoDuration }}-->
                                     <video start="0/1s" name="{{ photo.code }}"
                                            duration="{{ photoDuration|round }}/10s"
                                            enabled="1" lane="1"

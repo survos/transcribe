@@ -118,7 +118,11 @@ class TimelineHelper
                 // $clip->setTrackOffset($offset);
 
             }
-            $offset += round(($marker->getDuration())); //  + 5; // add a short delay
+            // if there's a photo, add a short delay, (otherwise a transition?)
+            $offset += round(($marker->getDuration()));
+            if ($marker->getBRolls()->count()) {
+                $offset +=  2; // add a short delay
+            }
         }
 
 

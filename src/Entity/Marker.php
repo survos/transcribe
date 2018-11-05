@@ -52,6 +52,7 @@ class Marker
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Word", mappedBy="marker")
      * @ORM\JoinColumn(name="marker_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OrderBy({"idx" = "asc"})
      */
     private $words;
 

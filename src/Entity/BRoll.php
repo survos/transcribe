@@ -103,7 +103,7 @@ class BRoll
 
     public function setStartWord(?string $start_word): self
     {
-        $this->start_word = $start_word;
+        $this->start_word = trim($start_word);
 
         return $this;
     }
@@ -115,6 +115,12 @@ class BRoll
 
     public function calculateStartWordTime()
     {
+        // maybe it's in the words..
+        foreach ($this->getMarker()->getWords() as $word) {
+            if ($word->getWord() == $this->getStartWord()) {
+                return $word->getStartTime();
+            }
+        }
         $marker = $this->getMarker();
         if ($this->getStartWord()) {
             $startPosition = strpos($marker->getNote(), $this->getStartWord());
