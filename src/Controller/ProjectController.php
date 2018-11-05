@@ -319,7 +319,9 @@ FCM: NON-DROP FRAME
 
         // file_put_contents('/tmp/' . $project->getCode() . '-import.fcpxml', $xml);
         // format the raw xml
-        $xml = tidy_repair_string($xml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+        if (function_exists('tidy_repair_string')) {
+            $xml = tidy_repair_string($xml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+        }
 
 
 
