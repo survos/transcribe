@@ -37,7 +37,12 @@
                                 <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
                                 <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                                 {{ photo.highlightedNote|raw }}
+
+                                <i>{{ marker.duration }}</i>
+                                <i>{{ photo.calculateStartWordTime }}</i>
+
                             </div>
+
 
                             <div class="thumbnail" >
                         </div>

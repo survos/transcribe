@@ -47,17 +47,26 @@ class TimelineHelper
 
         $mediaList = [];
         foreach ($markers as $idx=>$marker) {
+
+            foreach ($marker->getBRolls() as $broll) {
+                $brollMedia = $broll->getMedia();
+                $mediaList[$brollMedia->getCode()] = $brollMedia;
+                // dump($broll); die();
+            }
             $media = $marker->getMedia();
             $mediaList[$media->getCode()] = $media;
+
+            /** @var Media $brollMedia */
+            /* old way, with random photos
             if ($idx < $photos->count()) {
 
-                /** @var Media $brollMedia */
                 $brollMedia = $photos->getValues()[$idx];
                 $broll = (new BRoll())
                     ->setMedia($brollMedia);
                 $mediaList[$brollMedia->getCode()] = $brollMedia;
                 $marker->addBRoll($broll);
             }
+            */
         }
 
         $timeline->setMaxDuration($timeline->calcDuration());
@@ -105,8 +114,8 @@ class TimelineHelper
             foreach ($marker->getBRolls() as $BRoll) {
                 $clip->addBRoll($BRoll);
             }
-            $offset += round(($marker->getDuration())); // ??
-            // $offset += $BRoll->calculateStartWordTime(); // round(($marker->getDuration())); // ??
+            // $offset += round(($marker->getDuration())); // ??
+            $offset += round($BRoll->calculateStartWordTime()); // round(($marker->getDuration())); // ??
         }
 
 
