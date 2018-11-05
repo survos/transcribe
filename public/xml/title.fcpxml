@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.5">
+    <resources>
+        <format id="r0" frameDuration="1001/30000s" width="1920" height="1080" name="FFVideoFormat1080p2997"/>
+        <effect id="r1" uid=".../Generators.localized/Solids.localized/Vivid.localized/Vivid.motn" name="Vivid"/>
+        <effect id="r2" uid=".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti" name="Basic Title"/>
+    </resources>
+    <library>
+        <event name="Heschel Intro (Resolve)">
+            <project name="Heschel Intro (Resolve)">
+                <sequence duration="1001/200s" format="r0" tcFormat="NDF" tcStart="18018/5s">
+                    <spine>
+                        <video start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r1" name="Solid Color">
+                            <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+                            <title start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r2" lane="1" name="Rich">
+                                <text roll-up-height="0">
+                                    <text-style ref="ts0">JUFJ Heschel</text-style>
+                                </text>
+                                <text-style-def id="ts0">
+                                    <text-style strokeColor="0 0 0 1" font="Times New Roman" fontColor="1 1 1 1" lineSpacing="0" strokeWidth="0" alignment="left" fontSize="128" bold="0" italic="0"/>
+                                </text-style-def>
+                                <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+                            </title>
+                        </video>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
