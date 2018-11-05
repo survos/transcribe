@@ -195,7 +195,7 @@ class ImportMediaCommand extends Command
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
                 $media = (new Media())
-                    ->setPath($file->getRealPath())
+                    ->setPath($file->getRelativePath())
                     ->setFilename($filename);
 
 

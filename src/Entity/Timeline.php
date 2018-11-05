@@ -298,6 +298,15 @@ class Timeline
         return $this;
     }
 
+    public function getBrollCount()
+    {
+        $count = 0;
+        foreach ($this->getClips() as $clip) {
+            $count += $clip->getBRolls()->count();
+        }
+        return $count;
+    }
+
 
 
 

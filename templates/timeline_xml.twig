@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fcpxml>
+{% import _self as macro %}
 <fcpxml version="1.5">
     <resources>
         <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
@@ -31,6 +32,7 @@
                 {# {% set sequenceBase = 3 %} 01:00:00 #}
                 <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
+                        {{ macro.title(timeline.project.code) }}
                         {#
 
                         {% for photo in photos %}
@@ -107,3 +109,18 @@
         </event>
     </library>
 </fcpxml>
+
+{% macro title(title) %}
+<video start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r1" name="Solid Color">
+    <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+    <title start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r2" lane="1" name="Rich">
+        <text roll-up-height="0">
+            <text-style ref="ts0">{{ title }}</text-style>
+        </text>
+        <text-style-def id="ts0">
+            <text-style strokeColor="0 0 0 1" font="Times New Roman" fontColor="1 1 1 1" lineSpacing="0" strokeWidth="0" alignment="left" fontSize="128" bold="0" italic="0"/>
+        </text-style-def>
+        <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+    </title>
+</video>
+{% endmacro %}

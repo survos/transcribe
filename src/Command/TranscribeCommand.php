@@ -316,7 +316,7 @@ class TranscribeCommand extends Command
             // this is the name of the JPEG file.  At some point, we'll also export an image from the video
             $filename = $media->getPath();
 
-            $objectName = basename($filename); // hmm, might need the directory here!
+            $objectName = ($filename); // hmm, might need the directory here!
             $object = $bucket->object($objectName);
 
             // if object is not in cloud

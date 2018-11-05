@@ -25,8 +25,13 @@
                 {% for marker in markers %}
 
                     <li>
-                        {% if marker.bRolls.count %}
 
+                            {% set photoUrl =  marker.media.publicUrl('jpg') %}
+                            <a href="{{ photoUrl }}">
+                                <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
+                            </a>
+
+                        {% if marker.bRolls.count %}
                         {% for photo in marker.brolls %}
                         {% set photoUrl = photo.media.publicUrl('') %}
 
@@ -51,10 +56,6 @@
 
                         {% else %}
 
-                            {% set photoUrl =  marker.media.publicUrl('jpg') %}
-                            <a href="{{ photoUrl }}">
-                                <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
-                            </a>
                                 <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                                 {{ marker.note }}
                             <div class="thumbnail" >

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7645a56b9688efc2089b262b18698979",
+    "content-hash": "9432125a56d650d12c2fb217480d723b",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -3038,11 +3038,6 @@
         {
             "name": "survos/workflow-extension-bundle",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/survos/workflow-bundle.git",
-                "reference": "9c1cac596dc4d753d4bf51eb35835b6ecc710f4c"
-            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/survos/workflow-bundle/zipball/9c1cac596dc4d753d4bf51eb35835b6ecc710f4c",
@@ -4959,6 +4954,82 @@
             "time": "2018-10-02T12:43:31+00:00"
         },
         {
+            "name": "symfony/property-info",
+            "version": "v4.2.0-BETA1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-info.git",
+                "reference": "bee6faea2fb5aab322da8b952afe2c9d2e9b8e6e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/bee6faea2fb5aab322da8b952afe2c9d2e9b8e6e",
+                "reference": "bee6faea2fb5aab322da8b952afe2c9d2e9b8e6e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/inflector": "~3.4|~4.0"
+            },
+            "conflict": {
+                "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0,<3.2.2",
+                "phpdocumentor/type-resolver": "<0.3.0",
+                "symfony/dependency-injection": "<3.4"
+            },
+            "require-dev": {
+                "doctrine/annotations": "~1.0",
+                "phpdocumentor/reflection-docblock": "^3.0|^4.0",
+                "symfony/cache": "~3.4|~4.0",
+                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/serializer": "~3.4|~4.0"
+            },
+            "suggest": {
+                "phpdocumentor/reflection-docblock": "To use the PHPDoc",
+                "psr/cache-implementation": "To cache results",
+                "symfony/doctrine-bridge": "To use Doctrine metadata",
+                "symfony/serializer": "To use Serializer metadata"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyInfo\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kévin Dunglas",
+                    "email": "dunglas@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Property Info Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "doctrine",
+                "phpdoc",
+                "property",
+                "symfony",
+                "type",
+                "validator"
+            ],
+            "time": "2018-09-24T07:37:12+00:00"
+        },
+        {
             "name": "symfony/routing",
             "version": "v4.2.0-BETA1",
             "source": {
@@ -6791,8 +6862,8 @@
     "platform": {
         "php": "^7.1.3",
         "ext-ctype": "*",
-        "ext-simplexml": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-simplexml": "*"
     },
     "platform-dev": []
 }
