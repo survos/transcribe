@@ -105,7 +105,8 @@ class TimelineHelper
             foreach ($marker->getBRolls() as $BRoll) {
                 $clip->addBRoll($BRoll);
             }
-            $offset += $BRoll->calculateStartWordTime(); // round(($marker->getDuration())); // ??
+            $offset += round(($marker->getDuration())); // ??
+            // $offset += $BRoll->calculateStartWordTime(); // round(($marker->getDuration())); // ??
         }
 
 

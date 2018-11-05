@@ -48,8 +48,13 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
+        $projects = $this->projectRepository->findAll();
+        foreach ($projects as $project) {
+            $timeline = $this->timelineHelperService->updateTimelineFromProject($project);
+            $project->addTimeline($timeline);
+        }
         return $this->render('project/index.html.twig', [
-            'projects' => $this->projectRepository->findAll()
+            'projects' => $projects
         ]);
     }
 

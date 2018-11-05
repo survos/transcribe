@@ -76,6 +76,7 @@
                 <tr>
                     <th>type</th>
                     <th>name</th>
+                    <th>Image</th>
                     <th>format</th>
                     <th>src</th>
                     <th>offsets</th>
@@ -85,7 +86,7 @@
                 </thead>
                 <tbody>
                 {% for clip in timeline.clips  %}
-                    <tr>
+                    <tr {% if clip.type == 'clip'  %} style="color: #00a7d0"{% endif %}>
                         <td>{{ clip.type }}</td>
                         <td>{{ clip.name }}</td>
                         <td>
@@ -93,12 +94,12 @@
                                 {% if clip.asset.media %}
                             <a href="{{ clip.asset.media.publicUrl }}">IMG</a>
                                     {% endif %}
-                            <a href="{{ path('media_passthru', {fn: clip.asset.src}) }}">Passthru</a>
                             <img height="60" src="{{ path('media_passthru', {fn: clip.asset.src}) }}" />
 
 
                                 {# hack to disable photo #}
                                 {#
+                            <a href="{{ path('media_passthru', {fn: clip.asset.src}) }}">Passthru</a>
                                 {{ dump(clip.asset) }}
                                 #}
 

@@ -14,11 +14,13 @@
         <tr>
             <th>Code</th>
             <th>Media</th>
+            <th>Assets</th>
             <th>Transcript</th>
         </tr>
         </thead>
         <tbody>
         {% for p in projects %}
+            {% set timeline = p.timelines.first %}
             <tr>
                 <td><a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.media.count}}
@@ -26,6 +28,7 @@
                         {{ p.byType('photo').count }} Photos
                     </a>
                 </td>
+                <td>{{ timeline.timelineAssets.count }}</td>
                 <td>
                     {{ p.basePath }}
                 </td>
@@ -36,6 +39,9 @@
 
                 </td>
                 <td><a href="{{ path('project_edl', p.rp) }}">.edl</a></td>
+                <td>
+                    {{ timeline.clips.count }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

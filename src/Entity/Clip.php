@@ -194,7 +194,7 @@ class Clip
         }
 
         $this
-            ->setTrackOffset($splineItem->getName())
+            // ->setName($splineItem->getName())
             ->setType($splineItem->getName())
             ->setStart($this->fractionalSecondsToTime($splineItem['start']))
             ->setDuration($this->fractionalSecondsToTime($splineItem['duration']))
