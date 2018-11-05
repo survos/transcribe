@@ -116,12 +116,14 @@ class BRoll
     public function calculateStartWordTime()
     {
         $marker = $this->getMarker();
-        $startPosition = strpos($marker->getNote(), $this->getStartWord());
-        if ($startPosition !== false) {
-            $startTime = $marker->getDuration() * ($startPosition / strlen($marker->getNote()));
-        } else {
+        if ($this->getStartWord()) {
+            $startPosition = strpos($marker->getNote(), $this->getStartWord());
+            if ($startPosition !== false) {
+                $startTime = $marker->getDuration() * ($startPosition / strlen($marker->getNote()));
+            }
+        }
 
-        // if (!$startTime) {
+        if (!isset($startTime)) {
             // start halfway through, hack
             $startTime = $marker->getDuration() / 2;
         }
