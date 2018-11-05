@@ -119,6 +119,11 @@ class BRoll
         $startPosition = strstr($this->getStartWord(), $marker->getNote());
         $startTime = $marker->getDuration() * ($startPosition / strlen($marker->getNote()));
 
+        if (!$startTime) {
+            // start halfway through, hack
+            $startTime = $marker->getDuration() / 2;
+        }
+
         return $startTime;
     }
 

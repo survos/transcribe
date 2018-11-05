@@ -72,7 +72,7 @@
                                 {% for photo in clip.brolls  %}
 
                                     {% set photoStartAfter = clip.duration / 2 %} {# how many deci-seconds until the photo starts? #}
-                                    {% set photoDuration = (photo.CalculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
+                                    {% set photoDuration = (photo.calculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
                                     {% set trackOffset = clip.duration %}
                                     {% set media = photo.media %}
                                     <!--photo {{ media.baseName }} starts on {{ photo.startWord }} at {{ trackOffset }} for {{ photoDuration }}-->

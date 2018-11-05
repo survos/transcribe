@@ -7,7 +7,7 @@
 <div >
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-8 col-md-8">
             <h2>Timeline Object</h2>
             <h3>Formats</h3>
             <table class="table">
@@ -123,12 +123,13 @@
 
         </div>
 
-        <div class="col-md-6">
+        <div class="col-lg-4 col-md-4">
             {# link to xml #}
             <a target="_blank" href="{{ link }}">{{ link }}</a><br />
-            <a target="_blank" href="{{ link }}">{{ link }}</a><br />
+            {% if app.request.get('debug') %}
             <pre>{{ rawXml }}
             </pre>
+            {% endif %}
         </div>
     </div>
 </div>
