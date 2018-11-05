@@ -11,6 +11,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
+ * @ORM\Table(name="media", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="project_code", columns={"project_id", "code"})
+ * }, indexes={
+ *      @ORM\Index(name="code", columns={"code"})
+ * })
  * @UniqueEntity("filename")
  */
 class Media
@@ -106,7 +111,7 @@ class Media
     private $display;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $code;
 

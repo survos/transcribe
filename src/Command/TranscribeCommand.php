@@ -288,8 +288,8 @@ class TranscribeCommand extends Command
             if ($object->exists()) {
                 $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
                 $media->setFlacExists(true);
-                $this->io->note(sprintf("Public file exists in gs: %s ", $object->name()) );
-                dump($object->gcsUri());
+                $this->io->note(sprintf("Public file exists in gs: %s %s ",
+                    $object->name(), $media->getPublicUrl('')) );
             }
 
         }

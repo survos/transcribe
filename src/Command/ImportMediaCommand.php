@@ -208,7 +208,9 @@ class ImportMediaCommand extends Command
                 }
 
                 // if the code exists, throw an error
-                if ($existingMedia = $this->mediaRepository->findOneBy(['code' => $media->getCode()]))
+                if ($existingMedia = $this->mediaRepository->findOneBy([
+                    'project'=> $project,
+                    'code' => $media->getCode()]))
                 {
                     // continue;
                     throw new \Exception($media->getCode() . '/' . $media->getFilename() . ' is already used by '. $existingMedia->getFilename());
