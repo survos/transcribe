@@ -117,8 +117,8 @@ class TimelineHelper
                 // $offset += round($BRoll->calculateStartWordTime()); // round(($marker->getDuration())); // ??
                 // $clip->setTrackOffset($offset);
 
-                $offset += round(($marker->getDuration())) + 5; // add a short delay
             }
+            $offset += round(($marker->getDuration())); //  + 5; // add a short delay
         }
 
 
