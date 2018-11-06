@@ -70,7 +70,9 @@ class FcpXmlController extends AbstractController
         }
 
         // format the raw xml
-        $rawXml = tidy_repair_string($rawXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+        if (function_exists('tidy_repair_string')) {
+            $rawXml = tidy_repair_string($rawXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+        }
 
         // use a new timeline for the import!
         $timeline = new Timeline();

@@ -17,7 +17,7 @@
 
 {% block content  %}
 
-    <form>
+    <form method="post">
         <div class="row">
             <div class="col-md-6">
                 <h3>Markers</h3>
@@ -43,6 +43,7 @@
                                 <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                                 {{ photo.highlightedNote|raw }}
 
+
                                 <i>{{ marker.duration }}</i>
                                 <i>{{ photo.calculateStartWordTime }}</i>
 
@@ -58,6 +59,9 @@
 
                                 <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
                                 {{ marker.note }}
+                            <input name="word[{{ marker.id }}]" value="" />
+                            <input type="submit" class="btn btn-sm" value="+Create" />
+
                             <div class="thumbnail" >
                             </div>
                             {% endif %}

@@ -136,6 +136,10 @@ class TimelineHelper
 
         foreach ($xml->resources->children() as $resource) {
             switch ($resource->getName()) {
+                case 'effect':
+                    // effects are hard-coded for now, big hack
+                   // dump($resource);
+                    break;
                 case 'format':
                     $format = (new TimelineFormat());
                     $timeline
@@ -170,8 +174,9 @@ class TimelineHelper
 
             $clip->setFromXml($splineItem, $timeline);
             switch ($type = $splineItem->getName()) {
+                case 'video':
                 case 'clip':
-                    // dump($splineItem);
+                    dump($splineItem);
                     // break;
                 case 'asset-clip':
                     foreach ($splineItem->video as $photoItem) {

@@ -36,7 +36,10 @@
                 {# {% set sequenceBase = 3 %} 01:00:00 #}
                 <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
+                        {# needs timing! Right now it overwrites the first slide
                         {{ macro.title(timeline.project.code) }}
+                        #}
+
                         {#
 
                         {% for photo in photos %}

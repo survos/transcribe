@@ -144,6 +144,7 @@ class ImportMediaCommand extends Command
             // needs a directory if it's new
             if (!$dir = $input->getOption('dir'))
             {
+
                 $helper = $this->getHelper('question');
                 $question = new Question('Please enter the path: ', '/home/tac/Videos');
                 $dir = $helper->ask($input, $output, $question);
@@ -183,19 +184,28 @@ class ImportMediaCommand extends Command
         $finder->files()->in($dir); // ->contains('Shelly');
 
         foreach ($finder as $file) {
+
             $ext = strtolower($file->getExtension());
-            if (!in_array($ext, ['mov', 'mp4', 'jpg'])) # meed a better isMovie function
+            if (!in_array($ext, ['jpg'])) // avoid screwing up movie records!  ['mov', 'mp4', 'jpg'])) # meed a better isMovie function
             {
                 continue; // skip
             }
 
+            //
             $filename = $file->getRelativePathname();
             $isImage = in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'gif', 'png'] );
+            $isMovie = in_array(strtolower($file->getExtension()), ['mov', 'mp4'] );
 
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
+
+                if ( $isMovie )
+                {
+                    throw new \Exception("Not allowing new movies right now.");
+                }
                 $media = (new Media())
-                    ->setPath($file->getRelativePath())
+                    ->setProject($project)
+                    ->setPath($file->getRelativePathname())
                     ->setFilename($filename);
 
 
@@ -218,6 +228,12 @@ class ImportMediaCommand extends Command
                 $io->note(sprintf('Create %s: %s', $code, $file->getRealPath()) );
 
                 $this->em->persist($media);
+
+                if ($file->getRealPath() != $media->getRealPath()) {
+                    throw new \Exception(sprintf("Media/File mismatch, can only import %s, %s",
+                        $media->getRealPath(),
+                        $file->getRealPath()));
+                }
             }
 
             $info = $this->info($file->getRealPath());

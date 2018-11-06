@@ -202,6 +202,7 @@ class Media
         return $this->path;
     }
 
+    // this is really relativePath
     public function setPath(string $path): self
     {
         $this->path = $path;
@@ -339,7 +340,7 @@ class Media
     public function getPublicUrl($_format='flac')
     {
         return sprintf("https://storage.googleapis.com/%s/%s%s",
-            $this->getBucketName(), $this->getBaseName(), $_format ? ".$_format" : '');
+            $this->getBucketName(), $this->getPath(), $_format ? ".$_format" : '');
 
     }
 
@@ -366,6 +367,11 @@ class Media
     public function __toString()
     {
         return sprintf("%s/%s", $this->getProjectCode(), $this->getBaseName());
+    }
+
+    public function getRealPath()
+    {
+        return sprintf("%s/%s", $this->getProject()->getBasePath(), $this->getPath());
     }
 
     /**

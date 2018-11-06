@@ -66,9 +66,12 @@ class Project
         return $this->base_path;
     }
 
-    public function setBasePath(string $base_path): self
+    public function setBasePath(string $dir): self
     {
-        $this->base_path = $base_path;
+        $dir = rtrim($dir, '/');
+        $dir = rtrim($dir, '\\');
+
+        $this->base_path = $dir;
 
         return $this;
     }

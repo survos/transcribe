@@ -115,7 +115,9 @@ class ProjectController extends AbstractController
         if ($markerId = $request->get('marker_id')) {
             /** @var Marker $marker */
             $marker = $this->markerRepository->find($markerId);
-            $startWord = $request->get('start_word');
+            // hack!
+            $words = $request->get('word');
+            $startWord = $words[$markerId];
             $photo = $this->mediaRepository->find($request->get('photo_id'));
             $broll = (new BRoll())
                 ->setStartWord($startWord)
@@ -240,7 +242,7 @@ class ProjectController extends AbstractController
 
     /**
      * @param Request $request
-     * @Route("/{code}/markers.{_format}", name="project_edl")
+     * @Route("/{code}/edl.{_format}", name="project_edl")
      */
     public function edl(Request $request, Project $project, $_format='html')
     {
@@ -269,7 +271,7 @@ FCM: NON-DROP FRAME
             $start = $end; // fraction?
         }
 
-        file_put_contents($project->getCode() . '.edl', $txt);
+        // file_put_contents($project->getCode() . '.edl', $txt);
 
         return new Response($txt, 200, ['Content-Type' => 'text/plain']);
     }
@@ -352,18 +354,27 @@ FCM: NON-DROP FRAME
     public function markers(Request $request, Project $project, $_format='html')
     {
         $markers = $this->markerRepository->findByProject($project);
-        /* drat, this should work!!
+        /* drat, this should work!! */
+
         $encoders = array( new JsonEncode());
         $normalizers = array(new ObjectNormalizer());
 
-
         $serializer = new Serializer($normalizers, $encoders);
-        $data = $serializer->normalize($markers, null, array('groups' => array('project')));
-        dump($data); die();
+        $data = $serializer->normalize($project, null,
+            array(
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                },
+                'circular_reference_limit' => 1,
+                'groups' => ['project']));
+        // dump($data); die();
 
+        /*
         $json = $serializer->serialize($markers, 'json', ['groups'=>['project']]);
         dump($json); die();
         */
+
+        return new JsonResponse($data);
 
         $x = [];
         foreach ($markers as $marker) {

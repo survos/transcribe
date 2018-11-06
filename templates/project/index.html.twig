@@ -24,6 +24,7 @@
             <tr>
                 <td><a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.media.count}}
+                    {{ p.byType('video').count }} Videos
                     <a href="{{ path('project_add_photos_to_markers', p.rp) }}">
                         {{ p.byType('photo').count }} Photos
                     </a>
@@ -32,8 +33,10 @@
                 <td>
                     {{ p.basePath }}
                 </td>
-                <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a></td>
-                <td><a href="{{ path('project_markers', p.rp) }}">.json</a></td>
+                <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a>
+                <a href="{{ path('project_markers', p.rp) }}">.edl</a>
+                    <a href="{{ path('project_markers', p.rp({_format: 'json'})) }}">.json</a>
+                </td>
                 <td><a href="{{ path('project_xml', p.rp) }}">.fcpxml</a>
                     <a href="{{ path('fcp_xml_show', p.rp)}}">XML Debug</a>
 

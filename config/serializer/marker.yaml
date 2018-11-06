@@ -15,3 +15,5 @@ App\Entity\Project:
   attributes:
     code:
       groups: ['project']
+    markers:
+      groups: ['project']

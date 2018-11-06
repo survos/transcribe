@@ -50,6 +50,16 @@ class FixMediaCommand extends Command
             {
                 $code =  pathinfo($media->getFilename(), PATHINFO_FILENAME);
                 $media->setCode($code);
+
+                $finfo = new \finfo();
+                $finfo = $finfo->file($media->getPath());
+                if (strpos($finfo, 'movie') !== false) {
+                    $type = 'video';
+                } else {
+                    die($finfo);
+
+                }
+                $media->setType($type);
             }
         }
 
