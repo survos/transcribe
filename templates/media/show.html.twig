@@ -46,7 +46,7 @@
                        data-stop="{{ m.endTime / 10 }}"
                        data-url="{{ m.media.publicUrl }}"
                        href="#"><i class="fa fa-play"></i> </a>
-                    <span class="badge pull-right">+{{ m.duration/10|format(1)}}={{ total/10|round }}</span>
+                    <span class="badge pull-right"> #{{ m.id }} +{{ m.duration/10|format(1)}}={{ total/10|round }}</span>
                     <span class="hover">
                         <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
                     </span>
