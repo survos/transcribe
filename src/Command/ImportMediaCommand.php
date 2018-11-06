@@ -213,9 +213,8 @@ class ImportMediaCommand extends Command
                     $code =  'photo_' . pathinfo($media->getPath(), PATHINFO_FILENAME);
                     $media
                         ->setCode($code); // hack!
-                } else {
-                    $code = $media->getCode();
                 }
+                $code = $media->getCode();
 
                 // if the code exists, throw an error
                 if ($existingMedia = $this->mediaRepository->findOneBy([
@@ -229,9 +228,9 @@ class ImportMediaCommand extends Command
 
                 $this->em->persist($media);
 
-                if ($file->getRealPath() != $media->getRealPath()) {
+                if ($file->getRealPath() != $media->getRealPath("\\")) {
                     throw new \Exception(sprintf("Media/File mismatch, can only import %s, %s",
-                        $media->getRealPath(),
+                        $media->getRealPath("\\"),
                         $file->getRealPath()));
                 }
             }

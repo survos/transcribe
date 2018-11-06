@@ -30,7 +30,7 @@
     </resources>
     <library>
         <event name="Event Name">
-            <project name="{{ timeline.project.code }}_{{ random(999) }}">
+            <project name="{{ timeline.project.code }}_{{ "now"|date("F jS \\a\\t g:ia", "America/New_York") }}">
 
                 {% set sequenceBase = 36036 %} {# 01:00:00 #}
                 {# {% set sequenceBase = 3 %} 01:00:00 #}
