@@ -3,6 +3,10 @@
 {% import _self as macro %}
 <fcpxml version="1.5">
     <resources>
+
+        <effect id="e1" uid=".../Generators.localized/Solids.localized/Vivid.localized/Vivid.motn" name="Vivid"/>
+        <effect id="e2" uid=".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti" name="Basic Title"/>
+
         <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
         <format width="1280" name="FFVideoFormat720p2997" height="720" id="r1" frameDuration="1001/30000s"/>
 
@@ -111,9 +115,9 @@
 </fcpxml>
 
 {% macro title(title) %}
-<video start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r1" name="Solid Color">
+<video start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="e1" name="Solid Color">
     <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
-    <title start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="r2" lane="1" name="Rich">
+    <title start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="e2" lane="1" name="Rich">
         <text roll-up-height="0">
             <text-style ref="ts0">{{ title }}</text-style>
         </text>
