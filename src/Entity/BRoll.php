@@ -110,7 +110,7 @@ class BRoll
 
     public function highlightedNote($before='<b>', $after='</b>')
     {
-        return str_replace($this->getStartWord(), $before . $this->getStartWord(), $this->getMarker()->getNote(), 1) . $after;
+        return str_replace($this->getStartWord(), $before . $this->getStartWord(), $this->getMarker()->getNote()) . $after;
     }
 
     public function calculateStartWordTime()
