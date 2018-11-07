@@ -64,6 +64,7 @@ class ExportFcpCommand extends Command
 
         $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.fcpxml';
         file_put_contents($fn, $xml);
+        $io->success(sprintf('%s exported.', $fn));
 
         $subtitles = $this->helper->getMarkerSubtitles($project, $max);
 
