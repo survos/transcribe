@@ -84,8 +84,9 @@
                                                                         {% set photoStartAfter = photo.calculateStartWordTime %}
                                     {% set photoDuration = (clip.duration - photo.calculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
                                     #}
-                                    {% set photoStartAfter = (photo.calculateStartWordTime ) %} {# how many deci-seconds does the photo display? #}
-                                    {% set photoDuration = ( clip.duration - photo.calculateStartWordTime) + 20 %}
+                                    {% set photoStartAfter = clip.duration / 4 %} {# (photo.calculateStartWordTime ) %} #} {# how many deci-seconds does the photo display? #}
+                                    {% set photoDuration = ( clip.duration / 2) %}
+                                    {%  set oldTime = (photo.calculateStartWordTime) + 20 %}
 
 
                                     {% set trackOffset = clip.duration %}

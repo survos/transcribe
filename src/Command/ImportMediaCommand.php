@@ -210,7 +210,6 @@ class ImportMediaCommand extends Command
                 }
                 $media = (new Media())
                     ->setProject($project)
-                    ->setPath($file->getRelativePathname())
                     ->setFilename($filename);
 
 
@@ -238,6 +237,7 @@ class ImportMediaCommand extends Command
                         $media->getRealPath("\\"),
                         $file->getRealPath()));
                 }
+
             }
 
             $info = $this->info($file->getRealPath());
@@ -278,6 +278,7 @@ class ImportMediaCommand extends Command
             }
 
             $media
+                ->setPath($file->getRelativePathname())
                 ->setType($isImage ? 'photo' : 'video')
                 ->setStreamCount($info['nb_streams'])
                 ->setFileSize($file->getSize())

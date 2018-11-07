@@ -6,6 +6,11 @@
         <a href="{{ path('easyadmin') }}"><i class="fa fa-dashboard"></i> </a>
         <a href="{{ path('survos_landing') }}">Home</a>
         <a href="{{ path('fcp_xml') }}">XML Files</a>
+        |
+        {% for p in ['maryann', 'claire', 'kesh'] %}
+        <a href="{{ path('project_add_photos_to_markers', {code: p}) }}">{{ p }}</a>
+        {% endfor %}
+        |
     </li>
 
 {% endblock %}
