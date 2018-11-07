@@ -287,7 +287,7 @@ class Media
 
     public function getAudioFilePath()
     {
-        return $this->getPath() . '.flac';
+        return $this->getRealPath('\\') . '.flac';
         // return $this->getFilename() . '.wav';
     }
 

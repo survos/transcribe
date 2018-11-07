@@ -186,7 +186,7 @@ class ImportMediaCommand extends Command
         foreach ($finder as $file) {
 
             $ext = strtolower($file->getExtension());
-            if (!in_array($ext, ['jpg'])) // avoid screwing up movie records!  ['mov', 'mp4', 'jpg'])) # meed a better isMovie function
+            if (!in_array($ext, ['jpg', 'mov', 'mp4', 'jpg', 'png'])) # meed a better isMovie function
             {
                 continue; // skip
             }
@@ -196,12 +196,17 @@ class ImportMediaCommand extends Command
             $isImage = in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'gif', 'png'] );
             $isMovie = in_array(strtolower($file->getExtension()), ['mov', 'mp4'] );
 
+            if ($isImage)
+            {
+                continue; // should check for --videos-only or something
+            }
+
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
             {
 
                 if ( $isMovie )
                 {
-                    throw new \Exception("Not allowing new movies right now.");
+                    // throw new \Exception("Not allowing new movies right now.");
                 }
                 $media = (new Media())
                     ->setProject($project)
@@ -267,7 +272,6 @@ class ImportMediaCommand extends Command
                     foreach ($streams as $stream) {
                         $streamData[] = $stream->all();
                     }
-                    dump($streamData);
                     $media
                         ->setStreamsJson(json_encode($streamData));
                 }

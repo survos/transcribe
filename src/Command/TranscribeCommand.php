@@ -140,7 +140,7 @@ class TranscribeCommand extends Command
             // if object is not in cloud
             if (!$object->exists()) {
                 $this->io->note($objectName . ' does not exist');
-                $this->createFlac($filename, $flacFilename, $io);
+                $this->createFlac($media->getRealPath('\\'), $flacFilename, $io);
 
                 if ($input->getOption('upload-flac'))
                 {
@@ -209,15 +209,15 @@ class TranscribeCommand extends Command
             */
 
 
-            if ($jsonResult) {
+            if ($jsonResult && ($media->getWords()->count() == 0) ) {
                 $io->note("Import words from JSON");
 
                 $result = json_decode($jsonResult, true);
                 if (empty($result)) {
                     continue;
                 }
-                $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
-                $this->em->flush(); // hack
+                // $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
+                // $this->em->flush(); // hack
 
                 $idx = 0;
                 foreach ($result as $sentence) {
@@ -341,10 +341,14 @@ class TranscribeCommand extends Command
             }
 
             if ($object->exists()) {
-                $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
-                $media->setFlacExists(true);
-                $this->io->note(sprintf("Public file exists in gs: %s %s ",
-                    $object->name(), $media->getPublicUrl('')) );
+                try {
+                    $object->update(['acl' => []], ['predefinedAcl' => 'PUBLICREAD']);
+                    $media->setFlacExists(true);
+                    $this->io->note(sprintf("Public file exists in gs: %s %s ",
+                        $object->name(), $media->getPublicUrl('')) );
+                } catch (\Exception $e) {
+                    $this->io->error($e->getMessage());
+                }
             }
 
         }
