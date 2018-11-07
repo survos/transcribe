@@ -108,15 +108,15 @@
 
             {% if isEditor %}
             <a class="confirm" href="{{ path('project_clear_broll', project.rp) }}">Clear Broll</a>
-            <div class="col-md-5">
+            <div class="col-md-{{ isEditor ? 8 : 5 }}">
                 <h3>Photos</h3>
 
                 {% for photo in photos %}
                     {% set photoUrl = photo.publicUrl('') %}
-                    <div class="thumbnail">
+                    <div xclass="thumbnail">
 
                         <a href="{{ photoUrl }}">
-                            <img src="{{ photoUrl }}" style="max-height: 200px; max-width: 300px;" />
+                            <img src="{{ photoUrl }}" xstyle="max-height: 300px; max-width: 400px;" />
                         </a>
 
                             <div class="caption">
