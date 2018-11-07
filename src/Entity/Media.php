@@ -293,7 +293,7 @@ class Media
 
     public function getThumbFilePath()
     {
-        return $this->getPath() . '.jpg';
+        return $this->getRealPath('\\') . '.jpg';
     }
 
     public function getAudioFileName()
