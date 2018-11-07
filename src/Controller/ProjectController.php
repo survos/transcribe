@@ -222,11 +222,7 @@ class ProjectController extends AbstractController
      */
     public function subtitles(Request $request, Project $project, $_format='srt')
     {
-        $subtitles = new Subtitles();
-        foreach ($this->markerRepository->findByProject($project) as $marker)
-        {
-            $subtitles->add($marker->getStartTime() / 10, $marker->getEndTime() / 10, $marker->getNote());
-        }
+        $subtitles = $this->timelineHelperService->getMarkerSubtitles($project, $request->get('max', 180));
 
         switch ($_format) {
             // case 'html': return new Response($subtitles->content());

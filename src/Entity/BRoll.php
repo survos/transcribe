@@ -112,7 +112,7 @@ class BRoll
     {
         $note = $this->getMarker()->getNote();
         $start = $this->getStartWord();
-        if ($startPos = strpos($note, $start)) {
+        if ($start && $startPos = strpos($note, $start)) {
 
             if (preg_match(sprintf('/^(.*?)(%s.*)$/', $start), $note, $m)) {
                 return $m[1] . $before . $m[2] . $after;

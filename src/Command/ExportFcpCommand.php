@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Project;
 use App\Entity\Timeline;
+use App\Service\TimelineHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,19 +19,23 @@ class ExportFcpCommand extends Command
 
     private $em;
     private $projectRepo;
+    private $helper;
+    private $twig;
 
-    public function __construct(EntityManagerInterface $entityManager, ?string $name = null)
+    public function __construct(EntityManagerInterface $entityManager, TimelineHelper $helper, \Twig_Environment $twig_Environment, ?string $name = null)
     {
         parent::__construct($name);
         $this->em = $entityManager;
         $this->projectRepo = $entityManager->getRepository(Project::class);
+        $this->helper = $helper;
+        $this->twig = $twig_Environment;
     }
 
     protected function configure()
     {
         $this
             ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
+            ->addArgument('projectCode', InputArgument::OPTIONAL, 'Project')
             ->addOption('max', null, InputOption::VALUE_OPTIONAL, 'Max Seconds', 180)
         ;
     }
@@ -42,14 +47,28 @@ class ExportFcpCommand extends Command
 
         $project = $this->projectRepo->findOneBy(['code' => $projectCode]);
 
+        $max = $input->getOption('max'); // should be in project somehow.
 
 
-        $xml = $this->createXml($project, (new Timeline())->setMaxDuration($input->getOption('max')));
+        $timeline = $this->helper->updateTimelineFromProject($project, (new Timeline())->setMaxDuration($input->getOption('max')));
 
-        $fn = '../' . $project->getCode() . '-import.fcpxml';
+        $xml = $this->twig->render('timeline_xml.twig', [
+            'timeline' => $timeline
+        ]);
+
+        // file_put_contents('/tmp/' . $project->getCode() . '-import.fcpxml', $xml);
+        // format the raw xml
+        if (function_exists('tidy_repair_string')) {
+            $xml = tidy_repair_string($xml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+        }
+
+        $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.fcpxml';
         file_put_contents($fn, $xml);
 
+        $subtitles = $this->helper->getMarkerSubtitles($project, $max);
 
+        $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.srt';
+        file_put_contents($fn,  $subtitles->content('srt'));
         $io->success(sprintf('%s exported.', $fn));
     }
 }

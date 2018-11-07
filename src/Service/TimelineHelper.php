@@ -18,6 +18,7 @@ use App\Entity\Timeline;
 use App\Entity\TimelineAsset;
 use App\Entity\TimelineFormat;
 use Doctrine\ORM\EntityManagerInterface;
+use Done\Subtitles\Subtitles;
 
 class TimelineHelper
 {
@@ -27,6 +28,22 @@ class TimelineHelper
         $this->em = $entityManager;
         $this->markerRepo = $entityManager->getRepository(Marker::class);
         $this->mediaRepo = $entityManager->getRepository(Media::class);
+    }
+
+    public function getMarkerSubtitles(Project $project, $max): Subtitles
+    {
+        $subtitles = new Subtitles();
+
+        $offset = 0;
+        foreach ($this->markerRepo->findByProject($project, $max) as $marker)
+        {
+            $duration = $marker->getDuration() / 10;
+            $subtitles->add($offset, $offset + $duration, $marker->getNote());
+            $offset += $duration;
+        }
+
+        return $subtitles;
+
     }
 
     public function updateTimelineFromProject(Project $project, Timeline $timeline=null): Timeline
