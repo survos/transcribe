@@ -18,6 +18,7 @@
 {% block content  %}
 
     {% set isEditor = app.request.get('edit', false) %}
+    <a href="?edit={{ isEditor ? 0 : 1 }}">Toggle Edit</a>
 
     <form method="post">
         <div class="row">
@@ -32,13 +33,17 @@
                     <li>
                     {% set media = marker.media %}
 
-                        <div class="xxrow">
+                        <div class="row">
+                            <i>
+                                "
                             {% set photo = marker.bRolls.first %}
                             {% if photo %}
                                 {{  photo.highlightedNote|raw }}
                             {% else %}
                                 {{  marker.note }}
                             {% endif %}
+                            "
+                            </i>
                         </div>
                     </li>
 
@@ -107,7 +112,7 @@
             </div>
 
             {% if isEditor %}
-            <a class="confirm" href="{{ path('project_clear_broll', project.rp) }}">Clear Broll</a>
+            <a class="confirm" href="{{ path('project_clear_broll', project.rp) }}">Clear ALL Broll</a>
             <div class="col-md-5">
                 <h3>Photos</h3>
 
