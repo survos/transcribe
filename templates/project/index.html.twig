@@ -25,7 +25,7 @@
                 <td><a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.media.count}}
                     {{ p.byType('video').count }} Videos
-                    <a href="{{ path('project_add_photos_to_markers', p.rp) }}">
+                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': true})) }}">
                         {{ p.byType('photo').count }} Photos
                     </a>
                 </td>
@@ -41,10 +41,15 @@
                     <a href="{{ path('fcp_xml_show', p.rp)}}">XML Debug</a>
 
                 </td>
+
                 <td><a href="{{ path('project_edl', p.rp) }}">.edl</a></td>
                 <td>
                     {{ timeline.clips.count }}
                     {{ timeline.brollCount }}
+                    <a href="{{ path('project_add_photos_to_markers', p.rp) }}">
+                        {{ p.byType('photo').count }} Photos
+                    </a>
+
                 </td>
             </tr>
         {% endfor %}

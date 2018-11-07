@@ -19,13 +19,17 @@
 
     {% set isEditor = app.request.get('edit', false) %}
 
+    <form method="post">
         <div class="row">
             <div class="col-md-1">
             </div>
             <div class="col-md-6">
                 <h3>Markers</h3>
 
+                <ol>
+
                 {% for marker in markers %}
+                    <li>
                     {% set media = marker.media %}
 
                         <div class="xxrow">
@@ -36,6 +40,7 @@
                                 {{  marker.note }}
                             {% endif %}
                         </div>
+                    </li>
 
                 <div class="row">
 
@@ -53,60 +58,61 @@
                                     {% for photo in marker.brolls %}
                                         {% set photoUrl = photo.media.publicUrl('') %}
 
+                                        <div class="thumbnail" >
                                         <a href="{{ photoUrl }}">
                                             <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
                                         </a>
                                         <div class="caption">
+                                            {{ photo.media.filename }}
 
                                             {% if isEditor %}
                                                 <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
-                                                <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
+
                                             {% endif %}
                                             {#
                                             {{ photo.highlightedNote|raw }}
                                             #}
 
 
-                                            {{ photo.calculateStartWordTime|tc }}?
+                                            on <b>{{ photo.startWord }}</b> @~{{ photo.calculateStartWordTime|tc }}
                                             <i>{{ marker.duration/10|format(1) }} sec.</i>
 
                                         </div>
-
-
-                                        <div class="thumbnail" >
                                         </div>
 
                                     {% endfor %}
-
                                 {% else %}
+                                <img src="https://dummyimage.com/120x80/000/fff&text=no+broll" />
+                                {% endif %}
+                            </div>
 
+                    <div class="col-md-4">
                                     {% if isEditor %}
+                                        <div class="thumbnail" >
                                         <input name="marker_id" type="radio" value="{{ marker.id }}" {% if marker.id == nextMarkerId %}checked="checked"{% endif %}>
-                                        {{ marker.note }}
                                         <input name="word[{{ marker.id }}]" value="" />
                                         <input type="submit" class="btn btn-sm" value="+Create" />
+                                        </div>
                                     {% endif %}
 
-                                    <div class="thumbnail" >
-                                    </div>
-                                {% endif %}
+                    </div>
+                    </div>
 
-                            </div>
-                        </div>
                     <hr />
 
                 {% endfor %}
+                </ol>
+
 
             </div>
 
             {% if isEditor %}
             <a class="confirm" href="{{ path('project_clear_broll', project.rp) }}">Clear Broll</a>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <h3>Photos</h3>
 
                 {% for photo in photos %}
                     {% set photoUrl = photo.publicUrl('') %}
-
                     <div class="thumbnail">
 
                         <a href="{{ photoUrl }}">
@@ -123,7 +129,7 @@
                                     <i class="fa fa-eye-slash"></i>
                                 </a>
 
-                                <input name="photo_id" type="radio" value="{{ photo.id }}">
+                                <input name="photo_id" type="radio" value="{{ photo.id }}" />
 
                                 {#
                                 {% if false and photo.bRolls.count %}
@@ -134,8 +140,8 @@
 
                             </div>
                     </div>
+                        {% endfor %}
 
-                {% endfor %}
 
             </div>
             {% endif %}
