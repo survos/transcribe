@@ -17,7 +17,7 @@
 
 {% block content  %}
 
-    {% set isEditor = app.request.get('edit', false) %}
+    {% set isEditor = app.request.get('edit', true) %}
     <a href="?edit={{ isEditor ? 0 : 1 }}">Toggle Edit</a>
 
     <form method="post">

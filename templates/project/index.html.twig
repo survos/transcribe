@@ -46,7 +46,7 @@
                 <td>
                     {{ timeline.clips.count }}
                     {{ timeline.brollCount }}
-                    <a href="{{ path('project_add_photos_to_markers', p.rp) }}">
+                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': false})) }}">
                         Timeline Review
                     </a>
 
