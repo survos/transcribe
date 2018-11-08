@@ -106,11 +106,16 @@ class Timeline
 
     public function calcDuration()
     {
-        $duration = 0;
+        $duration = $this->getTitleTime();
         foreach ($this->getClips() as $clip) {
             $duration += $clip->getDuration();
         }
         return $duration;
+    }
+
+    public function getTitleTime()
+    {
+        return 50; // constant...
     }
 
     /**

@@ -313,6 +313,7 @@ FCM: NON-DROP FRAME
 
         // $xml = $this->createXml($project, (new Timeline())->setMaxDuration($request->get('max', 180)));
         $timeline = (new Timeline())
+            ->setProject($project)
             ->setMaxDuration($request->get('max', 60));
 
         $timeline = $this->timelineHelperService->updateTimelineFromProject($project, $timeline);

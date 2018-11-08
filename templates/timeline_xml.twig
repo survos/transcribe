@@ -25,8 +25,10 @@
                 <asset src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" name="{{ asset.code }}" hasVideo="1" format="photo_format" duration="0/1s" id="{{ asset.code }}"/>
             {% endif %}
         {% endfor %}
-        {% set musicId = "jazzyfrenchy" %}
-        <asset name="bensound-jazzyfrenchy.mp3" audioChannels="2" id="{{ musicId }}" duration="69781577/666000s" hasAudio="1" start="0/1s" audioSources="1" src="file://localhost/C:/JUFJ/music/bensound-jazzyfrenchy.mp3"/>
+        {% set project = timeline.project %}
+        {% set musicId = "music" %}
+        <asset name="{{ project.music }}" audioChannels="2" id="{{ musicId }}" duration="500/10s" hasAudio="1" start="0/1s" audioSources="1"
+               src="file://localhost/C:/JUFJ/music/{{ project.music }}"/>
 
 
     </resources>
@@ -41,8 +43,10 @@
                 <sequence format="r0" tcFormat="NDF" duration="{{ timelineDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
 
+                        {% set titleTime = timeline.titleTime %}
+
+                        {{ macro.title(timeline.project.code, 5) }}
                         {# needs timing! Right now it overwrites the first slide
-                        {{ macro.title(timeline.project.code) }}
                         #}
 
                         {#
@@ -68,8 +72,6 @@
                         </clip>
                         #}
                         {% for clip in timeline.clips %}
-
-
                             {% set format = clip.asset.format %} {# hack! This is probably the timeline format, not the clip format #}
                             <!--Clip {{ clip.name  }} starts at {{ clip.trackOffset }} for {{ clip.duration }}-->
                             {% set asset = clip.asset %}
@@ -110,8 +112,8 @@
                                 {% endfor %}
 
                                 {% if loop.first %}
-                                    {% set d = "%d/10s"|format(timelineDuration * 10) %}
-                                    <clip name="bensound-jazzyfrenchy.mp3" lane="3" duration="{{ d }}" start="0/1s" offset="0/10s" enabled="1">
+                                    {% set d = "%d/10s"|format(timelineDuration) %}
+                                    <clip name="{{ project.music }}" lane="4" duration="{{ d }}" start="0/1s" offset="0/10s" enabled="1">
                                         <audio srcCh="1, 2" duration="{{ d }}" start="0/1s" offset="0/1s" ref="{{ musicId }}"/>
                                     </clip>
                                 {% endif %}
@@ -133,8 +135,8 @@
     </library>
 </fcpxml>
 
-{% macro title(title) %}
-<video start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="e1" name="Solid Color">
+{% macro title(title, seconds) %}
+<video start="18018/5s" duration="{{ seconds * 10 }}/10s" offset="18018/5s" enabled="1" ref="e1" name="Solid Color">
     <adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
     <title start="18018/5s" duration="1001/200s" offset="18018/5s" enabled="1" ref="e2" lane="1" name="Rich">
         <text roll-up-height="0">

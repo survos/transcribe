@@ -232,7 +232,7 @@ class Project
 
     public function getMusic(): ?string
     {
-        return $this->music;
+        return $this->music ?: 'bensound-goinghigher.mp3';
     }
 
     public function setMusic(?string $music): self

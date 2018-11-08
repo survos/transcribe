@@ -36,7 +36,8 @@
                     {{ p.basePath }}
                 </td>
                 <td>
-                    {{ p.lastMarker ? p.lastMarker.note }}
+                    {{ p.lastMarker ? p.lastMarker.title }}
+                    <br />{{ p.music }}
                 </td>
                 <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a>
                 <a href="{{ path('project_markers', p.rp) }}">.edl</a>

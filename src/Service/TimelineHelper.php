@@ -119,6 +119,8 @@ class TimelineHelper
             }
 
         $offset = 36033; // hack for 1 hour
+        $offset += $timeline->getTitleTime();
+
         foreach ($markers as $idx=>$marker) {
             // now go through the markers and add the clips
             $clip = (new Clip())
