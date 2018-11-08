@@ -139,23 +139,31 @@ projectManager = resolve.GetProjectManager()
 mediaStorage = resolve.GetMediaStorage()
 
 # get these from the database, or via twig
-projectName = 'aac';
+projectName = 'claire';
 
 # create the project if it doesn't exist
 project = projectManager.LoadProject(projectName)
 if project is None:
     project = projectManager.CreateProject(projectName)
 
+
 if project is None:
     raise ValueError('Unable to load / create ' + projectName)
+
+# go through all the items in the media pool, not just the new ones
+mediaPool = project.GetMediaPool()
+
+filePath = "C:\\JUFJ\\temp\\" + projectName + ".fcpxml"
+timeline = mediaPool.ImportTimelineFromFile(filePath)
+
+exit(0)
 
 
 clips = mediaStorage.AddItemsToMediaPool([
     "C:\\JUFJ\Kesh\kesh-2e.MOV"
 ])
 
-# go through all the items in the media pool, not just the new ones
-mediaPool = project.GetMediaPool()
+
 # Master Pool?
 folder = mediaPool.GetRootFolder()
 

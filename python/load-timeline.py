@@ -8,58 +8,8 @@ import os
 import inspect
 
 import urllib, json
-
-def AddMarkers(clip, displayShift):
-
-    url = "http://localhost:8000/kesh/markers"
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
-
-    for marker in data:
-        print marker
-        frame = (marker['startTime'] / 10) * 30
-        duration = (marker['endTime'] - marker['startTime']) / 10 * 30;
-        title = str(marker['idx']) + ': ' + marker['title']
-        markerAdded = clip.AddMarker(frame, marker['color'].title(), title, marker['note'], duration)
-
-        print marker['title']
-        if markerAdded:
-            print(displayShift + "  " + "Marked added to " + file_name)
-        else:
-            print(displayShift + "  " + "Marker was not added :-( to " + file_name)
-
-        # lets add this clip to the timeline, too, with in and out markers set
-        # first, let's get the current clip info
-        properties = clip.GetClipProperty()
-        print properties
-
-        meta = clip.GetMetadata()
-        print meta
-
-        x = clip.SetClipProperty('Take', 'Take Test')
-        x = clip.SetClipProperty('In', '00:00:04:00')
-        clip.SetClipProperty('Out', '00:00:08:00')
-        properties = clip.GetClipProperty()
-        print properties['In']
-
-        if project.GetTimelineCount() == 0:
-            timeline = mediaPool.CreateTimelineFromClips('markers', clip)
-        else:
-            timeline = project.GetTimelineByIndex(1)
-            project.SetCurrentTimeline(timeline)
-            mediaPool.AppendToTimeline(clip)
-
-        items = timeline.GetItemsInTrack('video', 1)
-        for itemIndex in items:
-            item = items[itemIndex]
-            print item.GetName()
-            # print item.GetClipProperty()
-            print item.GetDuration()
-
-        # pprint.pprint(clip, )
-        # return
-    # return
-
+import sys
+from subprocess import call
 
 
 def DisplayFolderInfo(folder, displayShift):
@@ -119,27 +69,28 @@ def DisplayMediaPoolInfo(project):
     DisplayFolderInfo(mediaPool.GetRootFolder(), "  ")
     return
 
-def XXAddMarkers():
-    file = open('main-interview.srt', "r")
-    srt_text = file.read()
-    gen = srt.parse(srt_text)
 
-    # pprint.pprint(list(gen))
+# print "Number of arguments: ", len(sys.argv)
+projectCode = sys.argv[1]
+projectName = projectCode + "-test"
 
-    if False:
-        for i in gen:
-            print(i.start, i.content)
-            pprint.pprint(i.content)
+# call(["php", 'C:\Users\tacma\github\resolve-transcript\bin\console app:export-fcp ', projectCode,' --max 4'])
+cmd = 'php C:\\Users\\tacma\\github\\resolve-transcript\\bin\\console app:export-fcp ' + projectCode
+print cmd
+os.system(cmd)
 
 
 smodule = imp.load_dynamic('fusionscript', 'C:\\Program Files\\Blackmagic Design\\DaVinci Resolve\\fusionscript.dll')
 resolve = smodule.scriptapp('Resolve')
 
 projectManager = resolve.GetProjectManager()
+current = projectManager.GetCurrentProject()
+if current:
+    projectManager.SaveProject()
+
 mediaStorage = resolve.GetMediaStorage()
 
 # get these from the database, or via twig
-projectName = 'claire';
 
 # create the project if it doesn't exist
 project = projectManager.LoadProject(projectName)
@@ -150,17 +101,20 @@ if project is None:
 if project is None:
     raise ValueError('Unable to load / create ' + projectName)
 
+
 # go through all the items in the media pool, not just the new ones
 mediaPool = project.GetMediaPool()
-
-filePath = "C:\\JUFJ\\temp\\" + projectName + ".fcpxml"
+filePath = "C:\\JUFJ\\temp\\" + projectCode + ".fcpxml"
 timeline = mediaPool.ImportTimelineFromFile(filePath)
+
+projectManager.SaveProject()
 
 exit(0)
 
 
 clips = mediaStorage.AddItemsToMediaPool([
     "C:\\JUFJ\Kesh\kesh-2e.MOV"
+    "C:\\JUFJ\music\\bensound-jazzyfrenchy.mp3"
 ])
 
 
