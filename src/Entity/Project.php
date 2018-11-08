@@ -38,6 +38,31 @@ class Project
      */
     private $timelines;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $honoree_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $honoree_title;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $music;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $signs;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Marker", cascade={"persist", "remove"})
+     */
+    private $last_marker;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
@@ -63,7 +88,9 @@ class Project
 
     public function getBasePath(): ?string
     {
-        return $this->base_path;
+        $base_path = str_replace('Z:', 'C:', $this->base_path); // hack for local
+
+        return $base_path;
     }
 
     public function setBasePath(string $dir): self
@@ -175,6 +202,66 @@ class Project
                 $timeline->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getHonoreeName(): ?string
+    {
+        return $this->honoree_name;
+    }
+
+    public function setHonoreeName(?string $honoree_name): self
+    {
+        $this->honoree_name = $honoree_name;
+
+        return $this;
+    }
+
+    public function getHonoreeTitle(): ?string
+    {
+        return $this->honoree_title;
+    }
+
+    public function setHonoreeTitle(?string $honoree_title): self
+    {
+        $this->honoree_title = $honoree_title;
+
+        return $this;
+    }
+
+    public function getMusic(): ?string
+    {
+        return $this->music;
+    }
+
+    public function setMusic(?string $music): self
+    {
+        $this->music = $music;
+
+        return $this;
+    }
+
+    public function getSigns(): ?string
+    {
+        return $this->signs;
+    }
+
+    public function setSigns(?string $signs): self
+    {
+        $this->signs = $signs;
+
+        return $this;
+    }
+
+    public function getLastMarker(): ?Marker
+    {
+        return $this->last_marker;
+    }
+
+    public function setLastMarker(?Marker $last_marker): self
+    {
+        $this->last_marker = $last_marker;
 
         return $this;
     }

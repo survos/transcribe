@@ -48,6 +48,12 @@ class FixMediaCommand extends Command
         foreach ($this->mediaRepository->findAll() as $media) {
             // if (empty($media->getCode()))
             {
+
+                if ($media->getWidth() == 0) {
+                    dump($media); die();
+                }
+
+                /* fix code and type
                 $code =  pathinfo($media->getFilename(), PATHINFO_FILENAME);
                 $media->setCode($code);
 
@@ -57,9 +63,9 @@ class FixMediaCommand extends Command
                     $type = 'video';
                 } else {
                     die($finfo);
-
                 }
                 $media->setType($type);
+                */
             }
         }
 

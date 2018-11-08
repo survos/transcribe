@@ -1,124 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ project.code }}{% endblock %}
+{% block title %}Project{% endblock %}
 
-{% block breadcrumbs %}
-{{ parent() }}
-    <li><a href="{{ path('project_show', project.rp) }}">{{ project.code }} Transcript</a></li>
-    <li><a href="{{ path('project_add_photos_to_markers', project.rp) }}">{{ project.code }} Photos</a></li>
+{% block body %}
+    <h1>Project</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ project.id }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ project.code }}</td>
+            </tr>
+            <tr>
+                <th>Base_path</th>
+                <td>{{ project.basePath }}</td>
+            </tr>
+            <tr>
+                <th>Honoree_name</th>
+                <td>{{ project.honoreeName }}</td>
+            </tr>
+            <tr>
+                <th>Honoree_title</th>
+                <td>{{ project.honoreeTitle }}</td>
+            </tr>
+            <tr>
+                <th>Music</th>
+                <td>{{ project.music }}</td>
+            </tr>
+            <tr>
+                <th>Signs</th>
+                <td>{{ project.signs }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('project_index') }}">back to list</a>
+
+    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+
+    {{ include('project/_delete_form.html.twig') }}
 {% endblock %}
-
-
-{% block content  %}
-
-    {% import "media/show.html.twig" as macro %}
-
-    <div id="navbar" class="audio_transcriber">
-        {{ macro.audio_player(false) }}
-    </div>
-
-    <div id="content" class="main example-wrapper">
-    <h1>Project {{ project.code }}</h1>
-
-    <div class="row">
-        <div class="col-md-5">
-
-            {{ macro.listMarkers(markers) }}
-
-            <hr />
-            Duration by Color:
-            <ul>
-                {% for color, duration in markerSummary %}
-                    <li><span style="color: {{ color }};">{{ duration }}</span></li>
-                {% endfor %}
-            </ul>
-
-            <br />Create Timline
-            {{ form(timelineForm) }}
-
-            <a href="{{ path('project_xml', project.rp)}}">Export XML</a>
-            <a href="{{ path('fcp_xml_show', project.rp)}}">XML Debug</a>
-            <a href="{{ path('project_add_photos_to_markers', project.rp)}}">Add Photos</a>
-        </div>
-        <div class="col-md-7">
-
-            {{ block('transcripts') }}
-
-        </div>
-    </div>
-
-
-</div>
-{% endblock %}
-
-    {% block transcripts %}
-        {% import "media/show.html.twig" as macro %}
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th></th>
-        <th>File</th>
-        <th>#words</th>
-        <th>#markers</th>
-        <th>Words</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for m in project.videos %}
-        {% if m.transcriptRequested%}
-        <tr>
-            <td><a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: m.id}) }}">
-                    <i class="fa fa-pencil"></i>
-                </a></td>
-            <td>
-                {% set photoUrl =  m.publicUrl('jpg') %}
-                <a href="{{ photoUrl }}">
-                    <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
-                </a>
-                <a title="{{ m.filename }}" href="{{ path('media_show', m.rp) }}">{{ m.display|default(m.filename) }}</a>
-
-            </td>
-            <td class="right">{{ m.words.count }}</td>
-            <td class="right">{{ m.markers.count }}</td>
-            <td>
-                {% if m.photo %}
-                    <img height="80" src="{{ path('media_passthru', {fn: m.path} ) }}" />
-                    <a href="{{ path('media_hide', m.rp) }}">Toggle</a>
-                    {% else %}
-                {{ macro.mediaWords(m) }}
-                        {% endif %}
-            </td>
-        </tr>
-        {% endif %}
-    {% endfor %}
-    </tbody>
-</table>
-
-
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-    {# need this to work when offline!! #}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="/js/project.js"></script>
-
-<script>
-    $( function() {
-        $( ".sortable" ).sortable({
-            update: function( event, ui ) {
-                var data = $(this).sortable('serialize');
-                console.log('data', data);
-                $('#marker_order').text('order: ' + data);
-                $.ajax({
-                    data: data,
-                    type: 'GET',
-                    url: '{{ path('marker_reorder', project.rp) }}'
-                });
-            }
-        });
-        $( ".sortable" ).disableSelection();
-    } );
-    </script>
-
-{% endblock  %}

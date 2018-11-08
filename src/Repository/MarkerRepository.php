@@ -5,7 +5,9 @@ namespace App\Repository;
 use App\Entity\Marker;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use PhpParser\Node\Expr\Array_;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @method Marker|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,14 +26,36 @@ class MarkerRepository extends ServiceEntityRepository
     /**
      * @return Marker[] Returns an array of Marker objects
      */
-    public function findByProject(Project $project, $maxDuration = 0)
+    public function findByProject(Project $project, array $options = [])
     {
-        $markers =  $this
+        $options = (new OptionsResolver())
+            ->setDefaults([
+                'maxDuration' => 180,
+                'maxMarkers' => 0,
+                'lastMarker' => null,
+                'timeline' => null
+            ])->resolve($options);
+
+        $markerQb =  $this
             ->createQueryBuilder('marker')
             ->where('marker.media IN (:media)')
             ->andWhere('marker.irrelevant <> true')
             ->andWhere('marker.hidden <> true')
-            ->setParameter('media', $project->getMedia())
+            ->setParameter('media', $project->getMedia());
+
+        if ($lastMarker = $options['lastMarker'])
+        {
+            $markerQb->andWhere('marker.idx <= :idx')
+                ->setParameter('idx', $lastMarker->getIdx());
+        }
+
+        if ($maxMarkers = $options['maxMarkers']) {
+            $markerQb
+                ->setMaxResults($maxMarkers)
+            ;
+        }
+
+        $markers = $markerQb
             ->orderBy('marker.idx', 'ASC')
             ->getQuery()
             ->getResult();
@@ -39,7 +63,7 @@ class MarkerRepository extends ServiceEntityRepository
         // there's likely a better way!
         $duration = 0;
 
-        if ($maxDuration) {
+        if ($maxDuration = $options['maxDuration']) {
             $filteredMarkers = [];
             /** @var Marker $marker */
             foreach ($markers as $marker) {

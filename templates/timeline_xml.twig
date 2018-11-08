@@ -25,17 +25,22 @@
                 <asset src="file://localhost/{{ asset.src|replace({'\\': '/'}) }}" start="0/1s" name="{{ asset.code }}" hasVideo="1" format="photo_format" duration="0/1s" id="{{ asset.code }}"/>
             {% endif %}
         {% endfor %}
+        {% set musicId = "jazzyfrenchy" %}
+        <asset name="bensound-jazzyfrenchy.mp3" audioChannels="2" id="{{ musicId }}" duration="69781577/666000s" hasAudio="1" start="0/1s" audioSources="1" src="file://localhost/C:/JUFJ/music/bensound-jazzyfrenchy.mp3"/>
 
 
     </resources>
     <library>
         <event name="Event Name">
+            {% set timelineDuration = timeline.calcDuration %}
+
             <project name="{{ timeline.project.code }}_{{ "now"|date("F jS \\a\\t g:ia", "America/New_York") }}">
 
-                {% set sequenceBase = 36036 %} {# 01:00:00 #}
+                {% set sequenceBase = 3603 %} {# 01:00:00 #}
                 {# {% set sequenceBase = 3 %} 01:00:00 #}
-                <sequence format="r0" tcFormat="NDF" duration="{{ timeline.maxDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
+                <sequence format="r0" tcFormat="NDF" duration="{{ timelineDuration * 10}}/10s" tcStart="{{ sequenceBase }}/10s">
                     <spine>
+
                         {# needs timing! Right now it overwrites the first slide
                         {{ macro.title(timeline.project.code) }}
                         #}
@@ -63,6 +68,8 @@
                         </clip>
                         #}
                         {% for clip in timeline.clips %}
+
+
                             {% set format = clip.asset.format %} {# hack! This is probably the timeline format, not the clip format #}
                             <!--Clip {{ clip.name  }} starts at {{ clip.trackOffset }} for {{ clip.duration }}-->
                             {% set asset = clip.asset %}
@@ -77,6 +84,7 @@
                                 </video>
                                 <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
 
+
                                 {# the photos #}
                                 {% for photo in clip.brolls  %}
 
@@ -85,7 +93,7 @@
                                     {% set photoDuration = (clip.duration - photo.calculateStartWordTime ) + 10 %} {# how many deci-seconds does the photo display? #}
                                     #}
                                     {% set photoStartAfter = clip.duration / 4 %} {# (photo.calculateStartWordTime ) %} #} {# how many deci-seconds does the photo display? #}
-                                    {% set photoDuration = ( clip.duration / 2) %}
+                                    {% set photoDuration = max(clip.duration / 2, 4) %}
                                     {%  set oldTime = (photo.calculateStartWordTime) + 20 %}
 
 
@@ -99,8 +107,15 @@
                                            offset="{{ ( photoStartAfter)|round }}/10s">
                                         <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
                                     </video>
-
                                 {% endfor %}
+
+                                {% if loop.first %}
+                                    {% set d = "%d/10s"|format(timelineDuration * 10) %}
+                                    <clip name="bensound-jazzyfrenchy.mp3" lane="3" duration="{{ d }}" start="0/1s" offset="0/10s" enabled="1">
+                                        <audio srcCh="1, 2" duration="{{ d }}" start="0/1s" offset="0/1s" ref="{{ musicId }}"/>
+                                    </clip>
+                                {% endif %}
+
                             </clip>
 
 

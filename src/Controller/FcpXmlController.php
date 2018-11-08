@@ -24,10 +24,16 @@ class FcpXmlController extends AbstractController
         // read the files in public/xml
         $finder = new Finder();
         $root = __DIR__ . '/../../public/xml'; // hack
-        $finder->files()->in($root );
+        $root = "C:/JUFJ/temp"; // hack
+        $finder->files()->in($root )->name('*.fcpxml');
 
         foreach ($finder as $file) {
-            $xml = simplexml_load_file($file->getRealPath());
+            try {
+                $xml = simplexml_load_file($file->getRealPath());
+            } catch (\Exception $e) {
+                // ignore it for now?
+                continue;
+            }
             $data[$file->getBasename()] =
                 [
                     'version' => $xml['version'],

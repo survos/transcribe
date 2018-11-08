@@ -35,7 +35,7 @@ class TimelineHelper
         $subtitles = new Subtitles();
 
         $offset = 0;
-        foreach ($this->markerRepo->findByProject($project, $max) as $marker)
+        foreach ($this->markerRepo->findByProject($project, ['maxDuration' => $max]) as $marker)
         {
             $duration = $marker->getDuration() / 10;
             $subtitles->add($offset, $offset + $duration, $marker->getNote());
@@ -60,7 +60,9 @@ class TimelineHelper
             return $media->getType() === 'photo' && ($media->getHeight() < $media->getWidth() && ($media->getTranscriptRequested()));
         });
 
-        $markers = $this->markerRepo->findByProject($project, $maxDuration = $timeline->getMaxDuration());
+        $markers = $this->markerRepo->findByProject($project, [
+            'lastMarker' => $project->getLastMarker(),
+            'maxDuration' => $timeline->getMaxDuration()]);
 
         $mediaList = [];
         foreach ($markers as $idx=>$marker) {

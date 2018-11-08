@@ -37,6 +37,7 @@ class ExportFcpCommand extends Command
             ->setDescription('Add a short description for your command')
             ->addArgument('projectCode', InputArgument::OPTIONAL, 'Project')
             ->addOption('max', null, InputOption::VALUE_OPTIONAL, 'Max Seconds', 180)
+            ->addOption('srt', null, InputOption::VALUE_NONE, 'SRT too')
         ;
     }
 
@@ -61,15 +62,17 @@ class ExportFcpCommand extends Command
         if (function_exists('tidy_repair_string')) {
             $xml = tidy_repair_string($xml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
         }
-
         $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.fcpxml';
         file_put_contents($fn, $xml);
         $io->success(sprintf('%s exported.', $fn));
 
-        $subtitles = $this->helper->getMarkerSubtitles($project, $max);
+        if ($input->getOption('srt')) {
+            $subtitles = $this->helper->getMarkerSubtitles($project, $max);
 
-        $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.srt';
-        file_put_contents($fn,  $subtitles->content('srt'));
-        $io->success(sprintf('%s exported.', $fn));
+            $fn = 'C:\\JUFJ\\temp\\' .  $project->getCode() . '.srt';
+            file_put_contents($fn,  $subtitles->content('srt'));
+            $io->success(sprintf('%s exported.', $fn));
+        }
+
     }
 }

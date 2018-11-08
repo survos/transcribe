@@ -374,6 +374,7 @@ class Media
         $path = sprintf("%s$delim%s", $this->getProject()->getBasePath(), $this->getPath());
         $path = str_replace('\\', $delim, $path);
         $path = str_replace('//', $delim, $path);
+
         return $path;
     }
 

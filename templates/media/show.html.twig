@@ -52,6 +52,11 @@
                     </span>
                     {{ m.note }}
                 </li>
+
+                {% if m == m.media.project.lastMarker %}
+                    <hr size="3" />
+
+                    {% endif %}
             {% endif %}
         {% endfor %}
 

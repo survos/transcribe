@@ -1,62 +1,41 @@
-{% extends '@SurvosLanding/public_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Projects{% endblock %}
+{% block title %}Project index{% endblock %}
 
 {% block body %}
+    <h1>Project index</h1>
 
-<div class="example-wrapper">
-    <h1>Projects</h1>
-
-    <a href="{{ path('fcp_xml') }}">FCP XML Debug</a>
-
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
-        <tr>
-            <th>Code</th>
-            <th>Media</th>
-            <th>Assets</th>
-            <th>Transcript</th>
-        </tr>
+            <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Base_path</th>
+                <th>Honoree_name</th>
+                <th>Honoree_title</th>
+                <th>Music</th>
+                <th>Signs</th>
+                <th>actions</th>
+            </tr>
         </thead>
         <tbody>
-        {% for p in projects %}
-            {% set timeline = p.timelines.first %}
+        {% for project in projects %}
             <tr>
-                <td><a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
-                <td>{{ p.media.count}}
-                    {{ p.byType('video').count }} Videos
-                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': true})) }}">
-                        {{ p.byType('photo').count }} Photos
-                    </a>
-                </td>
-                <td>{{ timeline.timelineAssets.count }}</td>
-                <td>
-                    {{ p.basePath }}
-                </td>
-                <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a>
-                <a href="{{ path('project_markers', p.rp) }}">.edl</a>
-                    <a href="{{ path('project_markers', p.rp({_format: 'json'})) }}">.json</a>
-                </td>
-                <td><a href="{{ path('project_xml', p.rp) }}">.fcpxml</a>
-                    <a href="{{ path('fcp_xml_show', p.rp)}}">XML Debug</a>
-
-                </td>
-
-                <td><a href="{{ path('project_edl', p.rp) }}">.edl</a></td>
-                <td>
-                    {{ timeline.clips.count }}
-                    {{ timeline.brollCount }}
-                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': false})) }}">
-                        Timeline Review
-                    </a>
-
-                </td>
+                <td>{{ project.id }}</td>
+                <td>{{ project.code }}</td>
+                <td>{{ project.basePath }}</td>
+                <td>{{ project.honoreeName }}</td>
+                <td>{{ project.honoreeTitle }}</td>
+                <td>{{ project.music }}</td>
+                <td>{{ project.signs }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-</div>
-
-    <a href="{{ path('easyadmin') }}">EZ Admin</a>
+    <a href="{{ path('project_new') }}">Create new</a>
 {% endblock %}

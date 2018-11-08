@@ -181,7 +181,7 @@ class ImportMediaCommand extends Command
 
 
         $finder = new Finder();
-        $finder->files()->in($dir); // ->contains('Shelly');
+        $finder->files()->in($dir)->name('Ed*.mov'); // ->contains('Shelly');
 
         foreach ($finder as $file) {
 
@@ -196,9 +196,9 @@ class ImportMediaCommand extends Command
             $isImage = in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'gif', 'png'] );
             $isMovie = in_array(strtolower($file->getExtension()), ['mov', 'mp4'] );
 
-            if ($isImage)
+            if (!$isImage)
             {
-                continue; // should check for --videos-only or something
+                // continue; // should check for --videos-only or something
             }
 
             if (!$media = $this->mediaRepository->findOneBy(['filename' => $filename]))
@@ -209,6 +209,7 @@ class ImportMediaCommand extends Command
                     // throw new \Exception("Not allowing new movies right now.");
                 }
                 $media = (new Media())
+                    ->setPath($file->getRelativePath() . $file->getFilename())
                     ->setProject($project)
                     ->setFilename($filename);
 
@@ -233,20 +234,21 @@ class ImportMediaCommand extends Command
                 $this->em->persist($media);
 
                 if ($file->getRealPath() != $media->getRealPath("\\")) {
-                    throw new \Exception(sprintf("Media/File mismatch, can only import %s, %s",
-                        $media->getRealPath("\\"),
-                        $file->getRealPath()));
+                    throw new \Exception(sprintf("Media/File mismatch, can only import file %s into media %s",
+                        $file->getRealPath(),
+                        $media->getRealPath("\\")
+                    ));
                 }
-
             }
 
             $info = $this->info($file->getRealPath());
+            dump($media);
 
             // $isImage = $info['format_name'] == 'image2';
 
 
             // @todo: get the properties from the internal array.
-            if (empty($media->getStreamsJson() ))
+            if (true || empty($media->getStreamsJson() ))
             {
                 $streamData = [];
                 if ($streams = $this->streams($file->getRealPath())) {
@@ -265,7 +267,10 @@ class ImportMediaCommand extends Command
                             ->setWidth($video->get('width'))
                             ;
                     }
+                }
 
+                if ($media->getWidth() == 0) {
+                    dump($media, $streams); die("Stopped");
                 }
 
                 if ($streams) {
@@ -278,7 +283,6 @@ class ImportMediaCommand extends Command
             }
 
             $media
-                ->setPath($file->getRelativePathname())
                 ->setType($isImage ? 'photo' : 'video')
                 ->setStreamCount($info['nb_streams'])
                 ->setFileSize($file->getSize())

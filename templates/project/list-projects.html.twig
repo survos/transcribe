@@ -1,0 +1,67 @@
+{% extends '@SurvosLanding/public_base.html.twig' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Projects</h1>
+
+    <a href="{{ path('fcp_xml') }}">FCP XML Debug</a>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Code</th>
+            <th>Media</th>
+            <th>Assets</th>
+            <th>Transcript</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in projects %}
+            {% set timeline = p.timelines.first %}
+            <tr>
+                <td>
+                    <a href="{{ path('project_edit', p.rp) }}"><i class="fa fa-pencil"></i> </a>
+                    <a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
+                <td>{{ p.media.count}}
+                    {{ p.byType('video').count }} Videos
+                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': true})) }}">
+                        {{ p.byType('photo').count }} Photos
+                    </a>
+                </td>
+                <td>{{ timeline.timelineAssets.count }}</td>
+                <td>
+                    {{ p.basePath }}
+                </td>
+                <td>
+                    {{ p.lastMarker ? p.lastMarker.note }}
+                </td>
+                <td><a href="{{ path('project_subtitles', p.rp) }}">.srt</a>
+                <a href="{{ path('project_markers', p.rp) }}">.edl</a>
+                    <a href="{{ path('project_markers', p.rp({_format: 'json'})) }}">.json</a>
+                </td>
+                <td><a href="{{ path('project_xml', p.rp) }}">.fcpxml</a>
+                    <a href="{{ path('fcp_xml_show', p.rp)}}">XML Debug</a>
+
+                </td>
+
+                <td><a href="{{ path('project_edl', p.rp) }}">.edl</a></td>
+                <td>
+                    {{ timeline.clips.count }}
+                    {{ timeline.brollCount }}
+                    <a href="{{ path('project_add_photos_to_markers', p.rp({'edit': false})) }}">
+                        Timeline Review
+                    </a>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+    <a href="{{ path('easyadmin') }}">EZ Admin</a>
+{% endblock %}
