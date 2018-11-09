@@ -36,7 +36,7 @@
         <event name="Event Name">
             {% set timelineDuration = timeline.calcDuration %}
 
-            <project name="{{ timeline.project.code }}_{{ "now"|date("F jS \\a\\t g:ia", "America/New_York") }}">
+            <project name="{{ timeline.project.code }}_{{ "now"|date("F jS \\a\\t g_i_sa", "America/New_York") }}">
 
                 {% set sequenceBase = 3603 %} {# 01:00:00 #}
                 {# {% set sequenceBase = 3 %} 01:00:00 #}
@@ -111,7 +111,7 @@
                                     </video>
                                 {% endfor %}
 
-                                {% if loop.first %}
+                                {% if loop.first and false %}
                                     {% set d = "%d/10s"|format(timelineDuration) %}
                                     <clip name="{{ project.music }}" lane="4" duration="{{ d }}" start="0/1s" offset="0/10s" enabled="1">
                                         <audio srcCh="1, 2" duration="{{ d }}" start="0/1s" offset="0/1s" ref="{{ musicId }}"/>
