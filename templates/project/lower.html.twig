@@ -7,6 +7,7 @@
 
 <table class="table">
     {% for media in project.videos %}
+        {% if app.request.get('lower_only', false) or media.lowerThirds %}
 <tr valign="top">
     <td>
         {% set photoUrl =  media.publicUrl('jpg') %}
@@ -25,6 +26,7 @@
         {% endif %}
     </td>
 </tr>
+        {% endif %}
     {% endfor %}
 </table>
 
