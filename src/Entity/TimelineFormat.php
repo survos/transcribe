@@ -211,7 +211,8 @@ class TimelineFormat
          $this
             ->setName($splineItem['name'])
             ->setCode($splineItem['id'])
-            ->setFrameDurationString(Timeline::fractionalSecondsToTime($splineItem['frameDuration']))
+            // ->setFrameDurationString(Timeline::fractionalSecondsToTime($splineItem['frameDuration']))
+            ->setFrameDurationString($splineItem['frameDuration'])
         ;
          if (!empty($splineItem['width'])) {
              $this

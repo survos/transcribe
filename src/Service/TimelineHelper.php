@@ -206,6 +206,7 @@ class TimelineHelper
                         $photo->setFromXml($photoItem, $timeline);
                     }
                     break;
+                case 'transition':
                 case 'gap':
                     break;
                 default:

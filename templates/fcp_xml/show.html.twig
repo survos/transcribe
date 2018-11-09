@@ -16,7 +16,7 @@
                     <th>id</th>
                     <th>name</th>
                     <th>HxW</th>
-                    <th>Duration</th>
+                    <th>FrameRate</th>
                     <th>#Clips</th>
                     <th>#Assets</th>
                 </tr>
@@ -80,7 +80,7 @@
                     <th>format</th>
                     <th>src</th>
                     <th>offsets</th>
-                    <th>duration</th>
+                    <th>start+duration</th>
                     <th>lane</th>
                 </tr>
                 </thead>
@@ -105,9 +105,12 @@
 
                             {% endif %}
                         </td>
-                        <td>{{ clip.format }}</td>
-                        <td>{{ clip.asset }}@{{ clip.start|number_format(1) }}</td>
+                        <td>{{ clip.format }} <small>{{ clip.format ? clip.format.frameDurationString }}</small></td>
+                        <td>{{ clip.asset }}@{{ clip.startString }}</td>
+
                         <td>{{ clip.trackOffset|number_format(1) }}-{{ (clip.trackOffset + clip.duration)|number_format(1) }}</td>
+                        <td>{{ clip.trackOffsetString }}+{{ clip.durationString }} ({{ clip.duration|number_format(1) }}s)</td>
+
                         <td>{{ clip.duration|number_format(1) }}</td>
                         <td>{{ clip.lane }}</td>
                         {#

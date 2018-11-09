@@ -71,6 +71,31 @@ class Clip
      */
     private $bRolls;
 
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $track_offset_string;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $duration_string;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $audio_start_string;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $audio_duration_string;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $start_string;
+
     public function __construct()
     {
         $this->bRolls = new ArrayCollection();
@@ -164,16 +189,18 @@ class Clip
                 case 'id':
                 case 'tcFormat':
                 case 'enabled':
-                case 'audioStart': // @todo: fix and use this!
-                case 'audioDuration': // @todo: fix and use this!
                     $skip = true;
-                    continue;
                     break;
+
                 case 'offset':
                     $var = 'trackOffset';
+                case 'audioStart': // @todo: fix and use this!
+                case 'audioDuration': // @todo: fix and use this!
                 case 'duration':
                 case 'start':
-                    $val = (Timeline::fractionalSecondsToTime($val));
+                    $this->{'set' . $var}(Timeline::fractionalSecondsToTime($val)); // bad!  The source of some problems
+                    $var .= 'String';
+                    // $val = (Timeline::fractionalSecondsToTime($val));
                     break;
                 case 'hasVideo':
                 case 'hasAudio':
@@ -291,6 +318,66 @@ class Clip
                 $bRoll->setClip(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTrackOffsetString(): ?string
+    {
+        return $this->track_offset_string;
+    }
+
+    public function setTrackOffsetString(?string $track_offset_string): self
+    {
+        $this->track_offset_string = $track_offset_string;
+
+        return $this;
+    }
+
+    public function getDurationString(): ?string
+    {
+        return $this->duration_string;
+    }
+
+    public function setDurationString(?string $duration_string): self
+    {
+        $this->duration_string = $duration_string;
+
+        return $this;
+    }
+
+    public function getAudioStartString(): ?string
+    {
+        return $this->audio_start_string;
+    }
+
+    public function setAudioStartString(?string $audio_start_string): self
+    {
+        $this->audio_start_string = $audio_start_string;
+
+        return $this;
+    }
+
+    public function getAudioDurationString(): ?string
+    {
+        return $this->audio_duration_string;
+    }
+
+    public function setAudioDurationString(?string $audio_duration_string): self
+    {
+        $this->audio_duration_string = $audio_duration_string;
+
+        return $this;
+    }
+
+    public function getStartString(): ?string
+    {
+        return $this->start_string;
+    }
+
+    public function setStartString(?string $start_string): self
+    {
+        $this->start_string = $start_string;
 
         return $this;
     }

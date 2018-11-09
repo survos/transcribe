@@ -25,6 +25,7 @@ class FcpXmlController extends AbstractController
         $finder = new Finder();
         $root = __DIR__ . '/../../public/xml'; // hack
         $root = "C:/JUFJ/temp"; // hack
+        $root = $this->getParameter('xml_root');
         $finder->files()->in($root )->name('*.fcpxml');
 
         foreach ($finder as $file) {
