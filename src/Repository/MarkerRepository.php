@@ -30,7 +30,7 @@ class MarkerRepository extends ServiceEntityRepository
     {
         $options = (new OptionsResolver())
             ->setDefaults([
-                'maxDuration' => 180,
+                'maxDuration' => null, //  180,
                 'maxMarkers' => 0,
                 'lastMarker' => null,
                 'timeline' => null
