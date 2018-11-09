@@ -47,6 +47,14 @@ class ProjectController extends AbstractController
     }
 
     /**
+     * @Route("/lower/{code}", name="project_lower_thirds", methods="GET")
+     */
+    public function lower(Project $project): Response
+    {
+        return $this->render('project/lower.html.twig', ['project' => $project]);
+    }
+
+    /**
      * @Route("/crud/{id}", name="project_crud_show", methods="GET")
      */
     public function show(Project $project): Response
@@ -73,6 +81,8 @@ class ProjectController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
 
     /**
      * @Route("/{id}", name="project_delete", methods="DELETE")

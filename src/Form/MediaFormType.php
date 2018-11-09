@@ -14,14 +14,15 @@ class MediaFormType extends AbstractType
         $builder
             ->add('filename')
             ->add('path')
+            ->add('lowerThirds')
             ->add('transcriptRequested')
-            ->add('word_count')
-            ->add('file_size')
-            ->add('duration')
+//            ->add('word_count')
+//            ->add('file_size')
+//            ->add('duration')
             ->add('speaker')
             ->add('display')
             ->add('marking')
-            ->add('lastTransitionTime')
+//            ->add('lastTransitionTime')
             ->add('project', null, [
                 'disabled' => true
             ])

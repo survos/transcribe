@@ -170,6 +170,11 @@ class Media
      */
     private $timelineAssets;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $lower_thirds;
+
     public function __construct()
     {
         $this->flacExists = false;
@@ -691,6 +696,18 @@ class Media
                 $timelineAsset->setMedia(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLowerThirds(): ?string
+    {
+        return $this->lower_thirds;
+    }
+
+    public function setLowerThirds(?string $lower_thirds): self
+    {
+        $this->lower_thirds = $lower_thirds;
 
         return $this;
     }

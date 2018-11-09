@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block body %}
+<h1>{{ project.code }}</h1>
+
+<table class="table">
+    {% for media in project.videos %}
+<tr valign="top">
+    <td>
+        {% set photoUrl =  media.publicUrl('jpg') %}
+        <a href="{{ photoUrl }}">
+            <img src="{{ photoUrl }}"  style="max-height: 100px; max-width: 200px;" />
+        </a>
+        <a title="{{ media.filename }}" href="{{ path('media_show', media.rp) }}">{{ media.display|default(media.filename) }}</a>
+        {{ media.height }}x{{ media.width }} @{{ media.frameRate }}
+    </td>
+    <td>
+        <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: media.id}) }}">
+            <i class="fa fa-pencil"></i>
+        </a>
+        {% if media.lowerThirds %}
+            <pre>{{ media.lowerThirds }}</pre>
+        {% endif %}
+    </td>
+</tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
+

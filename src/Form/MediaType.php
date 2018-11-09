@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Media;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,6 +17,9 @@ class MediaType extends AbstractType
             ->add('path')
             ->add('transcriptRequested')
             ->add('speaker')
+            ->add('lowerThirds', TextareaType::class, [
+                'required' => false
+            ])
             ->add('display')
             ->add('project', null, [
                 'disabled' => true

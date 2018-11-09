@@ -16,6 +16,7 @@
             <th>Media</th>
             <th>Assets</th>
             <th>Transcript</th>
+            <th>Lower Thirds</th>
         </tr>
         </thead>
         <tbody>
@@ -56,6 +57,10 @@
                         Timeline Review
                     </a>
 
+                </td>
+                <td>
+                    <a href="{{ path('project_lower_thirds', p.rp) }}">Lower Thirds</a>
+                    <a href="{{ path('project_lower_thirds', p.rp({'lower_only': 1})) }}">Only</a>
                 </td>
             </tr>
         {% endfor %}
