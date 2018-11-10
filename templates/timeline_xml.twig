@@ -48,8 +48,8 @@
 
                         {% set titleTime = timeline.titleTime %}
 
-                        {{ macro.title(timeline.project.code, 5) }}
                         {# needs timing! Right now it overwrites the first slide
+                        {{ macro.title(timeline.project.code, 5) }}
                         #}
 
                         {#
@@ -153,8 +153,8 @@
 </video>
 {% endmacro %}
 
-{% macro title2 %}
-<title duration="95/24s" enabled="1" name="Today we’re gonna make one of my favorite experimental dishes, it is called" offset="6/24s" ref="e3" start="6/24s">
+{% macro title2(title, seconds) %}
+<title duration="95/24s" enabled="1" lane="2" name="Today we’re gonna make one of my favorite experimental dishes, it is called" offset="6/24s" ref="e3" start="6/24s">
     <param key="9999/10199/10201/1/100/101" name="Position" value="0 -418.279"/>
     <param key="9999/10199/10201/2/354/1002961760/401" name="Alignment" value="1 (Center)"/>
     <param key="9999/10199/10201/2/354/3000144205/401" name="Alignment" value="1 (Center)"/>
