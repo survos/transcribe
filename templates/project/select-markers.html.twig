@@ -79,6 +79,11 @@
                 <a title="{{ m.filename }}" href="{{ path('media_show', m.rp) }}">{{ m.display|default(m.filename) }}</a>
                 {{ m.height }}x{{ m.width }} @{{ m.frameRate }}
 
+                {% if m.lowerThirds %}
+                    <pre>{{ m.lowerThirds }}</pre>
+                    {% endif %}
+
+
             </td>
             <td class="right">{{ m.words.count }}</td>
             <td class="right">{{ m.markers.count }}</td>
