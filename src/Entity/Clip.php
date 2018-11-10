@@ -198,6 +198,8 @@ class Clip
                 case 'audioDuration': // @todo: fix and use this!
                 case 'duration':
                 case 'start':
+                    $skip = true;
+                    continue; // @todo fIx!
                     $this->{'set' . $var}(Timeline::fractionalSecondsToTime($val)); // bad!  The source of some problems
                     $var .= 'String';
                     // $val = (Timeline::fractionalSecondsToTime($val));

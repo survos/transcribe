@@ -188,6 +188,9 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
+    "servo/fluidxml": {
+        "version": "1.21"
+    },
     "survos/landing-bundle": {
         "version": "dev-master"
     },
@@ -244,6 +247,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v4.1.6"
+    },
+    "symfony/dom-crawler": {
+        "version": "v4.2.0-beta1"
     },
     "symfony/dotenv": {
         "version": "v4.1.6"

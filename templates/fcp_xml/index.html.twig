@@ -22,6 +22,7 @@
             {% set version = fileData.version %}
         <tr>
             <td>
+                <a href="{{ path('fcp_test_xml', {fn: file.realPath}) }}">Test</a> |
                 <a href="{{ path('fcp_xml_show', {fn: file.realPath}) }}">{{ fn }}</a>
             </td>
             <td>

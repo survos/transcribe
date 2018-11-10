@@ -11,6 +11,7 @@ namespace App\Service;
 
 use App\Entity\BRoll;
 use App\Entity\Clip;
+use App\Entity\FinalCutPro;
 use App\Entity\Marker;
 use App\Entity\Media;
 use App\Entity\Project;
@@ -20,6 +21,11 @@ use App\Entity\TimelineFormat;
 use Doctrine\ORM\EntityManagerInterface;
 use Done\Subtitles\Subtitles;
 
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 class TimelineHelper
 {
     private $em;
@@ -28,6 +34,18 @@ class TimelineHelper
         $this->em = $entityManager;
         $this->markerRepo = $entityManager->getRepository(Marker::class);
         $this->mediaRepo = $entityManager->getRepository(Media::class);
+    }
+
+    public function importXml($xml)
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $fcp = $serializer->deserialize($xml, FinalCutPro::class, 'xml');
+
+        return $fcp;
     }
 
     public function getMarkerSubtitles(Project $project, $max): Subtitles

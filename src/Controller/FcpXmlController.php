@@ -9,7 +9,9 @@ use App\Entity\TimelineAsset;
 use App\Entity\TimelineFormat;
 use App\Repository\ProjectRepository;
 use App\Service\TimelineHelper;
+use FluidXml\FluidXml;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,8 +51,45 @@ class FcpXmlController extends AbstractController
         ]);
     }
 
-
     /**
+     * @Route("/fcp/test_xml", name="fcp_test_xml")
+     */
+    public function testXml(Request $request, TimelineHelper $helper, ProjectRepository $projectRepository)
+    {
+        if ($fn = $request->get('fn')) {
+            $rawXml = file_get_contents($fn);
+
+            $xmlDoc = new \DOMDocument();
+            $xmlDoc->load($fn);
+
+            print $xmlDoc->saveXML() . "\n";
+
+            // $fcp = FluidXml::load($fn);
+            dump($xmlDoc);
+            die("stopped in controller");
+
+            $fcp = $helper->importXml($rawXml);
+        }
+
+
+
+        $crawler = new Crawler($rawXml);
+
+        foreach ($crawler as $domElement) {
+            var_dump($domElement->nodeName);
+        }
+
+        die();
+
+        // convert to Transcribe Timeline
+
+        $timeline = new Timeline();
+
+    }
+
+
+
+            /**
      * @Route("/fcp/show_xml", name="fcp_xml_show")
      */
     public function showXml(Request $request, TimelineHelper $helper, ProjectRepository $projectRepository)
@@ -61,7 +100,17 @@ class FcpXmlController extends AbstractController
         $timeline = new Timeline();
         if ($fn = $request->get('fn'))
         {
+
+            $xmlDoc = new \DOMDocument();
+            $xmlDoc->load($fn);
+            $domXml = $xmlDoc->saveXML();
+
+
             $rawXml = file_get_contents($fn);
+
+            // try it with the XML Serializer
+
+
             $xml = simplexml_load_file($fn);
             $link = $fn; // pass through?
 
@@ -79,6 +128,7 @@ class FcpXmlController extends AbstractController
         // format the raw xml
         if (function_exists('tidy_repair_string')) {
             $rawXml = tidy_repair_string($rawXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+            $domXml = tidy_repair_string($domXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
         }
 
         // use a new timeline for the import!
@@ -94,6 +144,7 @@ class FcpXmlController extends AbstractController
             'timeline' => $importedTimeline,
             'rawXml' => $rawXml,
             'xml' => $xml,
+            'domXml' => $domXml,
             'fn' => $fn,
             'link' => $link
         ]);
