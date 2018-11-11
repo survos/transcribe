@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Element\Fcpxml;
 use App\Entity\Clip;
 use App\Entity\Marker;
 use App\Entity\Timeline;
@@ -101,10 +102,31 @@ class FcpXmlController extends AbstractController
         if ($fn = $request->get('fn'))
         {
 
+            $fcpxml = new Fcpxml($fn);
+            $formats = $fcpxml->getFormats();
+            foreach ($formats as $format) {
+                dump($format);
+            }
+            die();
+
+
+
+
             $xmlDoc = new \DOMDocument();
             $xmlDoc->load($fn);
-            $domXml = $xmlDoc->saveXML();
 
+            // https://developer.apple.com/library/archive/documentation/FinalCutProX/Reference/FinalCutProXXMLFormat/FCPXMLDTD/FCPXMLDTD.html
+            $formats = $xmlDoc->getElementsByTagName('format');
+            foreach ($formats as $format) {
+                // dump($format);
+            }
+
+            foreach ($xmlDoc->getElementsByTagName('clip') as $clip) {
+                dump($clip, $clip->saveXML());
+            }
+
+            die();
+            $domXml = $xmlDoc->saveXML();
 
             $rawXml = file_get_contents($fn);
 

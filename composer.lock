@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3df262eff86c4f18c4fc73682480aa79",
+    "content-hash": "3e1443806ad41f633258c0966524582a",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -3092,6 +3092,11 @@
         {
             "name": "survos/workflow-extension-bundle",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/workflow-bundle.git",
+                "reference": "9c1cac596dc4d753d4bf51eb35835b6ecc710f4c"
+            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/survos/workflow-bundle/zipball/9c1cac596dc4d753d4bf51eb35835b6ecc710f4c",
@@ -4014,16 +4019,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.1.1",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "9fb60f232af0764d58002e7872acb43a74506d25"
+                "reference": "27473c8bdf817b462dd26e9e4581795aa095d445"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/9fb60f232af0764d58002e7872acb43a74506d25",
-                "reference": "9fb60f232af0764d58002e7872acb43a74506d25",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/27473c8bdf817b462dd26e9e4581795aa095d445",
+                "reference": "27473c8bdf817b462dd26e9e4581795aa095d445",
                 "shasum": ""
             },
             "require": {
@@ -4057,7 +4062,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2018-09-03T08:17:12+00:00"
+            "time": "2018-11-10T12:25:57+00:00"
         },
         {
             "name": "symfony/form",
@@ -6973,6 +6978,7 @@
     "platform": {
         "php": "^7.1.3",
         "ext-ctype": "*",
+        "ext-dom": "*",
         "ext-iconv": "*",
         "ext-simplexml": "*"
     },

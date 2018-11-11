@@ -1,5 +1,7 @@
 <?php
 
+// note: realpath may help with some of the \\ / issues.
+
 namespace App\Command;
 
 use App\Entity\Media;
