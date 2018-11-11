@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.8">
+    <resources>
+        <format width="1920" name="FFVideoFormat1080p2997" height="1080" id="r0" frameDuration="1001/30000s"/>
+        <format width="1280" name="FFVideoFormat720p2997" height="720" id="r1" frameDuration="1001/30000s"/>
+
+        <format name="FFVideoFormatRateUndefined" width="6000" height="4000" id="photo_format"/>
+
+        
+                <asset id="clair-11" format="r1" src="file://localhost//media/shared/JUFJ/Claire/clair-11.MOV" start="0/1s" hasAudio="1" audioChannels="1" name="clair-11"
+               duration="16810/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="clair-9" format="r1" src="file://localhost//media/shared/JUFJ/Claire/clair-9.MOV" start="0/1s" hasAudio="1" audioChannels="1" name="clair-9"
+               duration="740/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="clair-14" format="r1" src="file://localhost//media/shared/JUFJ/Claire/clair-14.MOV" start="0/1s" hasAudio="1" audioChannels="1" name="clair-14"
+               duration="570/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="ShellyClaireTestimonialVideo" format="r1" src="file://localhost/C:/JUFJ/Claire/ShellyClaireTestimonialVideo.mov" start="0/1s" hasAudio="1" audioChannels="1" name="ShellyClaireTestimonialVideo"
+               duration="5920/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="clair-2" format="r1" src="file://localhost//media/shared/JUFJ/Claire/clair-2.MOV" start="0/1s" hasAudio="1" audioChannels="1" name="clair-2"
+               duration="630/10s"  audioSources="1" hasVideo="1"/>
+                <asset id="clair-8" format="r1" src="file://localhost//media/shared/JUFJ/Claire/clair-8.MOV" start="0/1s" hasAudio="1" audioChannels="1" name="clair-8"
+               duration="1050/10s"  audioSources="1" hasVideo="1"/>
+        
+
+    </resources>
+    <library>
+        <event name="Event Name">
+            <project name="1800/10s">
+
+
+                <sequence format="r0" tcFormat="NDF" duration="37037/6000s" tcStart="36000/10s">
+                    <spine>
+                        
+
+
+                        
+                                                    <asset-clip tcFormat="NDF" start="7847/10s" name="I don&#039;t really think..as a catalyst." format="r1" duration="73/10s" enabled="1"
+                                        ref="clair-11" offset="0/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="491/10s" name="Claire is tireless...creative" format="r1" duration="92/10s" enabled="1"
+                                        ref="clair-9" offset="73/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="50/10s" enabled="1" lane="1"  ref="clairephoto" offset="50/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="364/10s" name="awesome and funny..work with" format="r1" duration="46/10s" enabled="1"
+                                        ref="clair-14" offset="165/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="20/10s" enabled="1" lane="1"  ref="clairephoto" offset="20/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="4339/10s" name="For somebody who..doesn&#039;t know Claire" format="r1" duration="22/10s" enabled="1"
+                                        ref="ShellyClaireTestimonialVideo" offset="211/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="10/10s" enabled="1" lane="1"  ref="clairephoto" offset="10/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="4380/10s" name="she has just got so..better place ." format="r1" duration="87/10s" enabled="1"
+                                        ref="ShellyClaireTestimonialVideo" offset="233/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="1123/10s" name="it was back during..the time" format="r1" duration="168/10s" enabled="1"
+                                        ref="clair-11" offset="320/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="80/10s" enabled="1" lane="1"  ref="clairephoto" offset="80/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="1602/10s" name="so I went down there" format="r1" duration="22/10s" enabled="1"
+                                        ref="clair-11" offset="488/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="10/10s" enabled="1" lane="1"  ref="clairephoto" offset="10/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="1959/10s" name="but one of the..there." format="r1" duration="78/10s" enabled="1"
+                                        ref="clair-11" offset="510/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="2484/10s" name="fast forward a few..new group!&quot;" format="r1" duration="249/10s" enabled="1"
+                                        ref="clair-11" offset="588/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="120/10s" enabled="1" lane="1"  ref="clairephoto" offset="120/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="113/10s" name="Claire i-- has been..in in Baltimore" format="r1" duration="72/10s" enabled="1"
+                                        ref="clair-14" offset="837/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="94/10s" name="she has really been..JUFJ." format="r1" duration="38/10s" enabled="1"
+                                        ref="clair-2" offset="909/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="20/10s" enabled="1" lane="1"  ref="clairephoto" offset="20/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="188/10s" name="She is everywhere..it happen" format="r1" duration="52/10s" enabled="1"
+                                        ref="clair-2" offset="947/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="30/10s" enabled="1" lane="1"  ref="clairephoto" offset="30/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="7950/10s" name="my ability to just..about something" format="r1" duration="48/10s" enabled="1"
+                                        ref="clair-11" offset="999/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="20/10s" enabled="1" lane="1"  ref="clairephoto" offset="20/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="8029/10s" name="is a way of getting..something happen" format="r1" duration="144/10s" enabled="1"
+                                        ref="clair-11" offset="1047/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="70/10s" enabled="1" lane="1"  ref="clairephoto" offset="70/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="6470/10s" name="We&#039;re all energizing..whatever that is." format="r1" duration="70/10s" enabled="1"
+                                        ref="clair-11" offset="1191/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="4620/10s" name="it was just really..important to her to" format="r1" duration="32/10s" enabled="1"
+                                        ref="ShellyClaireTestimonialVideo" offset="1261/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="20/10s" enabled="1" lane="1"  ref="clairephoto" offset="20/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="4666/10s" name="To live centrally in..community" format="r1" duration="40/10s" enabled="1"
+                                        ref="ShellyClaireTestimonialVideo" offset="1293/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="20/10s" enabled="1" lane="1"  ref="clairephoto" offset="20/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="4706/10s" name="and to be able to..her is she&#039;s..." format="r1" duration="152/10s" enabled="1"
+                                        ref="ShellyClaireTestimonialVideo" offset="1333/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="80/10s" enabled="1" lane="1"  ref="clairephoto" offset="80/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="357/10s" name="Claire&#039;s deep..share." format="r1" duration="117/10s" enabled="1"
+                                        ref="clair-8" offset="1485/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="60/10s" enabled="1" lane="1"  ref="clairephoto" offset="60/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="8713/10s" name="our collective can..happen." format="r1" duration="73/10s" enabled="1"
+                                        ref="clair-11" offset="1602/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="40/10s" enabled="1" lane="1"  ref="clairephoto" offset="40/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                                    <asset-clip tcFormat="NDF" start="9977/10s" name="What social change..generations." format="r1" duration="190/10s" enabled="1"
+                                        ref="clair-11" offset="1675/10s">
+                                <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+
+                                                                                                <video start="0/1s" name="clair.JPG" duration="100/10s" enabled="1" lane="1"  ref="clairephoto" offset="100/10s">
+                                    <adjust-transform position="0 0" anchor="0 0" scale="1 1"/>
+                                </video>
+
+
+
+                            </asset-clip>
+                            
+                                                        <gap start="3600/1s" name="Gap" duration="7007/5000s" offset="108227119/30000s"/>
+
+                                            </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
