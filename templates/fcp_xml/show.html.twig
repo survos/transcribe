@@ -129,8 +129,12 @@
         <div class="col-lg-4 col-md-4">
             {# link to xml #}
             <a target="_blank" href="{{ link }}">{{ link }}</a><br />
+            {#
+            {% if domXml is not empty %}
             <pre>{{ domXml }}
             </pre>
+            {% endif %}
+            #}
 
             {% if app.request.get('debug') %}
             <pre>{{ rawXml }}

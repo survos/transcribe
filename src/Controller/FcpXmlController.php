@@ -57,6 +57,8 @@ class FcpXmlController extends AbstractController
      */
     public function testXml(Request $request, TimelineHelper $helper, ProjectRepository $projectRepository)
     {
+        // also see
+        // http://www.ethanjoachimeldridge.info/tech-blog/manipulating-XML-with-PHP
         if ($fn = $request->get('fn')) {
             $rawXml = file_get_contents($fn);
 
@@ -101,16 +103,14 @@ class FcpXmlController extends AbstractController
         $timeline = new Timeline();
         if ($fn = $request->get('fn'))
         {
-
+            /*
             $fcpxml = new Fcpxml($fn);
             $formats = $fcpxml->getFormats();
             foreach ($formats as $format) {
                 dump($format);
             }
             die();
-
-
-
+            */
 
             $xmlDoc = new \DOMDocument();
             $xmlDoc->load($fn);
@@ -150,7 +150,7 @@ class FcpXmlController extends AbstractController
         // format the raw xml
         if (function_exists('tidy_repair_string')) {
             $rawXml = tidy_repair_string($rawXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
-            $domXml = tidy_repair_string($domXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
+            // $domXml = tidy_repair_string($domXml, ['input-xml'=> 1, 'indent' => 1, 'wrap' => 0, 'hide-comments' => false]);
         }
 
         // use a new timeline for the import!
@@ -166,7 +166,7 @@ class FcpXmlController extends AbstractController
             'timeline' => $importedTimeline,
             'rawXml' => $rawXml,
             'xml' => $xml,
-            'domXml' => $domXml,
+            // 'domXml' => $domXml,
             'fn' => $fn,
             'link' => $link
         ]);

@@ -350,7 +350,7 @@ FCM: NON-DROP FRAME
      */
     public function markers(Request $request, Project $project, $_format='html')
     {
-        $markers = $this->markerRepository->findByProject($project);
+        // $markers = $this->markerRepository->findByProject($project);
         /* drat, this should work!! */
 
         $encoders = array( new JsonEncode());

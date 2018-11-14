@@ -376,7 +376,8 @@ class Media
 
     public function getRealPath($delim="//")
     {
-        $path = sprintf("%s$delim%s", $this->getProject()->getBasePath(), $this->getPath());
+        $path = sprintf("%s/%s", $this->getProject()->getBasePath(), $this->getPath());
+        return realpath($path);
         $path = str_replace('\\', $delim, $path);
         $path = str_replace('//', $delim, $path);
 

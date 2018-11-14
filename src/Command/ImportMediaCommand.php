@@ -183,9 +183,11 @@ class ImportMediaCommand extends Command
 
 
         $finder = new Finder();
-        $finder->files()->in($dir)->name('Ed*.mov'); // ->contains('Shelly');
+        $finder->files()->in($dir)->name('*.mov'); // ->contains('Shelly');
 
         foreach ($finder as $file) {
+            //
+            $filename = $file->getRelativePathname();
 
             $ext = strtolower($file->getExtension());
             if (!in_array($ext, ['jpg', 'mov', 'mp4', 'jpg', 'png'])) # meed a better isMovie function
@@ -193,8 +195,10 @@ class ImportMediaCommand extends Command
                 continue; // skip
             }
 
-            //
-            $filename = $file->getRelativePathname();
+            if ($input->getOption('verbose')) {
+                $output->writeln("Reading " . $filename);
+            }
+
             $isImage = in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'gif', 'png'] );
             $isMovie = in_array(strtolower($file->getExtension()), ['mov', 'mp4'] );
 
@@ -234,6 +238,8 @@ class ImportMediaCommand extends Command
                 $io->note(sprintf('Create %s: %s', $code, $file->getRealPath()) );
 
                 $this->em->persist($media);
+
+
 
                 if ($file->getRealPath() != $media->getRealPath("\\")) {
                     throw new \Exception(sprintf("Media/File mismatch, can only import file %s into media %s",

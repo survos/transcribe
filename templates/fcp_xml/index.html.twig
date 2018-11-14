@@ -26,6 +26,9 @@
                 <a href="{{ path('fcp_xml_show', {fn: file.realPath}) }}">{{ fn }}</a>
             </td>
             <td>
+                <a href="{{ path('fcp_xml_show', {fn: file.realPath}) }}">{{ (file.size / 1024)|number_format(1) }}k</a>
+            </td>
+            <td>
                 {{ version  }}
             </td>
         </tr>
