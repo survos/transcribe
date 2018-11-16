@@ -5,6 +5,14 @@
     <li>
         <a href="{{ path('easyadmin') }}"><i class="fa fa-dashboard"></i> </a>
         <a href="{{ path('survos_landing') }}">Home</a>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a class="link" href="{{ path('app_logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ path('user_registration') }}">Register</a>
+            <a href="{{ path('app_login') }}">Login</a>
+        {% endif %}
+
         <a href="{{ path('fcp_xml') }}">XML Files</a>
         |
         {% for p in ['maryann', 'claire', 'kesh'] %}

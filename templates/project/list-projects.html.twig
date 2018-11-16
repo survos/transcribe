@@ -1,13 +1,14 @@
-{% extends '@SurvosLanding/public_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Projects{% endblock %}
 
-{% block body %}
+{% block content %}
 
 <div class="example-wrapper">
     <h1>Projects</h1>
 
     <a href="{{ path('fcp_xml') }}">FCP XML Debug</a>
+    <a href="{{ path('user_registration') }}">Register</a>
 
     <table class="table table-bordered">
         <thead>
