@@ -1,5 +1,15 @@
 {% extends "@SurvosLanding/public_base.html.twig" %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
 
 {% block breadcrumbs %}
     <li>
@@ -34,10 +44,4 @@
     <div class="content">
         {{ block('content') }}
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-
 {% endblock %}
