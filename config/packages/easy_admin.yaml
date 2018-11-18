@@ -11,11 +11,30 @@ easy_admin:
             - {entity: Marker }
             - {entity: Broll }
             - {entity: Word }
+            - {entity: User }
             - { label: 'Workflow', icon: code-fork, route: 'survos_workflows' }
 
     entities:
         Broll:
             class: App\Entity\BRoll
+
+        User:
+            class: App\Entity\User
+            form:  # <-- 'form' is applied to both 'new' and 'edit' views
+                fields:
+                    - 'id'
+                    - { property: 'email', type: 'email' }
+                    # - { property: 'roles' }
+                    # - { property: 'roles', type_options: { expanded: true, multiple: true } }
+                # ...
+            list:
+                fields:
+                - username
+                - email
+                - roles
+
+
+
 
         Media:
             class: App\Entity\Media

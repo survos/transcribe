@@ -30,7 +30,7 @@ class LoadUsersCommand extends Command
     {
         $this
             ->setDescription('Create a new user')
-            ->addArgument('username', InputArgument::OPTIONAL, 'Username')
+            ->addArgument('username', InputArgument::REQUIRED, 'Username')
             ->addArgument('password', InputArgument::OPTIONAL, 'Plain Text Password')
             ->addOption('roles', null, InputOption::VALUE_OPTIONAL, 'Roles', 'ROLE_USER')
         ;

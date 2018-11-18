@@ -103,14 +103,14 @@ class FcpXmlController extends AbstractController
         $timeline = new Timeline();
         if ($fn = $request->get('fn'))
         {
-            /*
+
             $fcpxml = new Fcpxml($fn);
             $formats = $fcpxml->getFormats();
             foreach ($formats as $format) {
                 dump($format);
             }
             die();
-            */
+
 
             $xmlDoc = new \DOMDocument();
             $xmlDoc->load($fn);
