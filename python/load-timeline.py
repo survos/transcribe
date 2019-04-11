@@ -80,7 +80,8 @@ print cmd
 os.system(cmd)
 
 
-smodule = imp.load_dynamic('fusionscript', 'C:\\Program Files\\Blackmagic Design\\DaVinci Resolve\\fusionscript.dll')
+# smodule = imp.load_dynamic('fusionscript', 'C:\\Program Files\\Blackmagic Design\\DaVinci Resolve\\fusionscript.dll')
+smodule = imp.load_dynamic('fusionscript', '/mnt/c/Program Files/Blackmagic Design/DaVinci Resolve/fusionscript.dll')
 resolve = smodule.scriptapp('Resolve')
 
 projectManager = resolve.GetProjectManager()

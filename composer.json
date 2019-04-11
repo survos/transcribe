@@ -21,6 +21,7 @@
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
         "symfony/dom-crawler": "*",
+        "symfony/expression-language": "4.2.*",
         "symfony/finder": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
@@ -36,7 +37,6 @@
         "symfony/maker-bundle": "^1.7",
         "symfony/web-server-bundle": "*"
     },
-    "prefer-stable": true,
     "config": {
         "preferred-install": {
             "*": "dist"
@@ -54,6 +54,7 @@
         }
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "replace": {
         "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
