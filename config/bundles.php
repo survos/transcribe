@@ -17,4 +17,5 @@ return [
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Survos\LandingBundle\SurvosLandingBundle::class => ['all' => true],
     Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
+    Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
 ];

@@ -49,6 +49,7 @@ class ImportMediaCommand extends Command
             ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'root dir for project')
             ->addOption('skip-info', null, InputOption::VALUE_NONE, 'Skip ffprobe')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Skip saving')
+            ->addOption('mirror-dir', null, InputOption::VALUE_NONE, 'Mirros the directory structure (for flac, etc.)')
             ->addOption('delete-photos', null, InputOption::VALUE_NONE, 'Delete existing photos')
         ;
     }
@@ -160,6 +161,34 @@ class ImportMediaCommand extends Command
             $this->em->flush();
         }
 
+        if ($input->getOption('mirror-dir')) {
+
+            $source = $project->getBasePath();
+
+
+            $target = $this->$project->getCachePath();
+
+            $this->fileSystem->mkdir($target);
+
+            $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($iterator as $item)
+            {
+                if ($item->isDir())
+                {
+                    $fileSystem->mkdir($target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                }
+                else
+                {
+                    $fileSystem->copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                }
+            }
+
+            foreach ($project->getPhotos() as $photo) {
+                $project->removeMedium($photo);
+            }
+            $this->em->flush();
+        }
 
         // update the dir in the project, may have changed with --dir
         if (!empty($dir) || $dir = $input->getOption('dir'))

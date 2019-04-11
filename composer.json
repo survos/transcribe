@@ -29,6 +29,7 @@
         "symfony/property-info": "*",
         "symfony/serializer": "*",
         "symfony/twig-bundle": "*",
+        "symfony/webpack-encore-bundle": "^1.0",
         "symfony/yaml": "*",
         "wapmorgan/media-file": "^0.1.4"
     },
