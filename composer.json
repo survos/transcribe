@@ -8,15 +8,15 @@
         "ext-iconv": "*",
         "ext-simplexml": "*",
         "doctrine/cache": "^1.8",
-        "easycorp/easyadmin-bundle": "^1.17",
+        "easycorp/easyadmin-bundle": "dev-master",
         "google/cloud-speech": "^0.17.1",
         "google/cloud-storage": "^1.9",
         "mantas-done/subtitles": "^0.3.4",
         "php-ffmpeg/php-ffmpeg": "^0.13.0",
         "sensio/framework-extra-bundle": "^5.2",
         "servo/fluidxml": "^1.21",
-        "survos/landing-bundle": "*",
         "survos/workflow-extension-bundle": "dev-master",
+        "survos/landing-bundle": "dev-master",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
@@ -68,6 +68,10 @@
         {
             "type": "path",
             "url": "../Survos/WorkflowBundle"
+        },
+        {
+            "type": "path",
+            "url": "../Survos/LandingBundle"
         }
     ],
 
@@ -89,7 +93,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.2.*"
+            "require": "4.3.*"
         }
     }
 }

@@ -44,7 +44,7 @@ class ProjectTimelineController extends AbstractController
     }
 
     /**
-     * @Route("/", name="project")
+     * @Route("/projects", name="project")
      */
     public function index()
     {

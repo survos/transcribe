@@ -3,10 +3,10 @@ framework:
         media:
             type: 'state_machine'
             marking_store:
-                arguments: marking
+                property: marking
             supports:
                 - App\Entity\Media
-            initial_place: !php/const App\Entity\Media::PLACE_START
+            initial_marking: !php/const App\Entity\Media::PLACE_START
             places:
                 !php/const App\Entity\Media::PLACE_START: ~
                 !php/const App\Entity\Media::PLACE_AUDIO_LOCAL: ~

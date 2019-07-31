@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class AdminController extends BaseAdminController
+class AdminController extends AbstractController
 {
     /**
      * @Route("/admin", name="admin")

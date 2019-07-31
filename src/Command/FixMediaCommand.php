@@ -50,22 +50,23 @@ class FixMediaCommand extends Command
             {
 
                 if ($media->getWidth() == 0) {
-                    dump($media); die();
+                    dump($media); // die();
                 }
 
-                /* fix code and type
+                /* fix code and type */
                 $code =  pathinfo($media->getFilename(), PATHINFO_FILENAME);
                 $media->setCode($code);
 
                 $finfo = new \finfo();
-                $finfo = $finfo->file($media->getPath());
-                if (strpos($finfo, 'movie') !== false) {
-                    $type = 'video';
-                } else {
-                    die($finfo);
+                if (file_exists($media->getPath())) {
+                    $finfo = $finfo->file($media->getPath());
+                    if (strpos($finfo, 'movie') !== false) {
+                        $type = 'video';
+                    } else {
+                        die($finfo);
+                    }
+                    $media->setType($type);
                 }
-                $media->setType($type);
-                */
             }
         }
 

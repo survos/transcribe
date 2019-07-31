@@ -2,3 +2,23 @@ survos_landing:
   entities:
     - App\Entity\Message: ~
     - App\Entity\Archive: ~
+
+services:
+  survos.landing_menu_builder:
+    class: Survos\LandingBundle\Menu\LandingMenuBuilder
+    arguments:
+      - "@knp_menu.factory"
+      - "@security.authorization_checker"
+    tags:
+      #      - { name: knp_menu.menu_builder, method: createMainMenu, alias: landing_menu } # The alias is what is used to retrieve the menu
+      - { name: knp_menu.menu_builder, method: createTestMenu, alias: test_menu }
+      - { name: knp_menu.menu_builder, method: createTestMenu, alias: landing_menu }
+      - { name: knp_menu.menu_builder, method: createAuthMenu, alias: auth_menu }
+
+  app.menu_builder:
+    class: App\Menu\MenuBuilder
+    arguments:
+      - "@knp_menu.factory"
+      - "@security.authorization_checker"
+    tags:
+      - { name: knp_menu.menu_builder, method: createMainMenu, alias: landing_menu }
