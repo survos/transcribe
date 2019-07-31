@@ -199,7 +199,7 @@ class Clip
                 case 'duration':
                 case 'start':
                     $skip = true;
-                    continue; // @todo fIx!
+                    break;
                     $this->{'set' . $var}(Timeline::fractionalSecondsToTime($val)); // bad!  The source of some problems
                     $var .= 'String';
                     // $val = (Timeline::fractionalSecondsToTime($val));

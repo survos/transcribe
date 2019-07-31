@@ -266,7 +266,6 @@ class TimelineAsset
                     break;
                 case 'id':
                     $skip = true;
-                    continue;
                     break;
                 case 'duration':
                 case 'start':

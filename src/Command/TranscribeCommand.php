@@ -173,6 +173,7 @@ class TranscribeCommand extends Command
                 $io->note("Using cache file: $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
             } else {
+                $io->note("Generating : $cacheFile");
                 $jsonResult = null;
                 if ($input->getOption('transcribe')) {
                     $io->note("Transcribing $flacFilename");
