@@ -21,7 +21,7 @@
         "symfony/console": "*",
         "symfony/debug-pack": "^1.0",
         "symfony/dom-crawler": "*",
-        "symfony/expression-language": "4.2.*",
+        "symfony/expression-language": "^4.2",
         "symfony/finder": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
@@ -89,7 +89,7 @@
         ]
     },
     "conflict": {
-        "symfony/symfony": "*"
+        "symfony/symfony": "4.3"
     },
     "extra": {
         "symfony": {
