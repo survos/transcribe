@@ -11,6 +11,7 @@
         "easycorp/easyadmin-bundle": "^2",
         "google/cloud-speech": "^0.17.1",
         "google/cloud-storage": "^1.9",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "mantas-done/subtitles": "^0.3.4",
         "oneup/flysystem-bundle": "^3.3",
         "php-ffmpeg/php-ffmpeg": "^0.13.0",
@@ -89,13 +90,10 @@
             "@auto-scripts"
         ]
     },
-    "conflict": {
-        "symfony/symfony": "4.4"
-    },
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.4.*"
+            "require": "5.*"
         }
     }
 }
