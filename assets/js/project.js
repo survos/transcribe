@@ -1,3 +1,23 @@
+
+require('jquery-ui');
+
+const $ = require('jquery');
+
+$( ".sortable" ).sortable({
+    update: function( event, ui ) {
+        var data = $(this).sortable('serialize');
+        console.log('data', data);
+        $('#marker_order').text('order: ' + data);
+        $.ajax({
+            data: data,
+            type: 'GET',
+            // url: '{{ path('marker_reorder', project.rp) }}'
+        });
+    }
+});
+
+$( ".sortable" ).disableSelection();
+
 $(function() {
 
 

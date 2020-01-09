@@ -29,7 +29,6 @@ easy_admin:
                 # ...
             list:
                 fields:
-                - username
                 - email
                 - roles
 
@@ -69,6 +68,6 @@ easy_admin:
 
         Project:
             class: App\Entity\Project
-            label: 'Bin'
+            label: 'Project'
 
 

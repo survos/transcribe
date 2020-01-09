@@ -250,9 +250,12 @@
 
 {% block javascripts %}
 {{ parent() }}
+    {{ encore_entry_script_tags('markers') }}
+    {#
     {% if not offline %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
     {% endif %}
     <script src="/js/markers.js"></script>
+    #}
 
 {% endblock  %}

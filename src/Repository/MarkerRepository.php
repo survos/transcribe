@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Marker;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class MarkerRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Marker::class);
     }

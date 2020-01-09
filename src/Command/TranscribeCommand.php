@@ -70,6 +70,7 @@ class TranscribeCommand extends Command
             ->setDescription('Transcribe videos using Google Speech API')
             ->addArgument('projectCode', InputArgument::REQUIRED, 'Project Code')
             ->addOption('force', null, InputOption::VALUE_NONE, 're-do transcription')
+            ->addOption('existing-only', null, InputOption::VALUE_NONE, 'Just load existing JSON files')
             ->addOption('upload-flac', null, InputOption::VALUE_NONE, 'upload flac to gs')
             ->addOption('upload-thumb', null, InputOption::VALUE_NONE, 'upload thumbnail to gs')
             ->addOption('upload-photos', null, InputOption::VALUE_NONE, 'upload photos to gs')
@@ -87,8 +88,6 @@ class TranscribeCommand extends Command
         {
             throw new \Exception("Project $projectCode not found.");
         }
-
-
 
         $qb = $this->mediaRepository->createQueryBuilder('m')
             ->andWhere('m.transcriptRequested = true')
@@ -111,15 +110,32 @@ class TranscribeCommand extends Command
             ;
         /** @var Media $media */
 
+        if ($input->getOption('existing-only')) {
+            foreach ($project->getMedia() as $media) {
+                $filename = $media->getRealPath();
+                $cacheFile = $filename . '.json';
+                if (file_exists($cacheFile)) {
+                    $jsonResult = file_get_contents($cacheFile);
+                    $io->note("Importing existing words from JSON " . $cacheFile);
+                    $this->importWordsFromJson($jsonResult, $media);
+                } else {
+                    $io->note($cacheFile . ' does not exist.');
+                }
+                $this->em->flush();
+            }
+
+            return 0;
+        }
+
+
         // Note: Speech-to-Text also supports WAV files with LINEAR16 or MULAW encoded audio.
-
-
         foreach ($qb->getQuery()->getResult() as $media) {
+            $filename = $media->getPath();
+            $cacheFile = $filename . '.json';
 
             $projectCode = $media->getProject()->getCode();
             $bucket = $this->getBucket($projectCode);
 
-            $filename = $media->getPath();
 
 
             $flacFilename = $media->getAudioFilePath();
@@ -168,7 +184,6 @@ class TranscribeCommand extends Command
             }
 
             // $io->note(sprintf("Flac file $flacFilename is %d bytes", ($data)) );
-            $cacheFile = $filename . '.json';
             if (file_exists($cacheFile)) {
                 $io->note("Using cache file: $cacheFile");
                 $jsonResult = file_get_contents($cacheFile);
@@ -210,52 +225,10 @@ class TranscribeCommand extends Command
             */
 
 
-            if ($jsonResult && ($media->getWords()->count() == 0) ) {
-                $io->note("Import words from JSON");
-
-                $result = json_decode($jsonResult, true);
-                if (empty($result)) {
-                    continue;
-                }
-                // $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
-                // $this->em->flush(); // hack
-
-                $idx = 0;
-                foreach ($result as $sentence) {
-                    $x = $sentence['alternatives'][0];
-                    foreach ($x['words'] as $word) {
-                        $idx++;
-                        try {
-                            foreach (['startTime', 'endTime'] as $v) {
-                                $word[$v] = sprintf("%3.1f", rtrim($word[$v], 's'));
-                            }
-                            $w = $word['word']; // the string
-                            $lastChar = substr($w, -1);
-                            if ( in_array($lastChar, ['?', '.', '!']) ) {
-                                $punct = $lastChar;
-                                // remove last char from word?
-                            } else {
-                                $punct = null;
-                            }
-                            $wordObject = (new Word())
-                                // ->setMedia($media)
-                                ->setIdx($idx)
-                                ->setEndPunctuation($punct)
-                                ->setWord($w)
-                                ->setStartTime($word['startTime'])
-                                ->setEndTime($word['endTime'])
-                            ;
-                        } catch (\Exception $e) {
-                            dump($word);
-                            throw new \Exception($e->getMessage());
-                        }
-                        $media->addWord($wordObject);
-                    }
-                }
-
-                $media
-                    ->setTranscriptRequested(true) // since it already exists
-                    ->setTranscriptJson($jsonResult);
+            if ($jsonResult && ($media->getWords()->count() == 0) )
+            {
+                $io->note("Importing words from JSON");
+                $this->importWordsFromJson($jsonResult, $media);
 
             }
             $this->em->flush();
@@ -470,7 +443,7 @@ class TranscribeCommand extends Command
      *
      * @return Google\Cloud\Storage\Bucket the newly created bucket.
      */
-    function getBucket($bucketName, $options = [], $purgeFirst = false): Bucket
+    function getBucket($bucketName, $options = [], $purgeFirst = false): ?Bucket
     {
         // delete it while testing
         $bucketName = 'survos_' . $bucketName;
@@ -494,10 +467,66 @@ class TranscribeCommand extends Command
 
         // if (!$bucket = $this->storageClient->bucket($bucketName))
         {
-            $bucket = $this->storageClient->createBucket($bucketName, $options);
+            try {
+                $bucket = $this->storageClient->createBucket($bucketName, $options);
+            } catch (\Exception $e) {
+                $this->io->error($e->getMessage());
+                return null;
+            }
         }
 
         return $bucket;
+    }
+
+    /**
+     * @param string|null $jsonResult
+     * @param Media $media
+     * @throws \Exception
+     */
+    private function importWordsFromJson(?string $jsonResult, Media $media): void
+    {
+        $result = json_decode($jsonResult, true);
+        if (empty($result)) {
+            // continue;
+        }
+        // $media->getWords()->clear(); // if you've made edits or added markers, this is problematic.
+        // $this->em->flush(); // hack
+
+        $idx = 0;
+        foreach ($result as $sentence) {
+            $x = $sentence['alternatives'][0];
+            foreach ($x['words'] as $word) {
+                $idx++;
+                try {
+                    foreach (['startTime', 'endTime'] as $v) {
+                        $word[$v] = sprintf("%3.1f", rtrim($word[$v], 's'));
+                    }
+                    $w = $word['word']; // the string
+                    $lastChar = substr($w, -1);
+                    if (in_array($lastChar, ['?', '.', '!'])) {
+                        $punct = $lastChar;
+                        // remove last char from word?
+                    } else {
+                        $punct = null;
+                    }
+                    $wordObject = (new Word())
+                        // ->setMedia($media)
+                        ->setIdx($idx)
+                        ->setEndPunctuation($punct)
+                        ->setWord($w)
+                        ->setStartTime($word['startTime'])
+                        ->setEndTime($word['endTime']);
+                } catch (\Exception $e) {
+                    dump($word);
+                    throw new \Exception($e->getMessage());
+                }
+                $media->addWord($wordObject);
+            }
+        }
+
+        $media
+            ->setTranscriptRequested(true) // since it already exists
+            ->setTranscriptJson($jsonResult);
     }
 
 

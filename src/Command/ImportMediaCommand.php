@@ -163,31 +163,7 @@ class ImportMediaCommand extends Command
 
         if ($input->getOption('mirror-dir')) {
 
-            $source = $project->getBasePath();
-
-
-            $target = $this->$project->getCachePath();
-
-            $this->fileSystem->mkdir($target);
-
-            $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-            $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
-            foreach ($iterator as $item)
-            {
-                if ($item->isDir())
-                {
-                    $fileSystem->mkdir($target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-                }
-                else
-                {
-                    $fileSystem->copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-                }
-            }
-
-            foreach ($project->getPhotos() as $photo) {
-                $project->removeMedium($photo);
-            }
-            $this->em->flush();
+            $this->mirrorDir($project, $this->fileSystem);
         }
 
         // update the dir in the project, may have changed with --dir
@@ -212,7 +188,7 @@ class ImportMediaCommand extends Command
 
 
         $finder = new Finder();
-        $finder->files()->in($dir)->name('*.mov'); // ->contains('Shelly');
+        $finder->files()->in($dir)->name(['*.mov', '*.MOV', '*.jpg']); // ->contains('Shelly');
 
         foreach ($finder as $file) {
             //
@@ -270,16 +246,17 @@ class ImportMediaCommand extends Command
 
 
 
-                if ($file->getRealPath() != $media->getRealPath("\\")) {
-                    throw new \Exception(sprintf("Media/File mismatch, can only import file %s into media %s",
-                        $file->getRealPath(),
-                        $media->getRealPath("\\")
-                    ));
+                if ($isWindows = 0) {
+                    if ($file->getRealPath() != $media->getRealPath("\\")) {
+                        throw new \Exception(sprintf("Media/File mismatch, can only import file '%s' into media '%s'",
+                            $file->getRealPath(),
+                            $media->getRealPath("\\") // this is a Windows thing!
+                        ));
+                    }
                 }
             }
 
             $info = $this->info($file->getRealPath());
-            dump($media);
 
             // $isImage = $info['format_name'] == 'image2';
 
@@ -359,5 +336,34 @@ class ImportMediaCommand extends Command
             $io->success('Files read but not imported');
         }
 
+    }
+
+    /**
+     * @param Project|null $project
+     * @param $fileSystem
+     */
+    private function mirrorDir(?Project $project, $fileSystem): void
+    {
+        $source = $project->getBasePath();
+
+
+        $target = $this->$project->getCachePath();
+
+        $this->fileSystem->mkdir($target);
+
+        $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $item) {
+            if ($item->isDir()) {
+                $fileSystem->mkdir($target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            } else {
+                $fileSystem->copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            }
+        }
+
+        foreach ($project->getPhotos() as $photo) {
+            $project->removeMedium($photo);
+        }
+        $this->em->flush();
     }
 }

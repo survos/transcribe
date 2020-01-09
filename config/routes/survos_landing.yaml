@@ -1,4 +1,19 @@
-survos_workflow_bundle:
-  resource: '@SurvosLandingBundle/Controller/LandingController.php'
-  prefix: /
-  type: annotation
+#survos_landing_bundle:
+#    resource: '@SurvosLandingBundle/Controller/LandingController.php'
+#    prefix: /
+#    type: annotation
+
+#survos_landing_bundle_oauth:
+#    resource: '@SurvosLandingBundle/Controller/OAuthController.php'
+#    prefix: /
+#    type: annotation
+
+
+survos_landing: {path: /, controller: 'Survos\LandingBundle\Controller\LandingController::landing'}
+app_homepage: {path: /, controller: 'Survos\LandingBundle\Controller\LandingController::landing'}
+app_logo: {path: /logo, controller: 'Survos\LandingBundle\Controller\LandingController::logo'}
+app_profile: {path: /profile, controller: 'Survos\LandingBundle\Controller\LandingController::profile'}
+# required if app_profile is used, since you can change the password from the profile
+app_change_password: {path: /change-password, controller: 'Survos\LandingBundle\Controller\LandingController::changePassword'}
+app_typography: {path: /typography, controller: 'Survos\LandingBundle\Controller\LandingController::typography'}
+survos_landing_credits: {path: /credits, controller: 'Survos\LandingBundle\Controller\LandingController::credits'}

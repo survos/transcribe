@@ -8,17 +8,18 @@
         "ext-iconv": "*",
         "ext-simplexml": "*",
         "doctrine/cache": "^1.8",
-        "easycorp/easyadmin-bundle": "dev-master",
+        "easycorp/easyadmin-bundle": "^2",
         "google/cloud-speech": "^0.17.1",
         "google/cloud-storage": "^1.9",
         "mantas-done/subtitles": "^0.3.4",
+        "oneup/flysystem-bundle": "^3.3",
         "php-ffmpeg/php-ffmpeg": "^0.13.0",
         "sensio/framework-extra-bundle": "^5.2",
         "servo/fluidxml": "^1.21",
-        "survos/workflow-extension-bundle": "dev-master",
         "survos/landing-bundle": "dev-master",
+        "survos/workflow-extension-bundle": "dev-master",
         "symfony/apache-pack": "^1.0",
-        "symfony/console": "*",
+        "symfony/console": "^4.4|^5.0",
         "symfony/debug-pack": "^1.0",
         "symfony/dom-crawler": "*",
         "symfony/expression-language": "^4.2",
@@ -31,12 +32,12 @@
         "symfony/twig-bundle": "*",
         "symfony/webpack-encore-bundle": "^1.0",
         "symfony/yaml": "*",
+        "vich/uploader-bundle": "^1.12",
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
         "symfony/dotenv": "*",
-        "symfony/maker-bundle": "^1.7",
-        "symfony/web-server-bundle": "*"
+        "symfony/maker-bundle": "^1.7"
     },
     "config": {
         "preferred-install": {
@@ -89,12 +90,12 @@
         ]
     },
     "conflict": {
-        "symfony/symfony": "4.3"
+        "symfony/symfony": "4.4"
     },
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.3.*"
+            "require": "4.4.*"
         }
     }
 }

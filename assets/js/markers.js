@@ -1,5 +1,7 @@
-$(function() {
+const $ = require('jquery');
 
+
+console.log("Setting up listeners for transcript");
     var element = $(".transcript");
 
     element.attr('unselectable', 'on').css('user-select', 'none').on('selectstart dragstart', false);
@@ -56,7 +58,8 @@ $(function() {
             console.log(time)
             audio.currentTime = time;
             audio.pause();
-        }
+            }
     });
 
+$(function() {
 });

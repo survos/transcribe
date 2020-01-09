@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_link_tags('project') }}
+{% endblock %}
+
+
 {% block title %}Project{% endblock %}
 
 {% block body %}

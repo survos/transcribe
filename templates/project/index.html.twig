@@ -22,7 +22,7 @@
         {% for project in projects %}
             <tr>
                 <td>{{ project.id }}</td>
-                <td>{{ project.code }}</td>
+                <td><a href="{{ path('project_show', project.rp) }}">{{ project.code }}</a></td>
                 <td>{{ project.basePath }}</td>
                 <td>{{ project.honoreeName }}</td>
                 <td>{{ project.honoreeTitle }}</td>

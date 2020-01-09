@@ -2,8 +2,6 @@ framework:
     workflows:
         media:
             type: 'state_machine'
-            marking_store:
-                property: marking
             supports:
                 - App\Entity\Media
             initial_marking: !php/const App\Entity\Media::PLACE_START

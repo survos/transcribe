@@ -183,6 +183,7 @@ class Media
         $this->words = new ArrayCollection();
         $this->bRolls = new ArrayCollection();
         $this->timelineAssets = new ArrayCollection();
+        $this->marking = self::PLACE_START;
     }
 
     public function getId(): ?int

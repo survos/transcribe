@@ -106,26 +106,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-    {# need this to work when offline!! #}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="/js/project.js"></script>
-
-<script>
-    $( function() {
-        $( ".sortable" ).sortable({
-            update: function( event, ui ) {
-                var data = $(this).sortable('serialize');
-                console.log('data', data);
-                $('#marker_order').text('order: ' + data);
-                $.ajax({
-                    data: data,
-                    type: 'GET',
-                    url: '{{ path('marker_reorder', project.rp) }}'
-                });
-            }
-        });
-        $( ".sortable" ).disableSelection();
-    } );
-    </script>
-
+{{ encore_entry_link_tags('project') }}
 {% endblock  %}
