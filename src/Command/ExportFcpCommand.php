@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Twig\Environment;
 
 class ExportFcpCommand extends Command
 {
@@ -22,7 +23,7 @@ class ExportFcpCommand extends Command
     private $helper;
     private $twig;
 
-    public function __construct(EntityManagerInterface $entityManager, TimelineHelper $helper, \Twig_Environment $twig_Environment, ?string $name = null)
+    public function __construct(EntityManagerInterface $entityManager, TimelineHelper $helper, Environment $twig_Environment, ?string $name = null)
     {
         parent::__construct($name);
         $this->em = $entityManager;
