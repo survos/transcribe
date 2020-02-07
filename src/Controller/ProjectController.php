@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectController extends AbstractController
 {
     /**
+     * @Route("/crud", name="project_index", methods="GET")
      * @Route("/", name="project_crud_index", methods="GET")
      */
     public function index(ProjectRepository $projectRepository): Response

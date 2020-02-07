@@ -22,3 +22,10 @@ services:
     tags:
       - { name: knp_menu.menu_builder, method: createMainMenu, alias: landing_menu }
       - { name: knp_menu.menu_builder, method: createTestMenu, alias: test }
+      - { name: knp_menu.menu_builder, method: createMainMenu, alias: landing_content_menu }
+
+twig:
+  globals:
+    landing_menu_route: landing_menu
+    landing_content_menu_route: test
+    site_name: '%env(SITE_NAME)%'
