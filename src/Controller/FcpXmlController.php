@@ -9,7 +9,7 @@ use App\Entity\Timeline;
 use App\Entity\TimelineAsset;
 use App\Entity\TimelineFormat;
 use App\Repository\ProjectRepository;
-use App\Service\TimelineHelper;
+use App\Services\TimelineHelper;
 use FluidXml\FluidXml;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DomCrawler\Crawler;

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MLT DTD{% endblock %}
+
+{% block body %}
+
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Content Spec</th>
+            <th>Attributes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for element in elements %}
+            <tr>
+                <td>{{ element.type }}</td>
+                <td>
+                    <h3>{{ element.contentSpecification }}</h3>
+
+                    <table class="table table-sm table-striped table-info">
+                        <tbody>
+                        {% for code, definition in element.attributes %}
+                            <tr>
+                                <td>{{ code }} {{ definition.defaultType == '#REQUIRED' ? '<sup>*</sup>' }}</td>
+                                <td>{{ definition.type }}</td>
+                                <td>{{ definition.enumeration is iterable ? '[]' }}</td>
+                                {#
+                                <td>{{ definition.defaultType}}</td>
+                                <td>{{ definition.defaultValue }}</td>
+                                #}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

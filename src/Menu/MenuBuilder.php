@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class MenuBuilder extends LandingMenuBuilder
 {
 
-
     public function createMainMenu(array $options)
     {
         $menu = $this->factory->createItem('root');
@@ -23,6 +22,9 @@ class MenuBuilder extends LandingMenuBuilder
             ->setAttribute('icon', 'fas fa-home');
 
         $menu->addChild('admin', ['route' => 'easyadmin']);
+        $menu->addChild('kden_reader', ['route' => 'kden_reader']);
+        $menu->addChild('kden_writer', ['route' => 'kden_writer']);
+        $menu->addChild('kden_dtd', ['route' => 'kden_dtd']);
         $menu->addChild('projects', ['route' => 'project_crud_index'])->setAttribute('icon', 'fas fa-list');
 
         // ... add more children

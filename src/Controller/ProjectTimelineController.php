@@ -10,7 +10,7 @@ use App\Entity\Timeline;
 use App\Entity\Word;
 use App\Form\MarkerFormType;
 use App\Form\TimelineType;
-use App\Service\TimelineHelper;
+use App\Services\TimelineHelper;
 use Done\Subtitles\Subtitles;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

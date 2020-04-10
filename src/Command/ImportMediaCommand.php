@@ -71,7 +71,7 @@ class ImportMediaCommand extends Command
         return $streams;
     }
 
-        private function info($filename)
+    private function info($filename)
     {
 
         $ffprobe = FFMpeg\FFProbe::create();
@@ -335,6 +335,8 @@ class ImportMediaCommand extends Command
         } else {
             $io->success('Files read but not imported');
         }
+
+        return 0;
 
     }
 
