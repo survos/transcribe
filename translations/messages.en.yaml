@@ -9,6 +9,6 @@ icon:
 home:
     title: 'transcribe'
     intro: 'JUFJ transcriptions for gala. '
-    description: 'Symfony 4.4 and heroku'
+    description: 'Symfony 5 and heroku'
 survos_landing: Home
 app_docs: Documentation

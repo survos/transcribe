@@ -1,0 +1,39 @@
+App\Entity\Mlt:
+  attributes:
+    version:
+      groups: ['xml']
+      serialized_name: '@version'
+
+    lcNumeric:
+      groups: ['xml']
+      serialized_name: '@LC_NUMERIC'
+    producer:
+      groups: ['xml']
+      serialized_name: '@producer'
+    root:
+      groups: ['xml']
+      serialized_name: '@root'
+
+    # perhaps this should be 1-to-1?
+    profiles:
+      serialized_name: 'profile'
+      groups: ['xml']
+
+
+App\Entity\Profile:
+  attributes:
+    frameRateNum:
+      serialized_name: '@frame_rate_num'
+      groups: ['xml']
+    sampleAspectNum:
+      serialized_name: '@sample_aspect_num'
+      groups: ['xml']
+
+App\Entity\Property:
+  attributes:
+    name:
+      # serialized_name: '@name'
+      groups: ['xml']
+    value:
+      # serialized_name: '#'
+      groups: ['xml']

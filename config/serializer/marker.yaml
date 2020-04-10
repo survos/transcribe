@@ -1,3 +1,4 @@
+
 App\Entity\Marker:
   attributes:
     title:

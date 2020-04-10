@@ -13,7 +13,7 @@ Setup files as follows
         /interview
         /interview-audio
         /broll
-        /photos
+        /photos`
     
 
 Assemble assets, .mov files at test/test1.mov, etc. photos and broll in broll/photo1.jpg
