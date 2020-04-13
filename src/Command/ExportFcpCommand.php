@@ -75,5 +75,7 @@ class ExportFcpCommand extends Command
             $io->success(sprintf('%s exported.', $fn));
         }
 
+        return 0;
+
     }
 }

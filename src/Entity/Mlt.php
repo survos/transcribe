@@ -42,19 +42,20 @@ class Mlt
     private $LcNumeric;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @SerializedName("@producer_ref")
-     */
-    private $producer;
-
-    /**
      * @ORM\Column(type="string", length=16, nullable=true)
      */
     private $version;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Producer", mappedBy="mlt", orphanRemoval=true)
+     * @SerializedName("producers")
+     */
+    private $producers;
+
     public function __construct()
     {
         $this->profiles = new ArrayCollection();
+        $this->producers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,7 +87,7 @@ class Mlt
     {
         if (!$this->profiles->contains($profile)) {
             $this->profiles[] = $profile;
-            $profile->setMlt($this);
+            // $profile->setMlt($this);
         }
 
         return $this;
@@ -129,17 +130,6 @@ class Mlt
         return $this;
     }
 
-    public function getProducer(): ?string
-    {
-        return $this->producer;
-    }
-
-    public function setProducer(?string $producer): self
-    {
-        $this->producer = $producer;
-
-        return $this;
-    }
 
     public function getVersion(): ?string
     {
@@ -149,6 +139,37 @@ class Mlt
     public function setVersion(?string $version): self
     {
         $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Producer[]
+     */
+    public function getProducers(): Collection
+    {
+        return $this->producers;
+    }
+
+    public function addProducer(Producer $producer): self
+    {
+        if (!$this->producers->contains($producer)) {
+            $this->producers[] = $producer;
+            $producer->setMlt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProducer(Producer $producer): self
+    {
+        if ($this->producers->contains($producer)) {
+            $this->producers->removeElement($producer);
+            // set the owning side to null (unless already changed)
+            if ($producer->getMlt() === $this) {
+                $producer->setMlt(null);
+            }
+        }
 
         return $this;
     }

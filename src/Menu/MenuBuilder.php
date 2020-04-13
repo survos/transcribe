@@ -25,7 +25,8 @@ class MenuBuilder extends LandingMenuBuilder
         $menu->addChild('kden_reader', ['route' => 'kden_reader']);
         $menu->addChild('kden_writer', ['route' => 'kden_writer']);
         $menu->addChild('kden_dtd', ['route' => 'kden_dtd']);
-        $menu->addChild('projects', ['route' => 'project_crud_index'])->setAttribute('icon', 'fas fa-list');
+        $menu->addChild('projects_crud', ['route' => 'project_crud_index'])->setAttribute('icon', 'fas fa-list');
+        $menu->addChild('projects', ['route' => 'project'])->setAttribute('icon', 'fad fa-list');
 
         // ... add more children
 

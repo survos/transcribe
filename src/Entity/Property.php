@@ -11,11 +11,22 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class Property
 {
     /**
-     * @ ORM\Id()
-     * @ ORM\GeneratedValue()
-     * @ ORM\Column(type="integer")
-    private $id;
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     * @SerializedName("@id")
      */
+    private $id;
+
+    /**
+     * @param mixed $id
+     * @return Property
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -26,8 +37,8 @@ class Property
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Producer", inversedBy="properties")
      * @ORM\JoinColumn(nullable=false)
-    private $producer;
      */
+    private $producer;
 
     /**
      * @ORM\Column(type="string", length=255)

@@ -91,8 +91,7 @@ class FcpXmlController extends AbstractController
     }
 
 
-
-            /**
+    /**
      * @Route("/fcp/show_xml", name="fcp_xml_show")
      */
     public function showXml(Request $request, TimelineHelper $helper, ProjectRepository $projectRepository)

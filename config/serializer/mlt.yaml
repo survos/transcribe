@@ -7,9 +7,9 @@ App\Entity\Mlt:
     lcNumeric:
       groups: ['xml']
       serialized_name: '@LC_NUMERIC'
-    producer:
+    producers :
       groups: ['xml']
-      serialized_name: '@producer'
+      serialized_name: 'producer'
     root:
       groups: ['xml']
       serialized_name: '@root'
@@ -19,6 +19,14 @@ App\Entity\Mlt:
       serialized_name: 'profile'
       groups: ['xml']
 
+App\Entity\Producer:
+  attributes:
+    id:
+      groups: ['xml']
+    inTime:
+      groups: ['xml']
+    properties:
+      groups: ['xml']
 
 App\Entity\Profile:
   attributes:
