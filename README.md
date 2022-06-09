@@ -1,4 +1,7 @@
 # transcribe
+
+The symfony6 branch has SOME work, but needs php7 to convert easyadmin.
+
 Scripts to call the Google Speech API for MOV files (JUFJ)
 
 Used by JUFJ for gala 2018 videos.
