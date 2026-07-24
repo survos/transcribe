@@ -21,6 +21,7 @@
         "servo/fluidxml": "^1.21",
         "soothsilver/dtd-parser": "^0.1.0",
         "symfony/apache-pack": "^1.0",
+        "symfony/asset-mapper": "8.1.*",
         "symfony/console": "^8.1",
         "symfony/dom-crawler": "^8.1",
         "symfony/dotenv": "^8.1",
@@ -35,6 +36,7 @@
         "symfony/serializer": "^8.1",
         "symfony/string": "^8.1",
         "symfony/twig-bundle": "^8.1",
+        "symfony/ux-icons": "*",
         "symfony/yaml": "^8.1",
         "twig/extra-bundle": "^3.0",
         "wapmorgan/media-file": "^0.1.4"
@@ -79,7 +81,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

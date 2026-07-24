@@ -19,7 +19,7 @@
     </td>
     <td>
         <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: media.id}) }}">
-            <i class="fa fa-pencil"></i>
+            {{ ux_icon(pencil, {class: icon}) }}
         </a>
         {% if media.lowerThirds %}
             <pre>{{ media.lowerThirds }}</pre>

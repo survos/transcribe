@@ -57,8 +57,8 @@
                         <td>{{ asset.src }}</td>
                         <td>{{ asset.format }}</td>
                         <td>
-                            {% if asset.hasAudio %}<i class="fa fa-headphones"> {{ asset.audioChannels }}</i>{% endif %}
-                            {% if asset.hasVideo%}<i class="fa fa-video-camera"></i>{% endif %}
+                            {% if asset.hasAudio %}{{ ux_icon(headphones, {class: icon}) }} {{ asset.audioChannels }}{% endif %}
+                            {% if asset.hasVideo%}{{ ux_icon(video, {class: icon}) }}{% endif %}
                         </td>
                         <td>{{ asset.start }}</td>
                         <td>{{ asset.clips.count }}</td>

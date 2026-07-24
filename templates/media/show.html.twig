@@ -19,7 +19,7 @@
     {{ form_start(switchForm, { 'attr': {'class': 'form-inline'} }) }}
     {{ form_widget(switchForm) }}
 
-    <input type="submit" class="btn btn-xs" value="Switch" />
+    <input type="submit" class="btn btn-sm" value="Switch" />
     {{ form_end(switchForm) }}
 
 {% endblock %}
@@ -40,15 +40,15 @@
                         {% endif %}
 
                     &nbsp;
-                    <a class="clip pull-right"
+                    <a class="clip float-end"
                        data-id="{{ m.id }}"
                        data-start="{{ m.startTime / 10 }}"
                        data-stop="{{ m.endTime / 10 }}"
                        data-url="{{ m.media.publicUrl }}"
-                       href="#"><i class="fa fa-play"></i> </a>
-                    <span class="badge pull-right"> #{{ m.id }} +{{ m.duration/10|format(1)}}={{ total/10|round }}</span>
+                       href="#">{{ ux_icon(play, {class: icon}) }} </a>
+                    <span class="badge text-bg-secondary float-end"> #{{ m.id }} +{{ m.duration/10|format(1)}}={{ total/10|round }}</span>
                     <span class="hover">
-                        <a href="{{ path('marker_edit', m.rp) }}"><i class="fa fa-pencil"></i> </a>
+                        <a href="{{ path('marker_edit', m.rp) }}">{{ ux_icon(pencil, {class: icon}) }} </a>
                     </span>
                     {{ m.note }}
                 </li>
@@ -213,8 +213,8 @@
                     <tr>
                         <td>
                             <a href="#" data-value="{{ audio }}">Play {{ audio }}</a>
-                            <br /><a href="{{ audio }}"><i class="fa fa-download">Download</i> <small>{{ audio }}</small> </a>
-                            <br /><a href="{{ path('media_stream', media.rp({_format: 'flac'}) ) }}"><i class="fa fa-download">Flac</i>  </a>
+                            <br /><a href="{{ audio }}">{{ ux_icon(download, {class: icon}) }} Download <small>{{ audio }}</small> </a>
+                            <br /><a href="{{ path('media_stream', media.rp({_format: 'flac'}) ) }}">{{ ux_icon(download, {class: icon}) }} Flac  </a>
 
                         </td>
 

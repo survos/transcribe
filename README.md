@@ -137,3 +137,77 @@ Notes for the next session:
 - Legacy configs/bundles were removed for Sensio FrameworkExtra, Survos Workflow/Landing, Oneup Flysystem, VichUploader, Knp OAuth, and Webpack Encore.
 - A generated migration file was intentionally removed per the “no migrations right now” decision.
 - Re-check `git status --short` before continuing; there are many changes from Composer recipes and cleanup.
+
+## HANDOFF: AssetMapper / UX Icons Dependency Cleanup
+
+Status as of 2026-07-24:
+
+This checkout is intentionally stopped mid-migration. The goal was to remove the old jQuery/Webpack Encore frontend stack and move the app toward Symfony AssetMapper/importmap with `symfony/ux-icons`, matching the direction used in newer Symfony apps.
+
+What changed in this work-in-progress:
+
+- `symfony/asset-mapper` and `symfony/ux-icons` were added through Composer.
+- Symfony Flex added initial AssetMapper and UX Icons recipe files:
+  - `config/packages/asset_mapper.yaml`
+  - `config/packages/ux_icons.yaml`
+  - `importmap.php`
+  - `assets/app.js`
+  - `assets/styles/app.css`
+  - `assets/icons/symfony.svg`
+- Local SVG icons were started under `assets/icons/` so templates can use `{{ ux_icon(...) }}` instead of Font Awesome classes.
+- The old jQuery-dependent scripts were partially rewritten toward plain browser APIs:
+  - `assets/js/markers.js`
+  - `assets/js/project.js`
+- `jquery`, `jquery-ui`, `popper.js`, Bootstrap 4, and old Encore-related npm dependencies were being removed/replaced, but the npm side is not finalized.
+- Some Bootstrap 4-era classes were started toward Bootstrap 5 equivalents, such as `pull-right` to `float-end`, `btn-xs` to `btn-sm`, and `sr-only` to `visually-hidden`.
+
+Important current state:
+
+- The app was **not verified booting** after this change.
+- Composer installed the new Symfony packages, but Flex `cache:clear` failed on an existing legacy blocker:
+
+  ```text
+  Attempted to load trait "MarkingTrait" from namespace "Survos\WorkflowBundle\Traits".
+  ```
+
+  The failure comes from legacy `src/Entity/Media.php`, which still references `Survos\WorkflowBundle\Traits\MarkingTrait` after the Symfony 8 cleanup removed that bundle.
+
+- Some Twig files are currently in a damaged intermediate state because a quoted rewrite was interrupted. In particular, inspect and fix unquoted Twig string literals such as:
+
+  ```twig
+  {{ importmap(app) }}
+  {{ path(easyadmin) }}
+  {{ ux_icon(home, {class: icon}) }}
+  {{ block(breadcrumbs) }}
+  ```
+
+  They should be restored to quoted string arguments, for example:
+
+  ```twig
+  {{ importmap('app') }}
+  {{ path('easyadmin') }}
+  {{ ux_icon('home', {class: 'icon'}) }}
+  {{ block('breadcrumbs') }}
+  ```
+
+- `templates/base.html.twig`, `templates/media/show.html.twig`, `templates/project/select-markers.html.twig`, and other touched Twig templates need a careful syntax pass before running the app.
+- `package.json`, `yarn.lock`, and `webpack.config.js` are still present even though the intended direction is to delete the npm/Encore stack once AssetMapper is working.
+- `assets/js/app.js` is the old Encore entrypoint and should not be the long-term AssetMapper entry. The new AssetMapper entrypoint is `assets/app.js`.
+
+Suggested next steps:
+
+1. Fix the damaged Twig quoting in all touched templates.
+2. Decide whether to finish deleting `package.json`, `yarn.lock`, and `webpack.config.js` or keep a temporary compatibility path.
+3. Keep using `symfony/ux-icons`; do not reintroduce Font Awesome packages.
+4. Finish removing jQuery by keeping the plain JavaScript replacements or moving behavior into Stimulus controllers later.
+5. Resolve the legacy `Survos\WorkflowBundle\Traits\MarkingTrait` boot blocker.
+6. Run:
+
+   ```bash
+   php -l config/bundles.php
+   php -l importmap.php
+   php bin/console lint:twig templates
+   php bin/console asset-map:compile
+   ```
+
+7. If `asset-map:compile` is used in this AssetMapper app, remove generated `public/assets` after verification so compiled assets are not left as local residue.

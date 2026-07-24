@@ -10,7 +10,7 @@
 
 
 {% block content  %}
-    <a href="{{ path('project_edit', project.rp) }}"><i class="fa fa-pencil"></i> </a>
+    <a href="{{ path('project_edit', project.rp) }}">{{ ux_icon(pencil, {class: icon}) }} </a>
 
     {% import "media/show.html.twig" as macro %}
 
@@ -69,7 +69,7 @@
         {% if m.transcriptRequested%}
         <tr>
             <td><a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: m.id}) }}">
-                    <i class="fa fa-pencil"></i>
+                    {{ ux_icon(pencil, {class: icon}) }}
                 </a></td>
             <td>
                 {% set photoUrl =  m.publicUrl('jpg') %}

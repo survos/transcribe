@@ -1,65 +1,54 @@
-const $ = require('jquery');
-
-
 console.log("Setting up listeners for transcript");
-    var element = $(".transcript");
 
-    element.attr('unselectable', 'on').css('user-select', 'none').on('selectstart dragstart', false);
+document.querySelectorAll(".transcript").forEach((element) => {
+    element.setAttribute("unselectable", "on");
+    element.style.userSelect = "none";
+    element.addEventListener("selectstart", (event) => event.preventDefault());
+    element.addEventListener("dragstart", (event) => event.preventDefault());
+});
 
+document.querySelectorAll(".word").forEach((wordElement) => {
+    wordElement.addEventListener("click", (event) => {
+        const wordIndex = parseInt(wordElement.dataset.wordIndex, 10);
 
-    $('.word').click( function (e) {
-        word_index = $(this).data('word-index');
-        console.log(e, $(this))
+        console.log(event, wordElement);
 
-        if (e.shiftKey) {
-            // $(this).css("color", "red");
-            stopTime = $(this).data('end');
-            $('#marker_form_lastWordIndex').val(word_index);
-            // $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
+        if (event.shiftKey) {
+            stopTime = parseFloat(wordElement.dataset.end);
+            document.getElementById("marker_form_lastWordIndex").value = wordIndex;
 
-            // get the phrase and add to the form
-            let title = '';
-            let note = '';
-            let wordHandles = 3;
-            for (let i = startWordIndex; i <= word_index; i++) {
-
-                if ( (i <= startWordIndex + wordHandles) || (i >= word_index - wordHandles)) {
-                    title = title + $('#w_' + i).data('word') + ' ';
-                    if (i === (startWordIndex + wordHandles)) {
-                        title = title + '..';
-                    }
+            let note = "";
+            const wordHandles = 3;
+            for (let i = startWordIndex; i <= wordIndex; i++) {
+                const currentWord = document.getElementById("w_" + i);
+                if (!currentWord) {
+                    continue;
                 }
-                $('#w_' + i).addClass('newMarker');
-                // $('#w_' + i).css("text-decoration", "underline overline");
-                note = note + $('#w_' + i).data('word') + ' ';
+
+                currentWord.classList.add("newMarker");
+                note = note + currentWord.dataset.word + " ";
             }
-            // $('#marker_form_title').val(title);
-            $('#marker_form_note').val(note);
 
+            document.getElementById("marker_form_note").value = note;
 
-
-            $('#audio').bind('timeupdate', function () {
+            audio.addEventListener("timeupdate", function () {
                 console.log(stopTime);
                 if (this.currentTime > stopTime) this.pause();
             });
             audio.play();
-
         } else {
-            $('.newMarker').removeClass('newMarker');
+            document.querySelectorAll(".newMarker").forEach((element) => element.classList.remove("newMarker"));
 
-            $(this).addClass('newMarker');
-            // $(this).css("text-decoration", "underline overline");
-            startWord = $(this);
+            wordElement.classList.add("newMarker");
+            startWord = wordElement;
 
-            time = $(this).data('start');
-            startWordIndex = word_index;
-            $('#marker_form_firstWordIndex').val(word_index);
-            $('#marker_form_note').val(startWord.data('word'));
-            console.log(time)
+            time = parseFloat(wordElement.dataset.start);
+            startWordIndex = wordIndex;
+            document.getElementById("marker_form_firstWordIndex").value = wordIndex;
+            document.getElementById("marker_form_note").value = startWord.dataset.word;
+            console.log(time);
             audio.currentTime = time;
             audio.pause();
-            }
+        }
     });
-
-$(function() {
 });

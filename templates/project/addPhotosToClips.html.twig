@@ -71,7 +71,7 @@
                                             {{ photo.media.filename }}
 
                                             {% if isEditor %}
-                                                <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}"><i class="fa fa-trash"></i> </a>
+                                                <a class="confirm" href="{{ path('project_clear_broll', project.rp({'broll_id': photo.id})) }}">{{ ux_icon(trash, {class: icon}) }} </a>
 
                                             {% endif %}
                                             {#
@@ -127,11 +127,11 @@
                             <div class="caption">
 
                                 <a href="{{ path('media_edit', {entity: 'Media', action: 'edit', id: photo.id}) }}">
-                                    <i class="fa fa-pencil"></i>
+                                    {{ ux_icon(pencil, {class: icon}) }}
                                 </a>
 
                                 <a class="confirm" href="{{ path('media_hide', photo.rp) }}">
-                                    <i class="fa fa-eye-slash"></i>
+                                    {{ ux_icon(eye-slash, {class: icon}) }}
                                 </a>
 
                                 <input name="photo_id" type="radio" value="{{ photo.id }}" />

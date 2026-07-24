@@ -1,103 +1,85 @@
+document.querySelectorAll(".sortable").forEach((list) => {
+    list.querySelectorAll("li[id^=\"marker_\"]").forEach((item) => {
+        item.draggable = true;
 
-require('jquery-ui');
-
-const $ = require('jquery');
-
-$( ".sortable" ).sortable({
-    update: function( event, ui ) {
-        var data = $(this).sortable('serialize');
-        console.log('data', data);
-        $('#marker_order').text('order: ' + data);
-        $.ajax({
-            data: data,
-            type: 'GET',
-            // url: '{{ path('marker_reorder', project.rp) }}'
+        item.addEventListener("dragstart", (event) => {
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", item.id);
+            item.classList.add("dragging");
         });
-    }
+
+        item.addEventListener("dragend", () => {
+            item.classList.remove("dragging");
+            updateMarkerOrder(list);
+        });
+    });
+
+    list.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        const draggingItem = list.querySelector(".dragging");
+        const nextItem = getDragAfterElement(list, event.clientY);
+
+        if (!draggingItem) {
+            return;
+        }
+
+        if (nextItem) {
+            list.insertBefore(draggingItem, nextItem);
+        } else {
+            list.appendChild(draggingItem);
+        }
+    });
 });
 
-$( ".sortable" ).disableSelection();
-
-$(function() {
-
-
-    $('.clip').click( function (e) {
-        e.preventDefault();
-        clickedMarker = $(this).data('id');
+document.querySelectorAll(".clip").forEach((clip) => {
+    clip.addEventListener("click", (event) => {
+        event.preventDefault();
+        clickedMarker = clip.dataset.id;
 
         if (!audio.paused) {
             audio.pause();
-            // if it's playing, then stop
             if (currentMarker === clickedMarker) {
                 return;
             }
         }
 
-        let a = $('#audio');
+        audio.src = clip.dataset.url;
+        stopTime = parseFloat(clip.dataset.stop);
+        startTime = parseFloat(clip.dataset.start);
 
-        audio.src = $(this).data('url');
-        stopTime = $(this).data('stop');
-        startTime = $(this).data('start');
-
-        a.bind('timeupdate', function () {
+        audio.addEventListener("timeupdate", function () {
             if (this.currentTime > stopTime) this.pause();
         });
 
         currentMarker = clickedMarker;
         audio.currentTime = startTime;
         audio.play();
-
-        return true;
-
-
-        word_index = $(this).data('word-index');
-
-        if (e.shiftKey) {
-            // $(this).css("color", "red");
-            stopTime = $(this).data('end');
-            $('#marker_form_lastWordIndex').val(word_index);
-            // $('#marker_form_title').val(startWord.data('word') + '..' + $(this).data('word'));
-
-            // get the phrase and add to the form
-            let title = '';
-            let note = '';
-            let wordHandles = 3;
-            for (let i = startWordIndex; i <= word_index; i++) {
-
-                if ( (i <= startWordIndex + wordHandles) || (i >= word_index - wordHandles)) {
-                    title = title + $('#w_' + i).data('word') + ' ';
-                    if (i === (startWordIndex + wordHandles)) {
-                        title = title + '..';
-                    }
-                }
-                $('#w_' + i).addClass('newMarker');
-                // $('#w_' + i).css("text-decoration", "underline overline");
-                note = note + $('#w_' + i).data('word') + ' ';
-            }
-            // $('#marker_form_title').val(title);
-            $('#marker_form_note').val(note);
-
-
-
-            a.bind('timeupdate', function () {
-                if (this.currentTime > stopTime) this.pause();
-            });
-            audio.play();
-
-        } else {
-            $('.newMarker').removeClass('newMarker');
-
-            $(this).addClass('newMarker');
-            // $(this).css("text-decoration", "underline overline");
-            startWord = $(this);
-
-            time = $(this).data('start');
-            startWordIndex = word_index;
-            $('#marker_form_firstWordIndex').val(word_index);
-            $('#marker_form_note').val(startWord.data('word'));
-            audio.currentTime = time;
-            audio.pause();
-        }
     });
-
 });
+
+function getDragAfterElement(list, y) {
+    return Array.from(list.querySelectorAll("li[id^=\"marker_\"]:not(.dragging)"))
+        .reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+
+            if (offset < 0 && offset > closest.offset) {
+                return { offset, element: child };
+            }
+
+            return closest;
+        }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+}
+
+function updateMarkerOrder(list) {
+    const data = Array.from(list.querySelectorAll("li[id^=\"marker_\"]"))
+        .map((item) => "marker[]=" + encodeURIComponent(item.id.replace("marker_", "")))
+        .join("&");
+
+    console.log("data", data);
+
+    const markerOrder = document.getElementById("marker_order");
+    if (markerOrder) {
+        markerOrder.textContent = "order: " + data;
+    }
+}

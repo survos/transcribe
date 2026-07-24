@@ -25,7 +25,7 @@
             {% set timeline = p.timelines.first %}
             <tr>
                 <td>
-                    <a href="{{ path('project_edit', p.rp) }}"><i class="fa fa-pencil"></i> </a>
+                    <a href="{{ path('project_edit', p.rp) }}">{{ ux_icon(pencil, {class: icon}) }} </a>
                     <a title = "{{ p.basePath }}" href="{{ path('project_show', p.rp) }}">{{ p.code }}</a></td>
                 <td>{{ p.media.count}}
                     {{ p.byType('video').count }} Videos
