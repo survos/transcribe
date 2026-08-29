@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef71ff7ec149c92a75165dd25e1b3162",
+    "content-hash": "721d83b5e7f8f7f8ecd0273af0945c2d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2927,6 +2927,160 @@
             "time": "2026-06-22T07:55:44+00:00"
         },
         {
+            "name": "survos/kit-bundle",
+            "version": "2.24.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/kit-bundle.git",
+                "reference": "c03f337b4d46683cda600ee66403e7b6da5ec048"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/kit-bundle/zipball/c03f337b4d46683cda600ee66403e7b6da5ec048",
+                "reference": "c03f337b4d46683cda600ee66403e7b6da5ec048",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.5",
+                "symfony/config": "^8.1",
+                "symfony/dependency-injection": "^8.1"
+            },
+            "require-dev": {
+                "doctrine/orm": "^3.0",
+                "symfony/asset-mapper": "^8.1",
+                "symfony/framework-bundle": "^8.1",
+                "symfony/messenger": "^8.1",
+                "symfony/remote-event": "^8.1",
+                "symfony/twig-bundle": "^8.1",
+                "symfony/webhook": "^8.1"
+            },
+            "suggest": {
+                "symfony/messenger": "For Survos\\Kit\\Webhook\\RemoteEventTransportMiddleware — per-webhook Messenger transports.",
+                "symfony/remote-event": "For Survos\\Kit\\Webhook — RemoteEvent consumers behind the webhook endpoint.",
+                "symfony/webhook": "For Survos\\Kit\\Webhook — the shared inbound-webhook convention (signature verification, /webhook/{name} matching)."
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\Kit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Base classes and traits for consistent Survos bundle development — auto-registers twig namespaces, asset mapper paths, and doctrine mappings by convention",
+            "keywords": [
+                "base-class",
+                "bundle",
+                "symfony",
+                "traits"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/kit-bundle/issues",
+                "source": "https://github.com/survos/kit-bundle/tree/2.24.16"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-17T22:24:28+00:00"
+        },
+        {
+            "name": "survos/state-bundle",
+            "version": "2.24.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/state-bundle.git",
+                "reference": "0c64829d844e4d9d886fac10a926d484ed09761f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/state-bundle/zipball/0c64829d844e4d9d886fac10a926d484ed09761f",
+                "reference": "0c64829d844e4d9d886fac10a926d484ed09761f",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "^2.12 || ^3.3",
+                "php": "^8.5",
+                "survos/kit-bundle": "^2.5",
+                "symfony/console": "^8.1",
+                "symfony/http-kernel": "^8.1",
+                "symfony/messenger": "^8.1",
+                "symfony/process": "^8.1",
+                "symfony/string": "^8.1",
+                "symfony/workflow": "^8.1",
+                "symfony/yaml": "^8.1"
+            },
+            "require-dev": {
+                "nette/php-generator": "^4.1",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^13.0",
+                "psr/log": "^3.0",
+                "roave/better-reflection": "^6.0",
+                "survos/tabler-bundle": "^2.5",
+                "symfony/browser-kit": "^8.1",
+                "symfony/config": "^8.1",
+                "symfony/dependency-injection": "^8.1",
+                "symfony/form": "^8.1",
+                "symfony/framework-bundle": "^8.1",
+                "symfony/maker-bundle": "^1.5",
+                "symfony/twig-bundle": "^8.1",
+                "symfony/ux-chartjs": "^3",
+                "symfony/var-dumper": "^8.1",
+                "zenstruck/class-metadata": "^1.1",
+                "zenstruck/messenger-monitor-bundle": "^v0.6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": true
+                },
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\StateBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Add some tools managing state machines using the Symfony Workflow Component",
+            "keywords": [
+                "symfony",
+                "symfony-ux",
+                "workflow"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/state-bundle/issues",
+                "source": "https://github.com/survos/state-bundle/tree/2.24.16"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-17T22:25:19+00:00"
+        },
+        {
             "name": "symfony/apache-pack",
             "version": "v1.0.1",
             "source": {
@@ -5160,6 +5314,98 @@
                 }
             ],
             "time": "2026-06-05T06:23:12+00:00"
+        },
+        {
+            "name": "symfony/messenger",
+            "version": "v8.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/messenger.git",
+                "reference": "a6740ff5c758be69d6fa4a3995242955e303ba50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/messenger/zipball/a6740ff5c758be69d6fa4a3995242955e303ba50",
+                "reference": "a6740ff5c758be69d6fa4a3995242955e303ba50",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "psr/log": "^1|^2|^3",
+                "symfony/clock": "^7.4|^8.0",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "conflict": {
+                "symfony/console": "<7.4",
+                "symfony/dependency-injection": "<8.1",
+                "symfony/event-dispatcher-contracts": "<2.5",
+                "symfony/lock": "<7.4",
+                "symfony/serializer": "<7.4.4|>=8.0,<8.0.4"
+            },
+            "require-dev": {
+                "psr/cache": "^1.0|^2.0|^3.0",
+                "symfony/console": "^7.4|^8.0",
+                "symfony/dependency-injection": "^8.1",
+                "symfony/event-dispatcher": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/lock": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/property-access": "^7.4|^8.0",
+                "symfony/rate-limiter": "^7.4|^8.0",
+                "symfony/routing": "^7.4|^8.0",
+                "symfony/serializer": "^7.4.4|^8.0.4",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/stopwatch": "^7.4|^8.0",
+                "symfony/validator": "^7.4|^8.0",
+                "symfony/var-dumper": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Messenger\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samuel Roze",
+                    "email": "samuel.roze@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Helps applications send and receive messages to/from other applications or via message queues",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/messenger/tree/v8.1.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-08-03T17:17:21+00:00"
         },
         {
             "name": "symfony/mime",
@@ -8363,6 +8609,96 @@
             "time": "2026-06-27T09:05:56+00:00"
         },
         {
+            "name": "symfony/workflow",
+            "version": "v8.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/workflow.git",
+                "reference": "8a4690c56fbc8766d4b49f02e60e8fa0ed360211"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/workflow/zipball/8a4690c56fbc8766d4b49f02e60e8fa0ed360211",
+                "reference": "8a4690c56fbc8766d4b49f02e60e8fa0ed360211",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1"
+            },
+            "require-dev": {
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^7.4|^8.0",
+                "symfony/console": "^7.4|^8.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/error-handler": "^7.4|^8.0",
+                "symfony/event-dispatcher": "^7.4|^8.0",
+                "symfony/expression-language": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/security-core": "^7.4|^8.0",
+                "symfony/stopwatch": "^7.4|^8.0",
+                "symfony/validator": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Workflow\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides tools for managing a workflow or finite state machine",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "petrinet",
+                "place",
+                "state",
+                "statemachine",
+                "transition",
+                "workflow"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/workflow/tree/v8.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-05-29T05:06:50+00:00"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v8.1.1",
             "source": {
@@ -9165,7 +9501,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -9175,6 +9511,6 @@
         "ext-iconv": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.9.0"
 }
